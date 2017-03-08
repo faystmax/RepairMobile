@@ -32,7 +32,7 @@ import spravochn.typeofdevice.TypeDevice;
  *
  * @author tigler
  */
-public class Orders extends javax.swing.JFrame implements UpdatesDataInForms{
+public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
 
     /**
      * Creates new form Orders
@@ -47,12 +47,8 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms{
         this.PK = PK;
         addDataInTable();
         try {
-<<<<<<< HEAD:src/main/rem/otdel/Orders.java
-            // Image img = ImageIO.read(getClass().getResource("/home/tigler/NetBeansProjects/InterfacesRepairMibile/edit.png"));
-            ImageIcon icon = new ImageIcon("/edit.png");
-=======
+
             ImageIcon icon = new ImageIcon(getClass().getResource("/img/edit.png"));
->>>>>>> 71822144ae6711da29a1107227bdfec255dc99f5:src/repairmobile/Orders.java
             Image img = icon.getImage();
             Image newimg = img.getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH);
             jButton3.setIcon(new ImageIcon(newimg));
@@ -63,17 +59,11 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms{
         holder = new PlaceHolder(jTextFieldAddName, "Имя");
         holder = new PlaceHolder(jTextFieldAddOtch, "Отчество");
         holder = new PlaceHolder(jTextFieldAddTelefon, "Телефон");
-       
-       
-                
 
         try {
-<<<<<<< HEAD:src/main/rem/otdel/Orders.java
-            // Image img = ImageIO.read(getClass().getResource("/home/tigler/NetBeansProjects/InterfacesRepairMibile/edit.png"));
-            ImageIcon icon = new ImageIcon("/ok.png");
-=======
+
             ImageIcon icon = new ImageIcon(getClass().getResource("/img/ok.png"));
->>>>>>> 71822144ae6711da29a1107227bdfec255dc99f5:src/repairmobile/Orders.java
+
             Image img = icon.getImage();
             Image newimg = img.getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH);
             jButtonAccept.setIcon(new ImageIcon(newimg));
@@ -82,12 +72,9 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms{
         }
 
         try {
-<<<<<<< HEAD:src/main/rem/otdel/Orders.java
-            // Image img = ImageIO.read(getClass().getResource("/home/tigler/NetBeansProjects/InterfacesRepairMibile/edit.png"));
-            ImageIcon icon = new ImageIcon("/user.png");
-=======
+
             ImageIcon icon = new ImageIcon(getClass().getResource("/img/user.png"));
->>>>>>> 71822144ae6711da29a1107227bdfec255dc99f5:src/repairmobile/Orders.java
+
             Image img = icon.getImage();
             Image newimg = img.getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH);
             jButtonChooseExist.setIcon(new ImageIcon(newimg));
@@ -96,12 +83,9 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms{
         }
 
         try {
-<<<<<<< HEAD:src/main/rem/otdel/Orders.java
-            // Image img = ImageIO.read(getClass().getResource("/home/tigler/NetBeansProjects/InterfacesRepairMibile/edit.png"));
-            ImageIcon icon = new ImageIcon("/mobile.png");
-=======
+
             ImageIcon icon = new ImageIcon(getClass().getResource("/img/mobile.png"));
->>>>>>> 71822144ae6711da29a1107227bdfec255dc99f5:src/repairmobile/Orders.java
+
             Image img = icon.getImage();
             Image newimg = img.getScaledInstance(30, 25, java.awt.Image.SCALE_SMOOTH);
             jButton1.setIcon(new ImageIcon(newimg));
@@ -109,7 +93,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms{
             System.out.println(ex);
         }
     }
-    
+
     @Override
     public void addDataInTable() {
         this.setEnabled(true);
@@ -298,7 +282,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms{
         }
 
     }
-    
+
     ArrayList<String> pkCrash;
     ArrayList<String> valueCrash;
     ArrayList<String> pkProizv;
@@ -336,8 +320,6 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms{
         jTable.getColumnModel().getColumn(10).setPreferredWidth(200);*/
 
     }
-
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -1039,7 +1021,8 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms{
     }
 
     private void jButtonAcceptActionPerformed(java.awt.event.ActionEvent evt) {
-         if (jTextFieldAddFam.equals("") || jTextFieldAddName.equals("") || jTextFieldAddOtch.equals("")
+        //
+        if (jTextFieldAddFam.equals("") || jTextFieldAddName.equals("") || jTextFieldAddOtch.equals("")
                 || jTextFieldAddTelefon.equals("")
                 || jComboBoxTypeDevice.getSelectedIndex() == -1
                 || jComboBoxManufacturers.getSelectedIndex() == -1
@@ -1180,7 +1163,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms{
     }//GEN-LAST:event_jButtonAddTypeOfDeviceActionPerformed
 
     private void jButtonAddTypeOfCrashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddTypeOfCrashActionPerformed
-         TypeCrashAddUpdate typeCrashAddUpdate = new TypeCrashAddUpdate(0, -1);
+        TypeCrashAddUpdate typeCrashAddUpdate = new TypeCrashAddUpdate(0, -1);
         typeCrashAddUpdate.setListenerCloseForm(new ListenerCloseForm(this));
         typeCrashAddUpdate.setVisible(true);
         this.setEnabled(false);

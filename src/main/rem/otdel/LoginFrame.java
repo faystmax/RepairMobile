@@ -28,8 +28,6 @@ public class LoginFrame extends javax.swing.JFrame {
     String engineerLogin = "engineer1";
     String engineerParol = "engineer11";
 
-    String storagemanLogin = "storageman1";
-    String storagemanParol = "storageman11";
 
     String adminLogin = "admin";
     String adminParol = "admin";
