@@ -73,12 +73,19 @@ public class LoginFrame extends javax.swing.JFrame {
 
         jLabelParol.setText("Пароль");
 
+        jPasswordField.setText("1");
         jPasswordField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jPasswordFieldKeyPressed(evt);
             }
         });
 
+        jTextFieldLogin.setText("manager1");
+        jTextFieldLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldLoginActionPerformed(evt);
+            }
+        });
         jTextFieldLogin.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTextFieldLoginKeyPressed(evt);
@@ -235,6 +242,10 @@ public class LoginFrame extends javax.swing.JFrame {
             jPasswordField.setEchoChar((char) 8226);
         }
     }//GEN-LAST:event_jCheckBoxParolItemStateChanged
+
+    private void jTextFieldLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldLoginActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldLoginActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

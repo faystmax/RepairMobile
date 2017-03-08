@@ -15,6 +15,8 @@ import java.sql.SQLException;
 import javax.swing.table.TableModel;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -37,15 +39,26 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
     /**
      * Creates new form Orders
      */
+    boolean flagSelDetals;
     PlaceHolder holder;
     private int PK;
     private int PKClient;
     private boolean isCreateNew = true;
 
+    final int DIAGNOSTIC_COST = 300;
+    final int GARANT_COST = 0;
+
+    DefaultListModel<MyMap> modelAllCrash;
+    DefaultListModel<MyMap> modelSelCrash;
+
     public Orders(int PK) {
         initComponents();
         this.PK = PK;
+        flagSelDetals = false;
+        modelAllCrash = new DefaultListModel<MyMap>();
+        modelSelCrash = new DefaultListModel<MyMap>();
         addDataInTable();
+        jTextFieldCost.setEditable(false);
         try {
 
             ImageIcon icon = new ImageIcon(getClass().getResource("/img/edit.png"));
@@ -220,6 +233,18 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                 }
             }
         }
+        
+        //типовые детали
+        jTable3.getColumnModel().getColumn(1).setHeaderValue("Деталь");
+        jTable3.getColumnModel().getColumn(2).setHeaderValue("Тип устройства");
+        jTable3.getColumnModel().getColumn(3).setHeaderValue("Производитель");
+        jTable3.getColumnModel().getColumn(4).setHeaderValue("Модель");
+        jTable3.getColumnModel().getColumn(5).setHeaderValue("Цена");
+
+        //пк типовой детали
+        jTable3.getColumnModel().getColumn(0).setMaxWidth(0);
+        jTable3.getColumnModel().getColumn(0).setMinWidth(0);
+        jTable3.getColumnModel().getColumn(0).setPreferredWidth(0);
 
         jDateChooserAddDate.setDateFormatString("dd.MM.yyyy");
         jDateChooserAddDate.setDate(new Date());
@@ -245,8 +270,17 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                 pkCrash.add(tableModel.getValueAt(i, 0).toString());
                 valueCrash.add(tableModel.getValueAt(i, 1).toString());
             }
-            //jComboBoxTypeCrash.setModel(new DefaultComboBoxModel(valueCrash.toArray()));
 
+            for (int i = 0; i < valueCrash.size(); i++) {
+                MyMap mymap = new MyMap(pkCrash.get(i), valueCrash.get(i));
+                modelAllCrash.addElement(mymap);
+            }
+            jListAllCrash.setModel(modelAllCrash);
+            jListSelCrash.setModel(modelSelCrash);
+            jListAllCrash.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            jListSelCrash.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+            //jComboBoxTypeCrash.setModel(new DefaultComboBoxModel(valueCrash.toArray()));
             //производитель
             resSetProizv = RepairMobile.st.executeQuery("select * from manufacturer");
             tableModel = DbUtils.resultSetToTableModel(resSetProizv);
@@ -385,7 +419,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         jComboBoxType = new javax.swing.JComboBox();
         jDateChooserAddDate = new com.toedter.calendar.JDateChooser();
         jLabel11 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        jTextFieldCost = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jButtonAccept = new javax.swing.JButton();
@@ -393,11 +427,11 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         jTextField3 = new javax.swing.JTextField();
         jButton4 = new javax.swing.JButton();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        jListAllCrash = new javax.swing.JList<>();
+        jButtonAddCrash = new javax.swing.JButton();
+        jButtonRetCrash = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList<>();
+        jListSelCrash = new javax.swing.JList<>();
         jButtonAddTypeOfCrash = new javax.swing.JButton();
         jLabelFIO = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -710,6 +744,12 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
 
         jLabel10.setText("Тип заказа");
 
+        jComboBoxType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxTypeActionPerformed(evt);
+            }
+        });
+
         jLabel11.setText("Стоимость");
 
         jLabel1.setText("Телефон на замену");
@@ -738,7 +778,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextFieldCost, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(69, 69, 69))
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -760,7 +800,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                     .addComponent(jDateChooserAddDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jComboBoxType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextFieldCost, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 13, Short.MAX_VALUE))
         );
@@ -782,13 +822,23 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
 
         jButton4.setText("Найти");
 
-        jScrollPane5.setViewportView(jList1);
+        jScrollPane5.setViewportView(jListAllCrash);
 
-        jButton5.setText("↓");
+        jButtonAddCrash.setText("↓");
+        jButtonAddCrash.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAddCrashActionPerformed(evt);
+            }
+        });
 
-        jButton6.setText("↑");
+        jButtonRetCrash.setText("↑");
+        jButtonRetCrash.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRetCrashActionPerformed(evt);
+            }
+        });
 
-        jScrollPane6.setViewportView(jList2);
+        jScrollPane6.setViewportView(jListSelCrash);
 
         jButtonAddTypeOfCrash.setText("Добавить тип поломки");
         jButtonAddTypeOfCrash.addActionListener(new java.awt.event.ActionListener() {
@@ -811,9 +861,9 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                 .addGap(69, 69, 69)
-                .addComponent(jButton5)
+                .addComponent(jButtonAddCrash)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton6)
+                .addComponent(jButtonRetCrash)
                 .addGap(59, 59, 59))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
                 .addComponent(jScrollPane6)
@@ -833,8 +883,8 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton6)
-                    .addComponent(jButton5))
+                    .addComponent(jButtonRetCrash)
+                    .addComponent(jButtonAddCrash))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
@@ -1206,20 +1256,48 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField3ActionPerformed
 
+    private void jButtonAddCrashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddCrashActionPerformed
+        // TODO add your handling code here:
+        if (jListAllCrash.getSelectedIndex() != -1) {
+            modelSelCrash.addElement(modelAllCrash.elementAt(jListAllCrash.getSelectedIndex()));
+            modelAllCrash.removeElementAt(jListAllCrash.getSelectedIndex());
+        }
+    }//GEN-LAST:event_jButtonAddCrashActionPerformed
+
+    private void jButtonRetCrashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRetCrashActionPerformed
+        // TODO add your handling code here:
+        if (jListSelCrash.getSelectedIndex() != -1) {
+            modelAllCrash.addElement(modelSelCrash.elementAt(jListSelCrash.getSelectedIndex()));
+            modelSelCrash.removeElementAt(jListSelCrash.getSelectedIndex());
+        }
+    }//GEN-LAST:event_jButtonRetCrashActionPerformed
+
+    private void jComboBoxTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxTypeActionPerformed
+        // TODO add your handling code here:
+        if (!flagSelDetals) {
+            if (jComboBoxType.getSelectedIndex() == 0) {
+                jTextFieldCost.setText(String.valueOf(GARANT_COST));
+            }
+            if (jComboBoxType.getSelectedIndex() == 1) {
+                jTextFieldCost.setText(String.valueOf(DIAGNOSTIC_COST));
+            }
+        }
+    }//GEN-LAST:event_jComboBoxTypeActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButtonAccept;
+    private javax.swing.JButton jButtonAddCrash;
     private javax.swing.JButton jButtonAddManufacturer;
     private javax.swing.JButton jButtonAddTypeOfCrash;
     private javax.swing.JButton jButtonAddTypeOfDevice;
     private javax.swing.JButton jButtonChooseExist;
+    private javax.swing.JButton jButtonRetCrash;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBoxManufacturers;
     private javax.swing.JComboBox jComboBoxType;
@@ -1233,8 +1311,8 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabelFIO;
-    private javax.swing.JList<String> jList1;
-    private javax.swing.JList<String> jList2;
+    private javax.swing.JList<MyMap> jListAllCrash;
+    private javax.swing.JList<MyMap> jListSelCrash;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -1262,13 +1340,13 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextFieldAddFam;
     private javax.swing.JTextField jTextFieldAddName;
     private javax.swing.JTextField jTextFieldAddOtch;
     private javax.swing.JTextField jTextFieldAddTelefon;
+    private javax.swing.JTextField jTextFieldCost;
     private javax.swing.JTextField jTextFieldModel;
     private java.awt.Menu menu1;
     private java.awt.Menu menu2;
