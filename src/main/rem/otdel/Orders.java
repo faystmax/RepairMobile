@@ -47,8 +47,12 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms{
         this.PK = PK;
         addDataInTable();
         try {
+<<<<<<< HEAD:src/main/rem/otdel/Orders.java
             // Image img = ImageIO.read(getClass().getResource("/home/tigler/NetBeansProjects/InterfacesRepairMibile/edit.png"));
             ImageIcon icon = new ImageIcon("/edit.png");
+=======
+            ImageIcon icon = new ImageIcon(getClass().getResource("/img/edit.png"));
+>>>>>>> 71822144ae6711da29a1107227bdfec255dc99f5:src/repairmobile/Orders.java
             Image img = icon.getImage();
             Image newimg = img.getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH);
             jButton3.setIcon(new ImageIcon(newimg));
@@ -64,8 +68,12 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms{
                 
 
         try {
+<<<<<<< HEAD:src/main/rem/otdel/Orders.java
             // Image img = ImageIO.read(getClass().getResource("/home/tigler/NetBeansProjects/InterfacesRepairMibile/edit.png"));
             ImageIcon icon = new ImageIcon("/ok.png");
+=======
+            ImageIcon icon = new ImageIcon(getClass().getResource("/img/ok.png"));
+>>>>>>> 71822144ae6711da29a1107227bdfec255dc99f5:src/repairmobile/Orders.java
             Image img = icon.getImage();
             Image newimg = img.getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH);
             jButtonAccept.setIcon(new ImageIcon(newimg));
@@ -74,8 +82,12 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms{
         }
 
         try {
+<<<<<<< HEAD:src/main/rem/otdel/Orders.java
             // Image img = ImageIO.read(getClass().getResource("/home/tigler/NetBeansProjects/InterfacesRepairMibile/edit.png"));
             ImageIcon icon = new ImageIcon("/user.png");
+=======
+            ImageIcon icon = new ImageIcon(getClass().getResource("/img/user.png"));
+>>>>>>> 71822144ae6711da29a1107227bdfec255dc99f5:src/repairmobile/Orders.java
             Image img = icon.getImage();
             Image newimg = img.getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH);
             jButtonChooseExist.setIcon(new ImageIcon(newimg));
@@ -84,10 +96,14 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms{
         }
 
         try {
+<<<<<<< HEAD:src/main/rem/otdel/Orders.java
             // Image img = ImageIO.read(getClass().getResource("/home/tigler/NetBeansProjects/InterfacesRepairMibile/edit.png"));
             ImageIcon icon = new ImageIcon("/mobile.png");
+=======
+            ImageIcon icon = new ImageIcon(getClass().getResource("/img/mobile.png"));
+>>>>>>> 71822144ae6711da29a1107227bdfec255dc99f5:src/repairmobile/Orders.java
             Image img = icon.getImage();
-            Image newimg = img.getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH);
+            Image newimg = img.getScaledInstance(30, 25, java.awt.Image.SCALE_SMOOTH);
             jButton1.setIcon(new ImageIcon(newimg));
         } catch (Exception ex) {
             System.out.println(ex);

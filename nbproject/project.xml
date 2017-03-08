@@ -6,6 +6,8 @@
             <name>RepairMobile</name>
             <source-roots>
                 <root id="src.dir"/>
+                <root id="src.resources.dir"/>
+                <root id="src.lib.dir"/>
             </source-roots>
             <test-roots>
                 <root id="test.src.dir"/>
