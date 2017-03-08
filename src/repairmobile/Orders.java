@@ -34,8 +34,7 @@ public class Orders extends javax.swing.JFrame {
     public Orders() {
         initComponents();
         try {
-            // Image img = ImageIO.read(getClass().getResource("/home/tigler/NetBeansProjects/InterfacesRepairMibile/edit.png"));
-            ImageIcon icon = new ImageIcon("/home/tigler/NetBeansProjects/InterfacesRepairMibile/edit.png");
+            ImageIcon icon = new ImageIcon(getClass().getResource("/img/edit.png"));
             Image img = icon.getImage();
             Image newimg = img.getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH);
             jButton3.setIcon(new ImageIcon(newimg));
@@ -51,8 +50,7 @@ public class Orders extends javax.swing.JFrame {
                 
 
         try {
-            // Image img = ImageIO.read(getClass().getResource("/home/tigler/NetBeansProjects/InterfacesRepairMibile/edit.png"));
-            ImageIcon icon = new ImageIcon("/home/tigler/NetBeansProjects/InterfacesRepairMibile/ok.png");
+            ImageIcon icon = new ImageIcon(getClass().getResource("/img/ok.png"));
             Image img = icon.getImage();
             Image newimg = img.getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH);
             jButtonAccept.setIcon(new ImageIcon(newimg));
@@ -61,8 +59,7 @@ public class Orders extends javax.swing.JFrame {
         }
 
         try {
-            // Image img = ImageIO.read(getClass().getResource("/home/tigler/NetBeansProjects/InterfacesRepairMibile/edit.png"));
-            ImageIcon icon = new ImageIcon("/home/tigler/NetBeansProjects/InterfacesRepairMibile/user.png");
+            ImageIcon icon = new ImageIcon(getClass().getResource("/img/user.png"));
             Image img = icon.getImage();
             Image newimg = img.getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH);
             jButtonChooseExist.setIcon(new ImageIcon(newimg));
@@ -71,10 +68,9 @@ public class Orders extends javax.swing.JFrame {
         }
 
         try {
-            // Image img = ImageIO.read(getClass().getResource("/home/tigler/NetBeansProjects/InterfacesRepairMibile/edit.png"));
-            ImageIcon icon = new ImageIcon("/home/tigler/NetBeansProjects/InterfacesRepairMibile/mobile.png");
+            ImageIcon icon = new ImageIcon(getClass().getResource("/img/mobile.png"));
             Image img = icon.getImage();
-            Image newimg = img.getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH);
+            Image newimg = img.getScaledInstance(30, 25, java.awt.Image.SCALE_SMOOTH);
             jButton1.setIcon(new ImageIcon(newimg));
         } catch (Exception ex) {
             System.out.println(ex);
