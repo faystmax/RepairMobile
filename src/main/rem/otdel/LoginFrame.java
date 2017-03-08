@@ -80,7 +80,7 @@ public class LoginFrame extends javax.swing.JFrame {
             }
         });
 
-        jTextFieldLogin.setText("manager1");
+        jTextFieldLogin.setText("man1");
         jTextFieldLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextFieldLoginActionPerformed(evt);

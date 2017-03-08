@@ -99,7 +99,7 @@
     </Component>
     <Component class="javax.swing.JTextField" name="jTextFieldLogin">
       <Properties>
-        <Property name="text" type="java.lang.String" value="manager1"/>
+        <Property name="text" type="java.lang.String" value="man1"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextFieldLoginActionPerformed"/>
