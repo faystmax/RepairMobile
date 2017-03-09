@@ -38,7 +38,7 @@ public class Model extends javax.swing.JFrame implements UpdatesDataInForms {
         ResultSet resSet = null;
         try {
             resSet = RepairMobile.st.executeQuery("select modeldevice.pk_modeldevice,modeldevice.nameofmodel,"
-                    + "manufacturer.pk_manufacturer ,manufacturer.nameofmanufacturer from model"
+                    + " manufacturer.pk_manufacturer ,manufacturer.nameofmanufacturer from modeldevice"
                     + " inner join manufacturer on manufacturer.PK_manufacturer=modeldevice.PK_manufacturer"
             );
         } catch (SQLException ex) {
@@ -79,7 +79,7 @@ public class Model extends javax.swing.JFrame implements UpdatesDataInForms {
         jButtonDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Статусы");
+        setTitle("Модели");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -185,7 +185,7 @@ public class Model extends javax.swing.JFrame implements UpdatesDataInForms {
                 int option = JOptionPane.showConfirmDialog(this, "Вы уверены что хотите удалить запись",
                         "Удаление записи", JOptionPane.YES_NO_CANCEL_OPTION);
                 if (option == 0) {
-                    RepairMobile.st.executeQuery("delete from modaldevice where PK_modaldevice=" + PK);
+                    RepairMobile.st.executeQuery("delete from modeldevice where PK_modeldevice=" + primKey);
                     addDataInTable();
                 }
 

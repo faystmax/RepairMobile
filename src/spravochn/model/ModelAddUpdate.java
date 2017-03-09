@@ -47,7 +47,7 @@ public class ModelAddUpdate extends javax.swing.JFrame {
             ResultSet resSet2 = null;
             
             try {
-                resSet = RepairMobile.st.executeQuery("select nameofmodel,pk_manufacturer  from  where modeldevice modeldevice.PK_modeldevice=" + PK);
+                resSet = RepairMobile.st.executeQuery("select nameofmodel,pk_manufacturer  from modeldevice  where  modeldevice.PK_modeldevice=" + PK);
                 
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(this, "Ошибка: Невозможно изменить");
@@ -58,19 +58,21 @@ public class ModelAddUpdate extends javax.swing.JFrame {
                 if (resSet.next()) {
                     jTextField1.setText(resSet.getString(1));
                 }
+                String tmp =resSet.getString(2);
                 resSet2 = RepairMobile.st.executeQuery("select pk_manufacturer,nameofmanufacturer  from manufacturer");
                 TableModel tableModel = DbUtils.resultSetToTableModel(resSet2);
                 for (int i = 0; i < tableModel.getRowCount(); i++) {
                     pkMan.add(tableModel.getValueAt(i, 0).toString());
                     valueMan.add(tableModel.getValueAt(i, 1).toString());
                 }
+                jComboBox1.setModel(new DefaultComboBoxModel(valueMan.toArray()));
                 for (int i = 0; i < pkMan.size(); i++) {
-                    if (pkMan.get(i).equals(resSet.getString(2))) {
+                    if (pkMan.get(i).equals(tmp)) {
                         jComboBox1.setSelectedIndex(i);
                     }
                 }
-                jComboBox1.setModel(new DefaultComboBoxModel(valueMan.toArray()));
-                resSet1 = RepairMobile.st.executeQuery("select pk_manufacturer,nameofmanufacturer  from manufacturer  where PK_manufacturer=" + resSet.getString(2));
+                
+                resSet1 = RepairMobile.st.executeQuery("select pk_manufacturer,nameofmanufacturer  from manufacturer  where PK_manufacturer=" + tmp);
             } catch (SQLException ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(this, "Ошибка: Невозможно изменить");
@@ -215,7 +217,7 @@ public class ModelAddUpdate extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Невозможно изменить на пустое поле");
                 } else {
                     try {
-                        RepairMobile.st.executeQuery("UPDATE modeldevice SET NAMEOFmodel= '" + text + "' pk_manufacturer= '" + pkMan.get(jComboBox1.getSelectedIndex()) + "' WHERE PK_modelDevice=" + PK);
+                        RepairMobile.st.executeQuery("UPDATE modeldevice SET NAMEOFmodel= '" + text + "', pk_manufacturer= '" + pkMan.get(jComboBox1.getSelectedIndex()) + "' WHERE PK_modelDevice=" + PK);
                         JOptionPane.showMessageDialog(this, "Запись успешно изменена");
                         listenerCloseForm.event();
                     } catch (SQLException ex) {

@@ -37,6 +37,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import spravochn.manufacture.Manufacturer;
 import spravochn.model.Model;
 import spravochn.model.ModelAddUpdate;
+import spravochn.status.Status;
 import spravochn.typeofcrash.TypeCrash;
 import spravochn.typeofdevice.TypeDevice;
 
@@ -620,6 +621,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         jMenuItemManufacturer = new javax.swing.JMenuItem();
         jMenuItemTypeCrash = new javax.swing.JMenuItem();
         jMenuItemTypeDevice = new javax.swing.JMenuItem();
+        jMenuItemModel = new javax.swing.JMenuItem();
 
         jMenu1.setText("jMenu1");
 
@@ -1206,6 +1208,14 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         });
         jMenu3.add(jMenuItemTypeDevice);
 
+        jMenuItemModel.setText("Модели");
+        jMenuItemModel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemModelActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItemModel);
+
         jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
@@ -1241,7 +1251,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
     }//GEN-LAST:event_jMenuItemManufacturerActionPerformed
 
     private void jMenuItemStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemStatusActionPerformed
-        Model status = new Model();
+        Status status = new Status();
         status.setVisible(true);
     }//GEN-LAST:event_jMenuItemStatusActionPerformed
 
@@ -1835,6 +1845,12 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         }
     }//GEN-LAST:event_jButtonDeleteOrderActionPerformed
 
+    private void jMenuItemModelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemModelActionPerformed
+        // TODO add your handling code here:
+        Model model = new Model();
+        model.setVisible(true);
+    }//GEN-LAST:event_jMenuItemModelActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -1871,6 +1887,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
     private javax.swing.JMenuItem jMenuClose;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItemManufacturer;
+    private javax.swing.JMenuItem jMenuItemModel;
     private javax.swing.JMenuItem jMenuItemStatus;
     private javax.swing.JMenuItem jMenuItemTypeCrash;
     private javax.swing.JMenuItem jMenuItemTypeDevice;
