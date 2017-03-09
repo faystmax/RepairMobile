@@ -219,7 +219,7 @@ public class EngenieersAddUpdate extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Невозможно добавить пустое поле");
             } else {
                 try {
-                    RepairMobile.st.executeQuery("Insert into SERVERADM.engineer (famofengineer,nameofengineer,otchofengineer,login,password) values "
+                    RepairMobile.st.executeQuery("Insert into engineer (famofengineer,nameofengineer,otchofengineer,login,password) values "
                             + "('" + textFam + "','" + textName + "','" + textOcth + "','" + textLogin + "','" + textPassword.hashCode() + "')");
                     JOptionPane.showMessageDialog(this, "Запись успешно добавлена");
                     listenerCloseForm.event();
@@ -243,12 +243,12 @@ public class EngenieersAddUpdate extends javax.swing.JFrame {
                 } else {
                     try {
                         if (jCheckBoxChangeParol.isSelected() == true) {
-                            RepairMobile.st.executeQuery("UPDATE SERVERADM.engineer SET famofengineer = '" + textFam + "', "
+                            RepairMobile.st.executeQuery("UPDATE engineer SET famofengineer = '" + textFam + "', "
                                     + "nameofengineer = '" + textName + "', otchofengineer = '" + textOcth + "',"
                                     + " login='" + textLogin + "',password='" + textPassword.hashCode() + "' WHERE PK_engineer=" + PK
                             );
                         } else {
-                            RepairMobile.st.executeQuery("UPDATE SERVERADM.engineer SET famofengineer = '" + textFam + "', "
+                            RepairMobile.st.executeQuery("UPDATE engineer SET famofengineer = '" + textFam + "', "
                                     + "nameofengineer = '" + textName + "', otchofengineer = '" + textOcth + "',"
                                     + " login='" + textLogin + "' WHERE PK_engineer=" + PK
                             );

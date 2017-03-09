@@ -144,7 +144,7 @@ public class ManufacturerAddUpdate extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Невозможно добавить пустое поле");
             } else {
                 try {
-                    RepairMobile.st.executeQuery("Insert into SERVERADM.manufacturer (NAMEOFmanufacturer) values ('" + text + "')");
+                    RepairMobile.st.executeQuery("Insert into manufacturer (NAMEOFmanufacturer) values ('" + text + "')");
                     JOptionPane.showMessageDialog(this, "Запись успешно добавлена");
                     listenerCloseForm.event();
                 } catch (SQLException ex) {
@@ -162,7 +162,7 @@ public class ManufacturerAddUpdate extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Невозможно изменить на пустое поле");
                 } else {
                     try {
-                        RepairMobile.st.executeQuery("UPDATE SERVERADM.manufacturer SET NAMEOFmanufacturer = '" + text + "' WHERE PK_manufacturer=" + PK);
+                        RepairMobile.st.executeQuery("UPDATE manufacturer SET NAMEOFmanufacturer = '" + text + "' WHERE PK_manufacturer=" + PK);
                         JOptionPane.showMessageDialog(this, "Запись успешно изменена");
                         listenerCloseForm.event();
                     } catch (SQLException ex) {

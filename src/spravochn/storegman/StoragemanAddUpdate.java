@@ -223,7 +223,7 @@ public class StoragemanAddUpdate extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Невозможно добавить пустое поле");
             } else {
                 try {
-                    RepairMobile.st.executeQuery("Insert into SERVERADM.storekeeper (famofstorekeeper,nameofstorekeeper,otcofstorekeeper,login,password) values "
+                    RepairMobile.st.executeQuery("Insert into storekeeper (famofstorekeeper,nameofstorekeeper,otcofstorekeeper,login,password) values "
                             + "('" + textFam + "','" + textName + "','" + textOcth + "','" + textLogin + "','" + textPassword.hashCode() + "')");
                     JOptionPane.showMessageDialog(this, "Запись успешно добавлена");
                     listenerCloseForm.event();
@@ -247,12 +247,12 @@ public class StoragemanAddUpdate extends javax.swing.JFrame {
                 } else {
                     try {
                         if (jCheckBoxChangeParol.isSelected() == true) {
-                            RepairMobile.st.executeQuery("UPDATE SERVERADM.storekeeper SET famofstorekeeper = '" + textFam + "', "
+                            RepairMobile.st.executeQuery("UPDATE storekeeper SET famofstorekeeper = '" + textFam + "', "
                                     + "nameofstorekeeper = '" + textName + "', otcofstorekeeper = '" + textOcth + "',"
                                     + " login='" + textLogin + "',password='" + textPassword.hashCode() + "' WHERE PK_storekeeper=" + PK
                             );
                         } else {
-                            RepairMobile.st.executeQuery("UPDATE SERVERADM.storekeeper SET famofstorekeeper = '" + textFam + "', "
+                            RepairMobile.st.executeQuery("UPDATE storekeeper SET famofstorekeeper = '" + textFam + "', "
                                     + "nameofstorekeeper = '" + textName + "', otcofstorekeeper = '" + textOcth + "',"
                                     + " login='" + textLogin + "' WHERE PK_storekeeper=" + PK
                             );

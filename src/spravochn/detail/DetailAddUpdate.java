@@ -142,7 +142,7 @@ public class DetailAddUpdate extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Невозможно добавить пустое поле");
             } else {
                 try {
-                    RepairMobile.st.executeQuery("Insert into SERVERADM.detail (NAMEOFdetail) values ('" + text + "')");
+                    RepairMobile.st.executeQuery("Insert into detail (NAMEOFdetail) values ('" + text + "')");
                     JOptionPane.showMessageDialog(this, "Запись успешно добавлена");
                     listenerCloseForm.event();
                 } catch (SQLException ex) {
@@ -160,7 +160,7 @@ public class DetailAddUpdate extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Невозможно изменить на пустое поле");
                 } else {
                     try {
-                        RepairMobile.st.executeQuery("UPDATE SERVERADM.detail SET NAMEOFdetail = '" + text + "' WHERE PK_detail=" + PK);
+                        RepairMobile.st.executeQuery("UPDATE detail SET NAMEOFdetail = '" + text + "' WHERE PK_detail=" + PK);
                         JOptionPane.showMessageDialog(this, "Запись успешно изменена");
                         listenerCloseForm.event();
                     } catch (SQLException ex) {

@@ -149,7 +149,7 @@ public class TypeCrashAddUpdate extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Невозможно добавить пустое поле");
             } else {
                 try {
-                    RepairMobile.st.executeQuery("Insert into SERVERADM.typeofcrash (NAMEOFcrash) values ('" + text + "')");
+                    RepairMobile.st.executeQuery("Insert into typeofcrash (NAMEOFcrash) values ('" + text + "')");
                     JOptionPane.showMessageDialog(this, "Запись успешно добавлена");
                     listenerCloseForm.event();
                 } catch (SQLException ex) {
@@ -167,7 +167,7 @@ public class TypeCrashAddUpdate extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Невозможно изменить на пустое поле");
                 } else {
                     try {
-                        RepairMobile.st.executeQuery("UPDATE SERVERADM.typeofcrash SET NAMEOFcrash = '" + text + "' WHERE PK_crash=" + PK);
+                        RepairMobile.st.executeQuery("UPDATE typeofcrash SET NAMEOFcrash = '" + text + "' WHERE PK_crash=" + PK);
                         JOptionPane.showMessageDialog(this, "Запись успешно изменена");
                         listenerCloseForm.event();
                     } catch (SQLException ex) {

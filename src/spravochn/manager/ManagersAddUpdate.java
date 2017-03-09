@@ -227,7 +227,7 @@ public class ManagersAddUpdate extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Невозможно добавить пустое поле");
             } else {
                 try {
-                    RepairMobile.st.executeQuery("Insert into SERVERADM.manager (famofmanager,nameofmanager,otcofmanager,login,password) values "
+                    RepairMobile.st.executeQuery("Insert into manager (famofmanager,nameofmanager,otcofmanager,login,password) values "
                             + "('" + textFam + "','" + textName + "','" + textOcth + "','" + textLogin + "','" + textPassword.hashCode() + "')");
                     JOptionPane.showMessageDialog(this, "Запись успешно добавлена");
                     listenerCloseForm.event();
@@ -251,12 +251,12 @@ public class ManagersAddUpdate extends javax.swing.JFrame {
                 } else {
                     try {
                         if (jCheckBoxChangeParol.isSelected() == true) {
-                            RepairMobile.st.executeQuery("UPDATE SERVERADM.manager SET famofmanager = '" + textFam + "', "
+                            RepairMobile.st.executeQuery("UPDATE manager SET famofmanager = '" + textFam + "', "
                                     + "nameofmanager = '" + textName + "', otcofmanager = '" + textOcth + "',"
                                     + " login='" + textLogin + "',password='" + textPassword.hashCode() + "' WHERE PK_manager=" + PK
                             );
                         } else {
-                            RepairMobile.st.executeQuery("UPDATE SERVERADM.manager SET famofmanager = '" + textFam + "', "
+                            RepairMobile.st.executeQuery("UPDATE manager SET famofmanager = '" + textFam + "', "
                                     + "nameofmanager = '" + textName + "', otcofmanager = '" + textOcth + "',"
                                     + " login='" + textLogin + "' WHERE PK_manager=" + PK
                             );

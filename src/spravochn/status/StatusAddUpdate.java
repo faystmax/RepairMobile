@@ -145,7 +145,7 @@ public class StatusAddUpdate extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Невозможно добавить пустое поле");
             } else {
                 try {
-                    RepairMobile.st.executeQuery("Insert into SERVERADM.Status (NAMEOFSTATUS) values ('" + text + "')");
+                    RepairMobile.st.executeQuery("Insert into Status (NAMEOFSTATUS) values ('" + text + "')");
                     JOptionPane.showMessageDialog(this, "Запись успешно добавлена");
                     listenerCloseForm.event();
                 } catch (SQLException ex) {
@@ -163,7 +163,7 @@ public class StatusAddUpdate extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Невозможно изменить на пустое поле");
                 } else {
                     try {
-                        RepairMobile.st.executeQuery("UPDATE SERVERADM.status SET NAMEOFSTATUS = '" + text + "' WHERE PK_Status=" + PK);
+                        RepairMobile.st.executeQuery("UPDATE status SET NAMEOFSTATUS = '" + text + "' WHERE PK_Status=" + PK);
                         JOptionPane.showMessageDialog(this, "Запись успешно изменена");
                         listenerCloseForm.event();
                     } catch (SQLException ex) {

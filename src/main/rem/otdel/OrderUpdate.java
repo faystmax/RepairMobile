@@ -280,7 +280,7 @@ public class OrderUpdate extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Невозможно изменить на пустое поле");
         } else {
             try {
-                RepairMobile.st.executeQuery("UPDATE SERVERADM.myorder SET "
+                RepairMobile.st.executeQuery("UPDATE myorder SET "
                         + "myorder.NUMOFORDER = '" + textNumber + "', "
                         + "myorder.TIMETOACCEPT = TO_DATE('" + date + "', 'YYYY-MM-DD'),"
                         + "myorder.TIMETODELIVERY = " + (date2==null ? "null," : "TO_DATE('" + date2 + "', 'YYYY-MM-DD'),")

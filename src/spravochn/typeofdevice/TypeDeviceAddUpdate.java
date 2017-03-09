@@ -137,7 +137,7 @@ public class TypeDeviceAddUpdate extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Невозможно добавить пустое поле");
             } else {
                 try {
-                    RepairMobile.st.executeQuery("Insert into SERVERADM.typeofdevice (NAMEOFtype) values ('" + text + "')");
+                    RepairMobile.st.executeQuery("Insert into typeofdevice (NAMEOFtype) values ('" + text + "')");
                     JOptionPane.showMessageDialog(this, "Запись успешно добавлена");
                     listenerCloseForm.event();
                 } catch (SQLException ex) {
@@ -155,7 +155,7 @@ public class TypeDeviceAddUpdate extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Невозможно изменить на пустое поле");
                 } else {
                     try {
-                        RepairMobile.st.executeQuery("UPDATE SERVERADM.typeofdevice SET NAMEOFtype = '" + text + "' WHERE PK_typeofdevice=" + PK);
+                        RepairMobile.st.executeQuery("UPDATE typeofdevice SET NAMEOFtype = '" + text + "' WHERE PK_typeofdevice=" + PK);
                         JOptionPane.showMessageDialog(this, "Запись успешно изменена");
                         listenerCloseForm.event();
                     } catch (SQLException ex) {
