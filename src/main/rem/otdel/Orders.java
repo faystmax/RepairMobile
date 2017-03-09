@@ -26,6 +26,7 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import spravochn.manufacture.ManufacturerAddUpdate;
 import spravochn.typeofcrash.TypeCrashAddUpdate;
 import spravochn.typeofdevice.TypeDeviceAddUpdate;
@@ -34,7 +35,8 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import spravochn.manufacture.Manufacturer;
-import spravochn.status.Status;
+import spravochn.model.Model;
+import spravochn.model.ModelAddUpdate;
 import spravochn.typeofcrash.TypeCrash;
 import spravochn.typeofdevice.TypeDevice;
 
@@ -64,6 +66,8 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
 
     //Обновление верхушки
     public void addTopData() {
+        DefaultTableModel dtm22 = (DefaultTableModel) jTable4.getModel();
+        dtm22.getDataVector().removeAllElements();
         try {
 
             ArrayList<String> type = new ArrayList<String>();
@@ -75,7 +79,30 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
             pkReplace = new ArrayList<String>();
             valueReplace = new ArrayList<String>();
             imeiReplace = new ArrayList<String>();
-            ResultSet resSetReplace = RepairMobile.st.executeQuery("select pk_keyofchangemobile,model,imeinumber from replacemobile");
+            String req = "";
+            boolean fl = true;
+            ResultSet resSetReplace1 = RepairMobile.st.executeQuery("select clientmobile.pk_keyofchangemobile,clientmobile.datereturn from clientmobile");
+            while (true) {
+                if (resSetReplace1.next()) {
+                    if (fl) {
+                        req += "replacemobile.pk_keyofchangemobile <> " + resSetReplace1.getString(1);
+                        fl = false;
+                    } else {
+                        req += " and replacemobile.pk_keyofchangemobile <> " + resSetReplace1.getString(1);
+                    }
+                } else {
+                    break;
+                }
+
+            }
+            ResultSet resSetReplace = null;
+            if (req.equals("")) {
+                resSetReplace = RepairMobile.st.executeQuery("select replacemobile.pk_keyofchangemobile,replacemobile.model,"
+                        + "replacemobile.imeinumber from replacemobile ");
+            } else {
+                resSetReplace = RepairMobile.st.executeQuery("select replacemobile.pk_keyofchangemobile,replacemobile.model,"
+                        + "replacemobile.imeinumber from replacemobile where " + req);
+            }
             TableModel tableModel = DbUtils.resultSetToTableModel(resSetReplace);
             for (int i = 0; i < tableModel.getRowCount(); i++) {
                 pkReplace.add(tableModel.getValueAt(i, 0).toString());
@@ -108,6 +135,16 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
             Image img = icon.getImage();
             Image newimg = img.getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH);
             jButton3.setIcon(new ImageIcon(newimg));
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        
+        try {
+
+            ImageIcon icon = new ImageIcon(getClass().getResource("/img/delete.png"));
+            Image img = icon.getImage();
+            Image newimg = img.getScaledInstance(32, 32, java.awt.Image.SCALE_SMOOTH);
+            jButtonDeleteOrder.setIcon(new ImageIcon(newimg));
         } catch (Exception ex) {
             System.out.println(ex);
         }
@@ -158,9 +195,12 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         ResultSet resSet = null;
         ResultSet resSet2 = null;
         ResultSet resSet3 = null;
-        
+
         jComboBoxModel.setModel(new DefaultComboBoxModel<String>());
         jTextFieldIMEI.setText("");
+        jTextFieldCost.setText("");
+        
+        
         holder = new PlaceHolder(jTextFieldAddFam, "Фамилия");
         holder = new PlaceHolder(jTextFieldAddName, "Имя");
         holder = new PlaceHolder(jTextFieldAddOtch, "Отчество");
@@ -168,7 +208,6 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         holder = new PlaceHolder(jTextFieldAddress, "Адрес");
         holder = new PlaceHolder(jTextFieldIMEI, "IMEI");
 
-        
         try {
             resSet = RepairMobile.st.executeQuery("select manager.FAMOFMANAGER,manager.NAMEOFMANAGER,manager.OTCOFMANAGER from manager"
                     + " where pk_manager=" + PK);
@@ -195,6 +234,27 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                     + " inner join client on client.PK_client=myorder.PK_client"
                     + " where myorder.PK_status=13 or myorder.PK_status=15 or myorder.PK_status=16");
             jTable1.setModel(DbUtils.resultSetToTableModel(resSet));
+
+            DefaultTableModel dtm = (DefaultTableModel) jTable1.getModel();
+            dtm.addColumn("на замене");
+            dtm.addColumn("pk_rep");
+            for (int i = 0; i < jTable1.getRowCount(); i++) {
+                resSet2 = RepairMobile.st.executeQuery("select clientmobile.PK_clientmobile,clientmobile.pk_client,"
+                        + " clientmobile.pk_keyofchangemobile,"
+                        + " replacemobile.model, replacemobile.imeinumber from clientmobile"
+                        + " inner join replacemobile on  clientmobile.pk_keyofchangemobile=replacemobile.pk_keyofchangemobile"
+                        + " where pk_client=" + jTable1.getValueAt(i, 9).toString()
+                );
+                if (resSet2.next()) {
+
+                    jTable1.setValueAt(resSet2.getString(4) + " " + resSet2.getString(5), i, 11);
+                    jTable1.setValueAt(resSet2.getString(1), i, 12);
+                } else {
+                    jTable1.setValueAt("", i, 11);
+                    jTable1.setValueAt("", i, 12);
+                }
+            }
+
             resSet2 = RepairMobile.st.executeQuery("select myorder.PK_ORDER,myorder.NUMOFORDER,"
                     + "TO_CHAR(myorder.TIMETOACCEPT, 'DD.MM.YYYY'),"
                     + "TO_CHAR(myorder.TIMETODELIVERY, 'DD.MM.YYYY'),"
@@ -210,6 +270,23 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                     + " inner join client on client.PK_client=myorder.PK_client"
                     + " ");
             jTable2.setModel(DbUtils.resultSetToTableModel(resSet2));
+
+            DefaultTableModel dtm2 = (DefaultTableModel) jTable2.getModel();
+            dtm2.addColumn("на замене");
+            for (int i = 0; i < jTable2.getRowCount(); i++) {
+                resSet = RepairMobile.st.executeQuery("select clientmobile.PK_clientmobile,clientmobile.pk_client,"
+                        + " clientmobile.pk_keyofchangemobile,"
+                        + " replacemobile.model, replacemobile.imeinumber from clientmobile"
+                        + " inner join replacemobile on  clientmobile.pk_keyofchangemobile=replacemobile.pk_keyofchangemobile"
+                        + " where pk_client=" + jTable2.getValueAt(i, 9).toString()
+                );
+
+                if (resSet.next()) {
+                    jTable2.setValueAt(resSet.getString(4) + " " + resSet.getString(5), i, 11);
+                } else {
+                    jTable2.setValueAt("", i, 11);
+                }
+            }
 
             resSet3 = RepairMobile.st.executeQuery("select concretedetail.PK_CONCRETEDETAIL,"
                     + " concretedetail.PK_detail,"
@@ -256,6 +333,10 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         jTable1.getColumnModel().getColumn(9).setMaxWidth(0);
         jTable1.getColumnModel().getColumn(9).setMinWidth(0);
         jTable1.getColumnModel().getColumn(9).setPreferredWidth(0);
+
+        jTable1.getColumnModel().getColumn(12).setMaxWidth(0);
+        jTable1.getColumnModel().getColumn(12).setMinWidth(0);
+        jTable1.getColumnModel().getColumn(12).setPreferredWidth(0);
 
         for (int i = 0; i < jTable1.getRowCount(); i++) {
             if (jTable1.getValueAt(i, 5).toString().equals("0")) {
@@ -340,7 +421,6 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         jDateChooserAddDate.setDate(new Date());
         JTextFieldDateEditor editor2 = (JTextFieldDateEditor) jDateChooserAddDate.getDateEditor();
         editor2.setEditable(false);
-
 
         ResultSet resSetCrash = null;
         pkCrash = new ArrayList<String>();
@@ -464,32 +544,6 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         menu1 = new java.awt.Menu();
         menu2 = new java.awt.Menu();
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable( )
-        {
-            @Override
-            public boolean isCellEditable(int row, int column)
-            {
-                return false;
-            }
-        };
-        jButton1 = new javax.swing.JButton();
-        jPanel6 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable( )
-        {
-            @Override
-            public boolean isCellEditable(int row, int column)
-            {
-                return false;
-            }
-        };
-        jButton3 = new javax.swing.JButton();
-        jPanel7 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
-        jButton7 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jTextFieldAddFam = new javax.swing.JTextField();
@@ -504,7 +558,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jComboBoxTypeDevice = new javax.swing.JComboBox<>();
-        jButtonAddTypeOfDevice = new javax.swing.JButton();
+        jButtonAddModel = new javax.swing.JButton();
         jButtonAddManufacturer = new javax.swing.JButton();
         jComboBoxModel = new javax.swing.JComboBox<>();
         jTextFieldIMEI = new javax.swing.JTextField();
@@ -529,6 +583,33 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         jPanel9 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTable4 = new javax.swing.JTable();
+        jPanel7 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable3 = new javax.swing.JTable();
+        jButton7 = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable( )
+        {
+            @Override
+            public boolean isCellEditable(int row, int column)
+            {
+                return false;
+            }
+        };
+        jButton3 = new javax.swing.JButton();
+        jButtonDeleteOrder = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable( )
+        {
+            @Override
+            public boolean isCellEditable(int row, int column)
+            {
+                return false;
+            }
+        };
+        jButton1 = new javax.swing.JButton();
         jLabelFIO = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
@@ -552,158 +633,6 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         setTitle("Заказы");
 
         jTabbedPane1.setToolTipText("");
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "№", "Статус", "Клиент", "Тип", "Стоимость", "Дата создания", "Дата завершения", "На замене"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(10);
-            jTable1.getColumnModel().getColumn(1).setPreferredWidth(30);
-            jTable1.getColumnModel().getColumn(2).setPreferredWidth(130);
-            jTable1.getColumnModel().getColumn(3).setPreferredWidth(50);
-            jTable1.getColumnModel().getColumn(4).setPreferredWidth(25);
-            jTable1.getColumnModel().getColumn(5).setPreferredWidth(50);
-            jTable1.getColumnModel().getColumn(6).setPreferredWidth(60);
-        }
-
-        jButton1.setText("Выдать");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 989, Short.MAX_VALUE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-
-        jTabbedPane1.addTab("Выдача", jPanel2);
-
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "№", "Статус", "Клиент", "Тип", "Стоимость", "Дата создания", "Дата завершения", "На замене"
-            }
-        ));
-        jScrollPane2.setViewportView(jTable2);
-        if (jTable2.getColumnModel().getColumnCount() > 0) {
-            jTable2.getColumnModel().getColumn(0).setPreferredWidth(10);
-            jTable2.getColumnModel().getColumn(2).setPreferredWidth(130);
-            jTable2.getColumnModel().getColumn(3).setPreferredWidth(50);
-            jTable2.getColumnModel().getColumn(4).setPreferredWidth(25);
-            jTable2.getColumnModel().getColumn(5).setPreferredWidth(50);
-            jTable2.getColumnModel().getColumn(6).setPreferredWidth(60);
-        }
-
-        jButton3.setText("Редактировать");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 989, Short.MAX_VALUE)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 432, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-
-        jTabbedPane1.addTab("Просмотр всех заказов", jPanel6);
-
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "Деталь", "Стоимость", "Наличие", "Производитель", "Тип", "Модель", "Наличие"
-            }
-        ));
-        jScrollPane3.setViewportView(jTable3);
-
-        jButton7.setText("Включить в стоимость");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 989, Short.MAX_VALUE)
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addComponent(jButton7)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-
-        jTabbedPane1.addTab("Типовые детали", jPanel7);
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Клиент"));
 
@@ -782,10 +711,10 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
             }
         });
 
-        jButtonAddTypeOfDevice.setText("Добавить тип устройства");
-        jButtonAddTypeOfDevice.addActionListener(new java.awt.event.ActionListener() {
+        jButtonAddModel.setText("Добавить модель");
+        jButtonAddModel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAddTypeOfDeviceActionPerformed(evt);
+                jButtonAddModelActionPerformed(evt);
             }
         });
 
@@ -810,7 +739,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButtonAddManufacturer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonAddTypeOfDevice, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonAddModel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7)
@@ -847,7 +776,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextFieldIMEI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButtonAddTypeOfDevice)
+                .addComponent(jButtonAddModel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonAddManufacturer)
                 .addContainerGap())
@@ -1056,6 +985,169 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
 
         jTabbedPane1.addTab("Добавление", jPanel1);
 
+        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Деталь", "Стоимость", "Наличие", "Производитель", "Тип", "Модель", "Наличие"
+            }
+        ));
+        jScrollPane3.setViewportView(jTable3);
+
+        jButton7.setText("Включить в стоимость");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 989, Short.MAX_VALUE)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addComponent(jButton7)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Типовые детали", jPanel7);
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "№", "Статус", "Клиент", "Тип", "Стоимость", "Дата создания", "Дата завершения", "На замене"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable2);
+        if (jTable2.getColumnModel().getColumnCount() > 0) {
+            jTable2.getColumnModel().getColumn(0).setPreferredWidth(10);
+            jTable2.getColumnModel().getColumn(2).setPreferredWidth(130);
+            jTable2.getColumnModel().getColumn(3).setPreferredWidth(50);
+            jTable2.getColumnModel().getColumn(4).setPreferredWidth(25);
+            jTable2.getColumnModel().getColumn(5).setPreferredWidth(50);
+            jTable2.getColumnModel().getColumn(6).setPreferredWidth(60);
+        }
+
+        jButton3.setText("Редактировать");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButtonDeleteOrder.setText("Удалить");
+        jButtonDeleteOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDeleteOrderActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 989, Short.MAX_VALUE)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonDeleteOrder, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 432, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+                    .addComponent(jButtonDeleteOrder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Просмотр всех заказов", jPanel6);
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "№", "Статус", "Клиент", "Тип", "Стоимость", "Дата создания", "Дата завершения", "На замене"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(10);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(30);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(130);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(50);
+            jTable1.getColumnModel().getColumn(4).setPreferredWidth(25);
+            jTable1.getColumnModel().getColumn(5).setPreferredWidth(50);
+            jTable1.getColumnModel().getColumn(6).setPreferredWidth(60);
+        }
+
+        jButton1.setText("Выдать");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 989, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Выдача", jPanel2);
+
         jLabelFIO.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelFIO.setText("Менеджер: Петрова Екатерина Сергеевна");
         jLabelFIO.setToolTipText("");
@@ -1127,8 +1219,9 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                 .addComponent(jLabelFIO, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1018, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 9, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1148,7 +1241,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
     }//GEN-LAST:event_jMenuItemManufacturerActionPerformed
 
     private void jMenuItemStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemStatusActionPerformed
-        Status status = new Status();
+        Model status = new Model();
         status.setVisible(true);
     }//GEN-LAST:event_jMenuItemStatusActionPerformed
 
@@ -1347,7 +1440,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                 }
                 sheet.getRow((short) 20).getCell((short) 5).setCellValue(polomki);
 
-                if (valueReplace.size()>0) {
+                if (valueReplace.size() > 0 && jComboBoxReplace.getSelectedIndex() != -1) {
                     sheet.getRow((short) 25).getCell((short) 5).setCellValue(valueReplace.get(jComboBoxReplace.getSelectedIndex()));
                     sheet.getRow((short) 27).getCell((short) 5).setCellValue(imeiReplace.get(jComboBoxReplace.getSelectedIndex()));
                 }
@@ -1376,6 +1469,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                     System.out.println(ex.getMessage());
                 }
             }
+            
             JOptionPane.showMessageDialog(this, "Заказ успешно создан!");
             addTopData();
             resetElements();
@@ -1390,21 +1484,24 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
     //именить статус заказа на выдан и поставить сегодняшнюю дату
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if (jTable1.getSelectedRow() == -1) {
-            JOptionPane.showMessageDialog(this, "Выделите запись для изминения статуса");
+            JOptionPane.showMessageDialog(this, "Выделите запись для выдачи");
         } else {
             Object PK = jTable1.getValueAt(jTable1.getSelectedRow(), 0);
             int primKey = Integer.parseInt(PK.toString());
             try {
-                if (jTable1.getValueAt(jTable1.getSelectedRow(), 7).toString().equals("7")) {
+                if (jTable1.getValueAt(jTable1.getSelectedRow(), 7).toString().equals("16")) {
                     JOptionPane.showMessageDialog(this, "Товар уже выдан!");
                     return;
                 }
-                RepairMobile.st.executeQuery("UPDATE myorder SET  PK_STATUS= " + 7 + " WHERE PK_ORDER=" + PK);
+                RepairMobile.st.executeQuery("UPDATE myorder SET  PK_STATUS= " + 16 + " WHERE PK_ORDER=" + PK);
                 Date datenow = new Date();
                 java.sql.Date date = new java.sql.Date(datenow.getTime());
                 RepairMobile.st.executeQuery("UPDATE myorder SET  myorder.TIMETODELIVERY= TO_DATE('" + date + "', 'YYYY-MM-DD') WHERE PK_ORDER=" + PK);
+                RepairMobile.st.executeQuery("delete from clientmobile where pk_clientmobile=" + jTable1.getValueAt(jTable1.getSelectedRow(), 12));
+                
                 JOptionPane.showMessageDialog(this, "Запись успешно изменена");
                 this.addDataInTable();
+                this.addTopData();
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(this, "Ошибка: Невозможно изменить");
             }
@@ -1413,7 +1510,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         if (jTable2.getSelectedRow() == -1) {
-            JOptionPane.showMessageDialog(this, "Выделите заказ для изминения!");
+            JOptionPane.showMessageDialog(this, "Выделите заказ для изменения!");
         } else {
             Object PK = jTable2.getValueAt(jTable2.getSelectedRow(), 0);
             int primKey = Integer.parseInt(PK.toString());
@@ -1430,12 +1527,12 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldAddOtchActionPerformed
 
-    private void jButtonAddTypeOfDeviceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddTypeOfDeviceActionPerformed
-        TypeDeviceAddUpdate typeDeviceAddUpdate = new TypeDeviceAddUpdate(0, -1);
-        typeDeviceAddUpdate.setListenerCloseForm(new ListenerCloseForm(this));
-        typeDeviceAddUpdate.setVisible(true);
+    private void jButtonAddModelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddModelActionPerformed
+        ModelAddUpdate modelAddUpdate = new ModelAddUpdate(0, -1);
+        modelAddUpdate.setListenerCloseForm(new ListenerCloseForm(this));
+        modelAddUpdate.setVisible(true);
         this.setEnabled(false);
-    }//GEN-LAST:event_jButtonAddTypeOfDeviceActionPerformed
+    }//GEN-LAST:event_jButtonAddModelActionPerformed
 
     private void jButtonAddTypeOfCrashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddTypeOfCrashActionPerformed
         TypeCrashAddUpdate typeCrashAddUpdate = new TypeCrashAddUpdate(0, -1);
@@ -1711,6 +1808,33 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         }
     }//GEN-LAST:event_jButton7ActionPerformed
 
+    private void jButtonDeleteOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteOrderActionPerformed
+        // TODO add your handling code here:
+        if (jTable2.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(this, "Выделите строку для удаления");
+        } else {
+            try {
+                Object PK = jTable2.getValueAt(jTable2.getSelectedRow(), 0);
+                int primKey = Integer.parseInt(PK.toString());
+
+                int option = JOptionPane.showConfirmDialog(this, "Вы уверены что хотите удалить запись",
+                        "Удаление записи", JOptionPane.YES_NO_CANCEL_OPTION);
+                if (option == 0) {
+                    RepairMobile.st.executeQuery("delete from clientmobile where PK_client="
+                            +jTable2.getValueAt(jTable2.getSelectedRow(), 9));
+                    RepairMobile.st.executeQuery("delete from myorder where PK_order=" + PK);                  
+                    addDataInTable();
+                }
+                
+                addTopData();
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Удаление невозможно");
+                Logger.getLogger(DetailsStore.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jButtonDeleteOrderActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -1719,9 +1843,10 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
     private javax.swing.JButton jButtonAccept;
     private javax.swing.JButton jButtonAddCrash;
     private javax.swing.JButton jButtonAddManufacturer;
+    private javax.swing.JButton jButtonAddModel;
     private javax.swing.JButton jButtonAddTypeOfCrash;
-    private javax.swing.JButton jButtonAddTypeOfDevice;
     private javax.swing.JButton jButtonChooseExist;
+    private javax.swing.JButton jButtonDeleteOrder;
     private javax.swing.JButton jButtonRetCrash;
     private javax.swing.JComboBox<String> jComboBoxManufacturers;
     private javax.swing.JComboBox<String> jComboBoxModel;

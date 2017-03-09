@@ -3,57 +3,97 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package spravochn.status;
+package spravochn.model;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.TableModel;
 import main.rem.otdel.ListenerCloseForm;
 import main.rem.otdel.RepairMobile;
+import net.proteanit.sql.DbUtils;
 
 /**
  *
  * @author tigler
  */
-public class StatusAddUpdate extends javax.swing.JFrame {
+public class ModelAddUpdate extends javax.swing.JFrame {
 
     /**
-     * Creates new form ModelAddUpdate
+     * Creates new form StatusAddUpdate
      */
     private int addOrUpdate;
     private int PK;
     private ListenerCloseForm listenerCloseForm;
-
-    public StatusAddUpdate(int addOrUpdate, int PK) {
+    ArrayList<String> pkMan;
+    ArrayList<String> valueMan;
+    
+    public ModelAddUpdate(int addOrUpdate, int PK) {
         initComponents();
         this.addOrUpdate = addOrUpdate;
         this.PK = PK;
+        pkMan = new ArrayList<String>();
+        valueMan = new ArrayList<String>();
         if (addOrUpdate == 1) {
             jButtonAddUpdate.setText("Изменить");
-            this.setTitle("Изменить статус");
-
+            this.setTitle("Изменить модель");
+            
             ResultSet resSet = null;
+            ResultSet resSet1 = null;
+            ResultSet resSet2 = null;
+            
             try {
-                resSet = RepairMobile.st.executeQuery("select nameofstatus from status where status.PK_status=" + PK);
+                resSet = RepairMobile.st.executeQuery("select nameofmodel,pk_manufacturer  from  where modeldevice modeldevice.PK_modeldevice=" + PK);
+                
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(this, "Ошибка: Невозможно изменить");
-
+                
                 this.dispose();
             }
             try {
                 if (resSet.next()) {
                     jTextField1.setText(resSet.getString(1));
                 }
+                resSet2 = RepairMobile.st.executeQuery("select pk_manufacturer,nameofmanufacturer  from manufacturer");
+                TableModel tableModel = DbUtils.resultSetToTableModel(resSet2);
+                for (int i = 0; i < tableModel.getRowCount(); i++) {
+                    pkMan.add(tableModel.getValueAt(i, 0).toString());
+                    valueMan.add(tableModel.getValueAt(i, 1).toString());
+                }
+                for (int i = 0; i < pkMan.size(); i++) {
+                    if (pkMan.get(i).equals(resSet.getString(2))) {
+                        jComboBox1.setSelectedIndex(i);
+                    }
+                }
+                jComboBox1.setModel(new DefaultComboBoxModel(valueMan.toArray()));
+                resSet1 = RepairMobile.st.executeQuery("select pk_manufacturer,nameofmanufacturer  from manufacturer  where PK_manufacturer=" + resSet.getString(2));
             } catch (SQLException ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(this, "Ошибка: Невозможно изменить");
                 this.dispose();
             }
+        } else {
+            try {
+                ResultSet resSet = RepairMobile.st.executeQuery("select pk_manufacturer,nameofmanufacturer  from manufacturer");
+                TableModel tableModel = DbUtils.resultSetToTableModel(resSet);
+                for (int i = 0; i < tableModel.getRowCount(); i++) {
+                    pkMan.add(tableModel.getValueAt(i, 0).toString());
+                    valueMan.add(tableModel.getValueAt(i, 1).toString());
+                }
+                jComboBox1.setModel(new DefaultComboBoxModel(valueMan.toArray()));
+                jComboBox1.setSelectedIndex(-1);
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Ошибка: Невозможно изменить");
+                
+                this.dispose();
+            }
         }
     }
-
+    
     public void setListenerCloseForm(ListenerCloseForm listenerCloseForm) {
         this.listenerCloseForm = listenerCloseForm;
     }
@@ -71,16 +111,18 @@ public class StatusAddUpdate extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jButtonCancel = new javax.swing.JButton();
         jButtonAddUpdate = new javax.swing.JButton();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Добавить статус");
+        setTitle("Добавить модель");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
         });
 
-        jLabel1.setText("Статус");
+        jLabel1.setText("Модель");
 
         jButtonCancel.setText("Отмена");
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
@@ -96,6 +138,8 @@ public class StatusAddUpdate extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setText("Производитель");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -103,24 +147,32 @@ public class StatusAddUpdate extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButtonCancel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 94, Short.MAX_VALUE)
-                        .addComponent(jButtonAddUpdate)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 130, Short.MAX_VALUE)
+                        .addComponent(jButtonAddUpdate))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jComboBox1, 0, 197, Short.MAX_VALUE)
+                            .addComponent(jTextField1))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGap(34, 34, 34)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCancel)
                     .addComponent(jButtonAddUpdate))
@@ -145,25 +197,25 @@ public class StatusAddUpdate extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Невозможно добавить пустое поле");
             } else {
                 try {
-                    RepairMobile.st.executeQuery("Insert into Status (NAMEOFSTATUS) values ('" + text + "')");
+                    RepairMobile.st.executeQuery("Insert into modeldevice (NAMEOFmodel,pk_manufacturer) values ('" + text + "','"+ pkMan.get(jComboBox1.getSelectedIndex())+"')");
                     JOptionPane.showMessageDialog(this, "Запись успешно добавлена");
                     listenerCloseForm.event();
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(this, "Ошибка: Невозможно добавить");
-
+                    
                 }
                 this.dispose();
             }
         } else {
             if (addOrUpdate == 1) {
-
+                
                 String text = jTextField1.getText();
-
+                
                 if (text.equals("")) {
                     JOptionPane.showMessageDialog(this, "Невозможно изменить на пустое поле");
                 } else {
                     try {
-                        RepairMobile.st.executeQuery("UPDATE status SET NAMEOFSTATUS = '" + text + "' WHERE PK_Status=" + PK);
+                        RepairMobile.st.executeQuery("UPDATE modeldevice SET NAMEOFmodel= '" + text + "' pk_manufacturer= '" + pkMan.get(jComboBox1.getSelectedIndex()) + "' WHERE PK_modelDevice=" + PK);
                         JOptionPane.showMessageDialog(this, "Запись успешно изменена");
                         listenerCloseForm.event();
                     } catch (SQLException ex) {
@@ -172,7 +224,7 @@ public class StatusAddUpdate extends javax.swing.JFrame {
                     this.dispose();
                 }
             }
-
+            
         }
     }//GEN-LAST:event_jButtonAddUpdateActionPerformed
 
@@ -184,7 +236,9 @@ public class StatusAddUpdate extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAddUpdate;
     private javax.swing.JButton jButtonCancel;
+    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }
