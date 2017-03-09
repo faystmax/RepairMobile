@@ -77,7 +77,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         holder = new PlaceHolder(jTextFieldAddOtch, "Отчество");
         holder = new PlaceHolder(jTextFieldAddTelefon, "Телефон");
         holder = new PlaceHolder(jTextFieldAddress, "Адрес");
-         holder = new PlaceHolder(jTextFieldIMEI, "IMEI");
+        holder = new PlaceHolder(jTextFieldIMEI, "IMEI");
 
         try {
 
@@ -1169,6 +1169,8 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
     }//GEN-LAST:event_jMenuCloseActionPerformed
 
     public void resetElements() {
+        jTextFieldIMEI.setText("");
+        jTextFieldAddress.setText("");
         jComboBoxManufacturers.setSelectedIndex(-1);
         //jComboBoxTypeCrash.setSelectedIndex(-1);
         jComboBoxTypeDevice.setSelectedIndex(-1);
@@ -1226,6 +1228,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         String textName = jTextFieldAddName.getText();
         String textOtch = jTextFieldAddOtch.getText();
         String textTelefon = jTextFieldAddTelefon.getText();
+        String textAddress = jTextFieldAddress.getText();
         //проверка по номеру телефона
         try {
             ResultSet resSet = RepairMobile.st.executeQuery("SELECT PK_Client,NameOfClient,FamOfClient,OtcOfClient  "
@@ -1247,8 +1250,8 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
             }
             //добавление клиента
             if (isCreateNew == true) {
-                resSet = RepairMobile.st.executeQuery("INSERT INTO CLIENT (NAMEOFCLIENT, FAMOFCLIENT, OTCOFCLIENT, NUMBEROFPHONE) "
-                        + "VALUES ('" + textName + "', '" + textFam + "', '" + textOtch + "', '" + textTelefon + "')"
+                resSet = RepairMobile.st.executeQuery("INSERT INTO CLIENT (NAMEOFCLIENT, FAMOFCLIENT, OTCOFCLIENT, NUMBEROFPHONE,address) "
+                        + "VALUES ('" + textName + "', '" + textFam + "', '" + textOtch + "', '" + textTelefon + "','" + textAddress + "')"
                 );
                 resSet = RepairMobile.st.executeQuery("select SEQCLIENT.currval from dual");
                 int pkZapros = 0;
@@ -1261,7 +1264,18 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
             int typeOfOrder = jComboBoxType.getSelectedIndex();
             Date dateChooserAddDate = jDateChooserAddDate.getDate();
             java.sql.Date date = new java.sql.Date(dateChooserAddDate.getTime());
-            
+
+            //добавление записи о выдаче телефона на замену
+            resSet = RepairMobile.st.executeQuery("INSERT INTO CLIENTMOBILE "
+                    + "(PK_CLIENT, PK_KEYOFCHANGEMOBILE, DATEDILIVERY)"
+                    + "VALUES ("
+                    + "'" + PKClient + "', "
+                    + "'" + pkReplace.get(jComboBoxReplace.getSelectedIndex()) + "', "
+                    + " TO_DATE('" + date + "', 'YYYY-MM-DD')"
+                            
+                    + ")"
+            );
+
             //добавление устройства
             resSet = RepairMobile.st.executeQuery("INSERT INTO DEVICE "
                     + "(PK_MODELDEVICE, PK_TYPEOFDEVICE,imei) "
@@ -1271,17 +1285,23 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                     + " '" + jTextFieldIMEI.getText() + "'"
                     + ")"
             );
-            
+
+            resSet = RepairMobile.st.executeQuery("select SEQDEVICE.currval from dual");
+            int currvalDevice = 0;
+            if (resSet.next()) {
+                currvalDevice = resSet.getInt(1);
+            }
+
             resSet = RepairMobile.st.executeQuery("INSERT INTO MYORDER "
                     + "(NUMOFORDER, TIMETOACCEPT, TIMETODELIVERY, COSTOFORDER, TYPEOFORDER, PK_STATUS, PK_MANAGER,PK_device, PK_CLIENT) "
                     + "VALUES (SeqOrderNumber.nextval,"
                     + "TO_DATE('" + date + "', 'YYYY-MM-DD'),"
                     + "null,"
-                    + " '"+countCost+"',"
+                    + " '" + countCost + "',"
                     + " '" + typeOfOrder + "',"
                     + " '10',"
                     + " '" + PK + "',"
-                    + " 'seqdevice.currval',"
+                    + " '" + currvalDevice + "',"
                     + " '" + PKClient + "')"
             );
             resSet = RepairMobile.st.executeQuery("select SEQMYORDER.currval from dual");
@@ -1289,16 +1309,15 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
             if (resSet.next()) {
                 pkOrder = resSet.getInt(1);
             }
-            
-            
-            for(int i=0;i<jListSelCrash.getModel().getSize();i++){
+
+            for (int i = 0; i < jListSelCrash.getModel().getSize(); i++) {
                 resSet = RepairMobile.st.executeQuery("INSERT INTO ordercrash "
-                    + "(PK_crash, PK_order) "
-                    + "VALUES ("
-                    + "'" + jListSelCrash.getModel().getElementAt(i).getKey() + "', "
-                    + " '" + pkOrder + "',"
-                    + ")"
-            );
+                        + "(PK_crash, PK_order) "
+                        + "VALUES ("
+                        + "'" + jListSelCrash.getModel().getElementAt(i).getKey() + "', "
+                        + " '" + pkOrder + "'"
+                        + ")"
+                );
             }
             JOptionPane.showMessageDialog(this, "Заказ успешно создан!");
             resetElements();
