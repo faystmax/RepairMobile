@@ -1508,8 +1508,8 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                 Date datenow = new Date();
                 java.sql.Date date = new java.sql.Date(datenow.getTime());
                 RepairMobile.st.executeQuery("UPDATE myorder SET  myorder.TIMETODELIVERY= TO_DATE('" + date + "', 'YYYY-MM-DD') WHERE PK_ORDER=" + PK);
-                RepairMobile.st.executeQuery("delete from clientmobile where pk_clientmobile=" + jTable1.getValueAt(jTable1.getSelectedRow(), 12));
-                JOptionPane.showMessageDialog(this, "Запись успешно изменена");
+                RepairMobile.st.executeQuery("delete from clientmobile where pk_clientmobile=" + jTable1.getValueAt(jTable1.getSelectedRow(), 9));
+                JOptionPane.showMessageDialog(this, "Товар успешно выдан");
                 this.addDataInTable();
                 this.addTopData();
             } catch (SQLException ex) {
