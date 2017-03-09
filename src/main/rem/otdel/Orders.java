@@ -9,6 +9,7 @@ import com.placeholder.PlaceHolder;
 import com.toedter.calendar.JTextFieldDateEditor;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
+import java.io.FileInputStream;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,6 +27,8 @@ import spravochn.manufacture.ManufacturerAddUpdate;
 import spravochn.typeofcrash.TypeCrashAddUpdate;
 import spravochn.typeofdevice.TypeDeviceAddUpdate;
 import net.proteanit.sql.DbUtils;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import spravochn.manufacture.Manufacturer;
 import spravochn.status.Status;
 import spravochn.typeofcrash.TypeCrash;
@@ -1319,7 +1322,43 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                         + ")"
                 );
             }
-            JOptionPane.showMessageDialog(this, "Заказ успешно создан!");
+            //JOptionPane.showMessageDialog(this, "Заказ успешно создан!");
+                       //excell
+            HSSFWorkbook wb = null;
+            try {
+                wb = new HSSFWorkbook(new FileInputStream("AktPriema(Itog).xls"));//for earlier version use HSSF
+                HSSFSheet sheet = wb.getSheetAt(0);
+
+                /* берём номер*/
+                resSet = RepairMobile.st.executeQuery("select SEQMYORDER.currval from dual");
+                int numOrder = 0;
+                if (resSet.next()) {
+                    numOrder = resSet.getInt(1);
+                }
+
+                sheet.getRow((short) 7).getCell((short) 19).setCellValue(String.valueOf(numOrder));           //Номер заказа
+                sheet.getRow((short) 10).getCell((short) 5).setCellValue(String.valueOf(textFam));            //Фамилия    
+                sheet.getRow((short) 10).getCell((short) 16).setCellValue(String.valueOf(textName));          //Имя
+                sheet.getRow((short) 10).getCell((short) 21).setCellValue(String.valueOf(textOtch));          //Отчество
+                sheet.getRow((short) 13).getCell((short) 3).setCellValue(String.valueOf(textOtch));           //Адрес
+                sheet.getRow((short) 13).getCell((short) 20).setCellValue(String.valueOf(textTelefon));       //Номер телефона 
+                sheet.getRow((short) 16).getCell((short) 18).setCellValue(String.valueOf(valueModel.get(jComboBoxModel.getSelectedIndex())));     //модель
+                sheet.getRow((short) 17).getCell((short) 5).setCellValue(String.valueOf(jTextFieldIMEI.getText()));                               //imei
+                String polomki = new String();
+                for (int i = 0; i < jListSelCrash.getModel().getSize(); i++) {
+                    polomki += jListSelCrash.getModel().getElementAt(i).getValue() + "\n ";
+
+                }
+                sheet.getRow((short) 20).getCell((short) 5).setCellValue(polomki);
+                /* телефон на замену*/
+
+                /* */
+                sheet.getRow((short) 43).getCell((short) 16).setCellValue(jDateChooserAddDate.getDate().toString());        //дата передачи
+
+            } catch (Exception e) {
+                System.out.println("Ошибка при чтении шаблона:" + e.getMessage());
+                return;
+            }
             resetElements();
             this.addDataInTable();
             isCreateNew = true;
