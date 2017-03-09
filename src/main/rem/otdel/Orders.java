@@ -66,8 +66,8 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
 
     //Обновление верхушки
     public void addTopData() {
-        DefaultTableModel dtm22 = (DefaultTableModel) jTable4.getModel();
-        dtm22.getDataVector().removeAllElements();
+        
+        
         try {
 
             ArrayList<String> type = new ArrayList<String>();
@@ -1469,12 +1469,13 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                     System.out.println(ex.getMessage());
                 }
             }
-            
             JOptionPane.showMessageDialog(this, "Заказ успешно создан!");
             addTopData();
             resetElements();
             this.addDataInTable();
             isCreateNew = true;
+            DefaultTableModel dtm = (DefaultTableModel) jTable4.getModel();
+            dtm.getDataVector().removeAllElements();
         } catch (SQLException ex) {
             Logger.getLogger(Orders.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(this, "Ошибка: Невозможно выполнить операцию(возможно введены неверные данные)");
@@ -1498,7 +1499,6 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                 java.sql.Date date = new java.sql.Date(datenow.getTime());
                 RepairMobile.st.executeQuery("UPDATE myorder SET  myorder.TIMETODELIVERY= TO_DATE('" + date + "', 'YYYY-MM-DD') WHERE PK_ORDER=" + PK);
                 RepairMobile.st.executeQuery("delete from clientmobile where pk_clientmobile=" + jTable1.getValueAt(jTable1.getSelectedRow(), 12));
-                
                 JOptionPane.showMessageDialog(this, "Запись успешно изменена");
                 this.addDataInTable();
                 this.addTopData();
