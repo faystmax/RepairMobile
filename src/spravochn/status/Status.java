@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import main.rem.otdel.DetailsStore;
 import main.rem.otdel.ListenerCloseForm;
@@ -30,6 +31,7 @@ public class Status extends javax.swing.JFrame implements UpdatesDataInForms {
     public Status() {
         initComponents();
         addDataInTable();
+        jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     @Override

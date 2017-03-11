@@ -9,7 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.TableSelectionModel;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 import main.rem.otdel.ListenerCloseForm;
 import main.rem.otdel.RepairMobile;
 import main.rem.otdel.UpdatesDataInForms;
@@ -31,6 +33,7 @@ public class ChooseExistClient extends javax.swing.JFrame implements UpdatesData
     public ChooseExistClient(Orders orders) {
         initComponents();
         addDataInTable();
+        jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         this.orders = orders;
     }
 

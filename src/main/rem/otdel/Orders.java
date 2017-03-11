@@ -25,6 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import spravochn.manufacture.ManufacturerAddUpdate;
@@ -67,8 +68,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
 
     //Обновление верхушки
     public void addTopData() {
-        
-        
+
         try {
 
             ArrayList<String> type = new ArrayList<String>();
@@ -128,6 +128,9 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         flagSelDetals = false;
         modelAllCrash = new DefaultListModel<MyMap>();
         modelSelCrash = new DefaultListModel<MyMap>();
+        jTable3.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        jTable2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         addDataInTable();
         jTextFieldCost.setEditable(false);
         try {
@@ -139,7 +142,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         } catch (Exception ex) {
             System.out.println(ex);
         }
-        
+
         try {
 
             ImageIcon icon = new ImageIcon(getClass().getResource("/img/delete.png"));
@@ -200,8 +203,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         jComboBoxModel.setModel(new DefaultComboBoxModel<String>());
         jTextFieldIMEI.setText("");
         jTextFieldCost.setText("");
-        
-        
+
         holder = new PlaceHolder(jTextFieldAddFam, "Фамилия");
         holder = new PlaceHolder(jTextFieldAddName, "Имя");
         holder = new PlaceHolder(jTextFieldAddOtch, "Отчество");
@@ -263,17 +265,21 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                     + ",myorder.PK_STATUS,"
                     + " status.NAMEOFSTATUS,"
                     + " myorder.PK_CLIENT,"
-                    + " client.FAMOFCLIENT || ' ' || client.NAMEOFCLIENT  || ' ' || client.OTCOFCLIENT"
+                    + " client.FAMOFCLIENT || ' ' || client.NAMEOFCLIENT  || ' ' || client.OTCOFCLIENT,"
+                    + " modeldevice.nameofmodel "
+                    //+ " device.pk_device "
                     // + " manager.FAMOFMANAGER || ' ' || manager.NAMEOFMANAGER  || ' ' || manager.OTCOFMANAGER"
                     + " from myorder "
                     + " inner join status on status.PK_status=myorder.PK_status"
                     + " inner join manager on manager.PK_manager=myorder.PK_manager"
                     + " inner join client on client.PK_client=myorder.PK_client"
+                    + " inner join device on device.PK_device=myorder.PK_device"
+                    + " inner join modeldevice on modeldevice.PK_modeldevice=device.PK_modeldevice"
                     + " ");
             jTable2.setModel(DbUtils.resultSetToTableModel(resSet2));
 
             DefaultTableModel dtm2 = (DefaultTableModel) jTable2.getModel();
-            dtm2.addColumn("на замене");
+            dtm2.addColumn("На замене");
             for (int i = 0; i < jTable2.getRowCount(); i++) {
                 resSet = RepairMobile.st.executeQuery("select clientmobile.PK_clientmobile,clientmobile.pk_client,"
                         + " clientmobile.pk_keyofchangemobile,"
@@ -283,9 +289,9 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                 );
 
                 if (resSet.next()) {
-                    jTable2.setValueAt(resSet.getString(4) + " " + resSet.getString(5), i, 11);
+                    jTable2.setValueAt(resSet.getString(4) + " " + resSet.getString(5), i, 12);
                 } else {
-                    jTable2.setValueAt("", i, 11);
+                    jTable2.setValueAt("", i, 12);
                 }
             }
 
@@ -359,6 +365,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         jTable2.getColumnModel().getColumn(5).setHeaderValue("Тип");
         jTable2.getColumnModel().getColumn(8).setHeaderValue("Статус");
         jTable2.getColumnModel().getColumn(10).setHeaderValue("Клиент");
+        jTable2.getColumnModel().getColumn(11).setHeaderValue("Устройство");
 
         //пк заказа
         jTable2.getColumnModel().getColumn(0).setMaxWidth(0);
@@ -586,7 +593,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         jTable4 = new javax.swing.JTable();
         jPanel7 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        jTable3 = new javax.swing.JTable( )         {             @Override             public boolean isCellEditable(int row, int column)             {                 return false;             }         };
         jButton7 = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -1423,6 +1430,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
             }
 
             //excell
+            int numOrder = 0;
             HSSFWorkbook wb = null;
             try {
                 wb = new HSSFWorkbook(new FileInputStream("AktPriema(Itog).xls"));//for earlier version use HSSF
@@ -1430,7 +1438,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
 
                 /* берём номер*/
                 resSet = RepairMobile.st.executeQuery("select SEQMYORDER.currval from dual");
-                int numOrder = 0;
+
                 if (resSet.next()) {
                     numOrder = resSet.getInt(1);
                 }
@@ -1466,6 +1474,9 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
 
             //выбор файла и сохранение
             JFileChooser fileChooser = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Excell", "xls");
+            fileChooser.setSelectedFile(new File(numOrder + ".xls"));
+            fileChooser.setFileFilter(filter);
             if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
                 File file = fileChooser.getSelectedFile();
                 // save to file
@@ -1831,11 +1842,20 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                         "Удаление записи", JOptionPane.YES_NO_CANCEL_OPTION);
                 if (option == 0) {
                     RepairMobile.st.executeQuery("delete from clientmobile where PK_client="
-                            +jTable2.getValueAt(jTable2.getSelectedRow(), 9));
-                    RepairMobile.st.executeQuery("delete from myorder where PK_order=" + PK);                  
+                            + jTable2.getValueAt(jTable2.getSelectedRow(), 9));
+                    ResultSet res = RepairMobile.st.executeQuery("select pk_device from myorder where PK_order="
+                            + jTable2.getValueAt(jTable2.getSelectedRow(), 0));
+                    String tmpPK = "";
+                    if (res.next()) {
+                        tmpPK = res.getString(1);
+
+                    }
+                    RepairMobile.st.executeQuery("delete from myorder where PK_order=" + PK);
+                    RepairMobile.st.executeQuery("delete from device where PK_device="
+                            + tmpPK);
                     addDataInTable();
                 }
-                
+
                 addTopData();
 
             } catch (SQLException ex) {

@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import main.rem.otdel.ListenerCloseForm;
 import main.rem.otdel.RepairMobile;
@@ -30,6 +31,7 @@ public class Detail extends javax.swing.JFrame implements UpdatesDataInForms {
     public Detail() {
         initComponents();
         addDataInTable();
+        jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     @Override

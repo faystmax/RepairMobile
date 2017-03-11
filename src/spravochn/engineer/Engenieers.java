@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
@@ -37,6 +38,7 @@ public class Engenieers extends javax.swing.JFrame implements UpdatesDataInForms
     public Engenieers() {
         initComponents();
         addDataInTable();
+        jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
 
