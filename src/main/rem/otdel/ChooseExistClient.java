@@ -47,7 +47,7 @@ public class ChooseExistClient extends javax.swing.JFrame implements UpdatesData
         ResultSet resSet = null;
         try {
             resSet = RepairMobile.st.executeQuery("select PK_CLIENT,FAMOFCLIENT,"
-                    + "NAMEOFCLIENT,OTCOFCLIENT,NUMBEROFPHONE from client");
+                    + "NAMEOFCLIENT,OTCOFCLIENT,NUMBEROFPHONE,address from client");
 
         } catch (SQLException ex) {
             Logger.getLogger(ChooseExistClient.class.getName()).log(Level.SEVERE, null, ex);
@@ -61,6 +61,7 @@ public class ChooseExistClient extends javax.swing.JFrame implements UpdatesData
         jTable1.getColumnModel().getColumn(2).setHeaderValue("Имя");
         jTable1.getColumnModel().getColumn(3).setHeaderValue("Отчество");
         jTable1.getColumnModel().getColumn(4).setHeaderValue("Телефон");
+        jTable1.getColumnModel().getColumn(5).setHeaderValue("Адрес");
     }
 
     /**
@@ -76,6 +77,8 @@ public class ChooseExistClient extends javax.swing.JFrame implements UpdatesData
         jTable1 = new javax.swing.JTable( )         {             @Override             public boolean isCellEditable(int row, int column)             {                 return false;             }         };
         jButtonChoose = new javax.swing.JButton();
         jButtonCancel = new javax.swing.JButton();
+        jButtonUpdateClient = new javax.swing.JButton();
+        jButtonDeleteClient = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Существующие пользователи");
@@ -112,33 +115,51 @@ public class ChooseExistClient extends javax.swing.JFrame implements UpdatesData
             }
         });
 
+        jButtonUpdateClient.setText("Изменить");
+        jButtonUpdateClient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonUpdateClientActionPerformed(evt);
+            }
+        });
+
+        jButtonDeleteClient.setText("Удалить");
+        jButtonDeleteClient.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDeleteClientActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButtonCancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonChoose, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE))
-                .addGap(6, 6, 6))
+                    .addComponent(jButtonChoose, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonUpdateClient, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonDeleteClient, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addComponent(jButtonChoose)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButtonCancel)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addComponent(jButtonChoose)
+                .addGap(18, 18, 18)
+                .addComponent(jButtonCancel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButtonUpdateClient)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonDeleteClient)
+                .addGap(25, 25, 25))
         );
 
         pack();
@@ -163,10 +184,48 @@ public class ChooseExistClient extends javax.swing.JFrame implements UpdatesData
         }
     }//GEN-LAST:event_jButtonChooseActionPerformed
 
+    private void jButtonUpdateClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpdateClientActionPerformed
+        // TODO add your handling code here:
+        if (jTable1.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(this, "Выделите запись для изменения");
+        } else {
+            Object PK = jTable1.getValueAt(jTable1.getSelectedRow(), 0);
+            int primKey = Integer.parseInt(PK.toString());
+            ClientAddUpdate clientAddUpdate = new ClientAddUpdate(primKey);
+            clientAddUpdate.setListenerCloseForm(new ListenerCloseForm(this));
+            clientAddUpdate.setVisible(true);
+        }
+    }//GEN-LAST:event_jButtonUpdateClientActionPerformed
+
+    private void jButtonDeleteClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteClientActionPerformed
+        // TODO add your handling code here:
+        if (jTable1.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(this, "Выделите строку для удаления");
+        } else {
+            try {
+                Object PK = jTable1.getValueAt(jTable1.getSelectedRow(), 0);
+                int primKey = Integer.parseInt(PK.toString());
+
+                int option = JOptionPane.showConfirmDialog(this, "Вы уверены что хотите удалить запись",
+                        "Удаление записи", JOptionPane.YES_NO_CANCEL_OPTION);
+                if (option == 0) {
+                    RepairMobile.st.executeQuery("delete from client where PK_client=" + PK);
+                    addDataInTable();
+                }
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Удаление невозможно");
+                Logger.getLogger(DetailsStore.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jButtonDeleteClientActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JButton jButtonChoose;
+    private javax.swing.JButton jButtonDeleteClient;
+    private javax.swing.JButton jButtonUpdateClient;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
