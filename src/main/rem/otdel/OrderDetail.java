@@ -124,7 +124,7 @@ public class OrderDetail extends javax.swing.JFrame {
     private void initComponents() {
 
         jSpinnerAmount = new javax.swing.JSpinner();
-        jComboBoxPostav = new javax.swing.JComboBox<>();
+        jComboBoxPostav = new javax.swing.JComboBox<String>();
         jButtonOrder = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -132,10 +132,10 @@ public class OrderDetail extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jComboBoxDetails = new javax.swing.JComboBox<>();
-        jComboBoxTypeDevice = new javax.swing.JComboBox<>();
-        jComboBoxManufacturer = new javax.swing.JComboBox<>();
-        jComboBoxModel = new javax.swing.JComboBox<>();
+        jComboBoxDetails = new javax.swing.JComboBox<String>();
+        jComboBoxTypeDevice = new javax.swing.JComboBox<String>();
+        jComboBoxManufacturer = new javax.swing.JComboBox<String>();
+        jComboBoxModel = new javax.swing.JComboBox<String>();
         jLabel8 = new javax.swing.JLabel();
         jSpinner1 = new javax.swing.JSpinner();
 
@@ -242,6 +242,7 @@ public class OrderDetail extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jComboBoxManufacturerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxManufacturerActionPerformed

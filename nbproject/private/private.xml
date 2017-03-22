@@ -3,9 +3,34 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/tigler/NetBeansProjects/repairMobile/src/main/rem/otdel/EngineerForm.java</file>
-            <file>file:/home/tigler/NetBeansProjects/repairMobile/src/main/rem/otdel/RepairAddUpdate.java</file>
-            <file>file:/home/tigler/NetBeansProjects/repairMobile/src/main/rem/otdel/EngineerUpdateStatus.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/main/rem/otdel/DetailsStore.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/spravochn/status/Status.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/main/rem/otdel/RepairAddUpdate.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/main/rem/otdel/UpdatesDataInForms.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/main/rem/otdel/ClientAddUpdate.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/spravochn/status/StatusAddUpdate.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/spravochn/manufacture/Manufacturer.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/spravochn/typeofdevice/TypeDevice.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/spravochn/model/Model.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/main/rem/otdel/Orders.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/main/rem/otdel/ChooseExistClient.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/spravochn/model/ModelAddUpdate.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/main/rem/otdel/OrderDetail.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/main/rem/otdel/ErrorLogin.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/main/rem/otdel/Zapros.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/spravochn/typeofcrash/TypeCrash.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/spravochn/manufacture/ManufacturerAddUpdate.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/main/rem/otdel/EngineerUpdateStatus.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/main/rem/otdel/OrderUpdate.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/main/rem/otdel/ListenerCloseForm.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/main/rem/otdel/SctructForTables.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/main/rem/otdel/LoginFrame.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/spravochn/typeofcrash/TypeCrashAddUpdate.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/main/rem/otdel/MyMap.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/main/rem/otdel/EngineerForm.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/spravochn/typeofdevice/TypeDeviceAddUpdate.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/main/rem/otdel/AddUpdateDetailFromStore.java</file>
+            <file>file:/C:/Users/maximus/Desktop/8%20семестр/Технология%20ком.%20раз.%20ПО/repairMobile/src/main/rem/otdel/JTextFieldLimit.java</file>
         </group>
     </open-files>
 </project-private>

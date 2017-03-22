@@ -215,16 +215,16 @@ public class RepairAddUpdate extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jComboBoxDevice = new javax.swing.JComboBox<>();
+        jComboBoxDevice = new javax.swing.JComboBox<String>();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jDateChooserStart = new com.toedter.calendar.JDateChooser();
         jButtonCancel = new javax.swing.JButton();
         jButtonAddUpdate = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        jComboBoxCrash = new javax.swing.JComboBox<>();
+        jComboBoxCrash = new javax.swing.JComboBox<String>();
         jLabel6 = new javax.swing.JLabel();
-        jComboBoxStatus = new javax.swing.JComboBox<>();
+        jComboBoxStatus = new javax.swing.JComboBox<String>();
 
         jLabel1.setText("jLabel1");
 
@@ -264,7 +264,7 @@ public class RepairAddUpdate extends javax.swing.JFrame {
 
         jLabel6.setText("Статус");
 
-        jComboBoxStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ремонтируется", "Выполнено" }));
+        jComboBoxStatus.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Ремонтируется", "Выполнено" }));
         jComboBoxStatus.setSelectedIndex(-1);
         jComboBoxStatus.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -296,12 +296,14 @@ public class RepairAddUpdate extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel6)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jDateChooserStart, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                                .addComponent(jDateChooserStart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(10, 10, 10))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -342,7 +344,7 @@ public class RepairAddUpdate extends javax.swing.JFrame {
 
         if (addOrUpdate == 0) {
 
-            if (jComboBoxDevice.getSelectedIndex() == -1) {
+            if (jComboBoxDevice.getSelectedIndex() == -1 || jComboBoxStatus.getSelectedIndex() == -1 || jComboBoxCrash.getSelectedIndex() == -1) {
                 JOptionPane.showMessageDialog(this, "Заполните поля");
             } else {
                 try {
