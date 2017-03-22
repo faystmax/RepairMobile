@@ -73,14 +73,14 @@ public class LoginFrame extends javax.swing.JFrame {
 
         jLabelParol.setText("Пароль");
 
-        jPasswordField.setText("admin");
+        jPasswordField.setText("1");
         jPasswordField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jPasswordFieldKeyPressed(evt);
             }
         });
 
-        jTextFieldLogin.setText("admin");
+        jTextFieldLogin.setText("eng1");
         jTextFieldLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextFieldLoginActionPerformed(evt);

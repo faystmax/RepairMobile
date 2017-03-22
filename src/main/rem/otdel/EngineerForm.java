@@ -19,12 +19,11 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
 
-
 /**
  *
  * @author tigler
  */
-public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInForms{
+public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInForms {
 
     private int PK;
     private ArrayList<String> pkStorekeeper;
@@ -32,14 +31,14 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
     private ArrayList<String> pkDetail;
     private ArrayList<String> valueDetail;
     private DefaultTableModel dtm;
+
     /**
      * Creates new form EngineerForm
      */
-  
 
     public EngineerForm(int PK) {
         initComponents();
-       this.PK = PK;
+        this.PK = PK;
         addDataInTable();
         pkStorekeeper = new ArrayList<String>();
         valueStorekeeper = new ArrayList<String>();
@@ -56,24 +55,9 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
         } catch (SQLException ex) {
             Logger.getLogger(EngineerForm.class.getName()).log(Level.SEVERE, null, ex);
         }
-        try {
-            resSet = RepairMobile.st.executeQuery("select storekeeper.PK_storekeeper,"
-                    + " storekeeper.FAMOFstorekeeper || ' ' || storekeeper.NAMEOFstorekeeper  || ' ' || storekeeper.OTCOFstorekeeper"
-                    + " from storekeeper");
-        } catch (SQLException ex) {
-            Logger.getLogger(DetailsStore.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        TableModel tableModel = DbUtils.resultSetToTableModel(resSet);
-        for (int i = 0; i < tableModel.getRowCount(); i++) {
-            pkStorekeeper.add(tableModel.getValueAt(i, 0).toString());
-            valueStorekeeper.add(tableModel.getValueAt(i, 1).toString());
-        }
-        //jComboBoxStorekeeper.setModel(new DefaultComboBoxModel(valueStorekeeper.toArray()));
-        //jComboBoxStorekeeper.setSelectedIndex(-1);
 
         jDateChooser1.setDateFormatString("dd.MM.yyyy");
         jDateChooser1.setDate(new Date());
-        //jDateChooser1.getDateEditor().setEnabled(false);
         JTextFieldDateEditor editor2 = (JTextFieldDateEditor) jDateChooser1.getDateEditor();
         editor2.setEditable(false);
 
@@ -87,7 +71,7 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
         } catch (SQLException ex) {
             Logger.getLogger(DetailsStore.class.getName()).log(Level.SEVERE, null, ex);
         }
-        tableModel = DbUtils.resultSetToTableModel(resSet);
+        TableModel tableModel = DbUtils.resultSetToTableModel(resSet);
         for (int i = 0; i < tableModel.getRowCount(); i++) {
             pkDetail.add(tableModel.getValueAt(i, 0).toString());
             valueDetail.add(tableModel.getValueAt(i, 1).toString());
@@ -95,27 +79,27 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
         jComboBoxDetail.setModel(new DefaultComboBoxModel(valueDetail.toArray()));
         jComboBoxDetail.setSelectedIndex(-1);
     }
-    
+
     @Override
     public void addDataInTable() {
         this.setEnabled(true);
         ResultSet resSet = null;
         try {
             resSet = RepairMobile.st.executeQuery("select repair.PK_repair,"
-                    + " typeofdevice.nameoftype,"
-                    + " manufacturer.nameofmanufacturer,"
-                    + " device.modelofdevice,"
+                    + " myorder.numoforder,"
+                    + " manufacturer.nameofmanufacturer|| ' ' ||modeldevice.nameofmodel,"
                     + " TO_CHAR(repair.startdate, 'DD.MM.YYYY'),"
                     + " TO_CHAR(repair.enddate, 'DD.MM.YYYY'),"
-                    + "status.nameofStatus "
-                    //+ " engineer.FAMOFengineer || ' ' || engineer.NAMEOFengineer  || ' ' || engineer.OTChOFengineer"
-                    + " from repair "
+                     + " typeofcrash.nameofcrash ,"
+                    + " repair.repairstatus "
+                   
+                    + " from repair"
                     + " inner join engineer on repair.PK_engineer=engineer.PK_engineer"
-                    + " inner join device on repair.PK_device=device.PK_device"
-                    + " inner join manufacturer on device.PK_manufacturer=manufacturer.PK_manufacturer"
-                    + " inner join typeofdevice on device.PK_typeofdevice=typeofdevice.PK_typeofdevice"
-                    + " inner join myorder on myorder.PK_order=device.PK_order"
-                    + " inner join status on status.PK_status=myOrder.PK_status"
+                    + " inner join myorder on myorder.PK_order=repair.PK_order"
+                    + " inner join device on myorder.PK_device=device.PK_device"
+                    + " inner join modeldevice on modeldevice.PK_modeldevice=device.PK_modeldevice"
+                    + " inner join manufacturer on modeldevice.PK_manufacturer=manufacturer.PK_manufacturer"
+                    + " inner join typeofcrash on typeofcrash.PK_crash=repair.PK_crash"                 
                     + " where engineer.PK_engineer="+ PK
             );
         } catch (SQLException ex) {
@@ -126,14 +110,26 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
         jTable1.getColumnModel().getColumn(0).setMaxWidth(0);
         jTable1.getColumnModel().getColumn(0).setMinWidth(0);
         jTable1.getColumnModel().getColumn(0).setPreferredWidth(0);
-        jTable1.getColumnModel().getColumn(1).setHeaderValue("Тип");
-        jTable1.getColumnModel().getColumn(2).setHeaderValue("Производитель");
-        jTable1.getColumnModel().getColumn(3).setHeaderValue("Модель");
-        jTable1.getColumnModel().getColumn(4).setHeaderValue("Начало ремонта");
-        jTable1.getColumnModel().getColumn(5).setHeaderValue("Конец ремонта");
+        jTable1.getColumnModel().getColumn(1).setHeaderValue("№ заказа");
+        jTable1.getColumnModel().getColumn(2).setHeaderValue("Устройство");
+        jTable1.getColumnModel().getColumn(3).setHeaderValue("Начало ремонта");
+        jTable1.getColumnModel().getColumn(4).setHeaderValue("Конец ремонта");
+        jTable1.getColumnModel().getColumn(5).setHeaderValue("Поломка");
         jTable1.getColumnModel().getColumn(6).setHeaderValue("Статус");
+        
+        for (int i = 0; i < jTable1.getRowCount(); i++) {
+            if (jTable1.getValueAt(i, 6).toString().equals("0")) {
+                jTable1.setValueAt("Ремонтируется", i, 6);
+            } else {
+                if (jTable1.getValueAt(i, 6).toString().equals("1")) {
+                    jTable1.setValueAt("Выполнено", i, 6);
+                } else {
+                    jTable1.setValueAt("Неизвестно", i, 6);
+                }
+            }
+        }
 
-        try {
+        /* try {
             resSet = RepairMobile.st.executeQuery("select repair.PK_repair,"
                     + " typeofdevice.nameoftype,"
                     + " manufacturer.nameofmanufacturer,"
@@ -177,11 +173,69 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
         dtm.addColumn("Колличество");
         jTable3.getColumnModel().getColumn(0).setMaxWidth(0);
         jTable3.getColumnModel().getColumn(0).setMinWidth(0);
-        jTable3.getColumnModel().getColumn(0).setPreferredWidth(0);
-    }
+        jTable3.getColumnModel().getColumn(0).setPreferredWidth(0);*/
+        try {
+            resSet = RepairMobile.st.executeQuery("select myorder.PK_ORDER,myorder.NUMOFORDER,"
+                    + "TO_CHAR(myorder.TIMETOACCEPT, 'DD.MM.YYYY'),"
+                    + "TO_CHAR(myorder.TIMETODELIVERY, 'DD.MM.YYYY'),"
+                    + "myorder.COSTOFORDER,myorder.TYPEOFORDER,myorder.PK_MANAGER"
+                    + ",myorder.PK_STATUS,"
+                    + " status.NAMEOFSTATUS,"
+                    + " myorder.PK_CLIENT,"
+                    + " client.FAMOFCLIENT || ' ' || client.NAMEOFCLIENT  || ' ' || client.OTCOFCLIENT,"
+                    + " manufacturer.nameofmanufacturer|| ' ' ||modeldevice.nameofmodel "
+                    //+ " device.pk_device "
+                    // + " manager.FAMOFMANAGER || ' ' || manager.NAMEOFMANAGER  || ' ' || manager.OTCOFMANAGER"
+                    + " from myorder "
+                    + " inner join status on status.PK_status=myorder.PK_status"
+                    + " inner join client on client.PK_client=myorder.PK_client"
+                    + " inner join device on device.PK_device=myorder.PK_device"
+                    + " inner join modeldevice on modeldevice.PK_modeldevice=device.PK_modeldevice"
+                    + " inner join manufacturer on manufacturer.PK_manufacturer=modeldevice.PK_manufacturer"
+                    + " where status.PK_status<>15 and status.PK_status<>16");
+        } catch (SQLException ex) {
+            Logger.getLogger(EngineerForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        jTableOrders.setModel(DbUtils.resultSetToTableModel(resSet));
 
-   
-    
+        jTableOrders.getColumnModel().getColumn(1).setHeaderValue("Номер");
+        jTableOrders.getColumnModel().getColumn(2).setHeaderValue("Дата создания");
+        jTableOrders.getColumnModel().getColumn(3).setHeaderValue("Дата завершения");
+        jTableOrders.getColumnModel().getColumn(4).setHeaderValue("Стоимость");
+        jTableOrders.getColumnModel().getColumn(5).setHeaderValue("Тип");
+        jTableOrders.getColumnModel().getColumn(8).setHeaderValue("Статус");
+        jTableOrders.getColumnModel().getColumn(10).setHeaderValue("Клиент");
+        jTableOrders.getColumnModel().getColumn(11).setHeaderValue("Устройство");
+
+        //пк заказа
+        jTableOrders.getColumnModel().getColumn(0).setMaxWidth(0);
+        jTableOrders.getColumnModel().getColumn(0).setMinWidth(0);
+        jTableOrders.getColumnModel().getColumn(0).setPreferredWidth(0);
+        //пк менеджера
+        jTableOrders.getColumnModel().getColumn(6).setMaxWidth(0);
+        jTableOrders.getColumnModel().getColumn(6).setMinWidth(0);
+        jTableOrders.getColumnModel().getColumn(6).setPreferredWidth(0);
+        //пк статуса
+        jTableOrders.getColumnModel().getColumn(7).setMaxWidth(0);
+        jTableOrders.getColumnModel().getColumn(7).setMinWidth(0);
+        jTableOrders.getColumnModel().getColumn(7).setPreferredWidth(0);
+        //пк клиета
+        jTableOrders.getColumnModel().getColumn(9).setMaxWidth(0);
+        jTableOrders.getColumnModel().getColumn(9).setMinWidth(0);
+        jTableOrders.getColumnModel().getColumn(9).setPreferredWidth(0);
+
+        for (int i = 0; i < jTableOrders.getRowCount(); i++) {
+            if (jTableOrders.getValueAt(i, 5).toString().equals("0")) {
+                jTableOrders.setValueAt("Гарантийный", i, 5);
+            } else {
+                if (jTableOrders.getValueAt(i, 5).toString().equals("1")) {
+                    jTableOrders.setValueAt("Не гарантийный", i, 5);
+                } else {
+                    jTableOrders.setValueAt("Неизвестно", i, 5);
+                }
+            }
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -215,6 +269,10 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable( )         {             @Override             public boolean isCellEditable(int row, int column)             {                 return false;             }         };
         jLabel4 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTableOrders = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
         jLabelFIO = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -264,7 +322,7 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
             jPanelRemontsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelRemontsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 671, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 789, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanelRemontsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButtonAdd, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -276,7 +334,7 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
             jPanelRemontsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelRemontsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 396, Short.MAX_VALUE)
+                .addComponent(jScrollPane1)
                 .addContainerGap())
             .addGroup(jPanelRemontsLayout.createSequentialGroup()
                 .addGap(132, 132, 132)
@@ -382,7 +440,7 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
                             .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jButtonAddDetail))
                         .addGap(19, 19, 19)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)))
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -438,7 +496,7 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
                         .addContainerGap())
                     .addGroup(jPanelCreateZaprosLayout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 161, Short.MAX_VALUE)
                         .addGroup(jPanelCreateZaprosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelCreateZaprosLayout.createSequentialGroup()
                                 .addGroup(jPanelCreateZaprosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -467,6 +525,51 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
         );
 
         jTabbedPane.addTab("Создание запроса", jPanelCreateZapros);
+
+        jTableOrders.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(jTableOrders);
+
+        jButton1.setText("Изменить статус");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 735, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 422, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(89, 89, 89)
+                .addComponent(jButton1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jTabbedPane.addTab("Заказы", jPanel3);
 
         jLabelFIO.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelFIO.setText("Инженер: Петров Игорь Олегович");
@@ -522,45 +625,45 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
 
     private void jButtonSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSendActionPerformed
         // TODO add your handling code here:
-         ResultSet resSet = null;
+        ResultSet resSet = null;
         if (jTable2.getSelectedRow() == -1) {
             JOptionPane.showMessageDialog(rootPane, "Не выбран ремонт. Выделите запись в таблице.");
         } else {
-           // if (jComboBoxStorekeeper.getSelectedIndex() == -1) {
-             //   JOptionPane.showMessageDialog(rootPane, "Не выбран кладовщик");
+            // if (jComboBoxStorekeeper.getSelectedIndex() == -1) {
+            //   JOptionPane.showMessageDialog(rootPane, "Не выбран кладовщик");
             //} else {
-                if (jTable3.getRowCount() <= 0) {
-                    JOptionPane.showMessageDialog(rootPane, "Не выбрана ни одна деталь");
-                } else {
-                    try {
-                        int pkRepair = Integer.parseInt(jTable2.getValueAt(jTable2.getSelectedRow(), 0).toString());
-                        int pkDevice = Integer.parseInt(jTable2.getValueAt(jTable2.getSelectedRow(), 7).toString());
-                        //int idxComboBox = jComboBoxStorekeeper.getSelectedIndex();
-                       // String pkStrokeeper = pkStorekeeper.get(idxComboBox);
-                        java.sql.Date date = new java.sql.Date(jDateChooser1.getDateEditor().getDate().getTime());
-                       // RepairMobile.st.executeQuery("Insert into zapros (PK_Repair, PK_storekeeper,timetoget,"
-                         //       + "flagofcomplete,pk_device) values ('" + pkRepair + "','" + pkStrokeeper + "', TO_DATE('" + date + "', 'YYYY-MM-DD') ,'0',"
-                        //        + "'" + pkDevice + "')");
-                        resSet = RepairMobile.st.executeQuery("select seqzapros.currval from dual");
-                        int pkZapros = 0;
-                        if (resSet.next()) {
-                            pkZapros = resSet.getInt(1);
-                        }
-                        for (int i = 0; i < jTable3.getRowCount(); i++) {
-                            String pkDet = (String) jTable3.getValueAt(i, 0);
-                            String countDetail = (String) jTable3.getValueAt(i, 2);
-                            RepairMobile.st.executeQuery("Insert into detailofrequest"
-                                    + " (PK_zapros,PK_detail,amount) values ('" + pkZapros + "','" + pkDet + "','" + countDetail + "')");
-                        }
-                        JOptionPane.showMessageDialog(rootPane, "Запрос отправлен");
-                    } catch (SQLException ex) {
-                        JOptionPane.showMessageDialog(rootPane, "Не удалось добавить запрос");
-                        Logger.getLogger(EngineerForm.class.getName()).log(Level.SEVERE, null, ex);
+            if (jTable3.getRowCount() <= 0) {
+                JOptionPane.showMessageDialog(rootPane, "Не выбрана ни одна деталь");
+            } else {
+                try {
+                    int pkRepair = Integer.parseInt(jTable2.getValueAt(jTable2.getSelectedRow(), 0).toString());
+                    int pkDevice = Integer.parseInt(jTable2.getValueAt(jTable2.getSelectedRow(), 7).toString());
+                    //int idxComboBox = jComboBoxStorekeeper.getSelectedIndex();
+                    // String pkStrokeeper = pkStorekeeper.get(idxComboBox);
+                    java.sql.Date date = new java.sql.Date(jDateChooser1.getDateEditor().getDate().getTime());
+                    // RepairMobile.st.executeQuery("Insert into zapros (PK_Repair, PK_storekeeper,timetoget,"
+                    //       + "flagofcomplete,pk_device) values ('" + pkRepair + "','" + pkStrokeeper + "', TO_DATE('" + date + "', 'YYYY-MM-DD') ,'0',"
+                    //        + "'" + pkDevice + "')");
+                    resSet = RepairMobile.st.executeQuery("select seqzapros.currval from dual");
+                    int pkZapros = 0;
+                    if (resSet.next()) {
+                        pkZapros = resSet.getInt(1);
                     }
+                    for (int i = 0; i < jTable3.getRowCount(); i++) {
+                        String pkDet = (String) jTable3.getValueAt(i, 0);
+                        String countDetail = (String) jTable3.getValueAt(i, 2);
+                        RepairMobile.st.executeQuery("Insert into detailofrequest"
+                                + " (PK_zapros,PK_detail,amount) values ('" + pkZapros + "','" + pkDet + "','" + countDetail + "')");
+                    }
+                    JOptionPane.showMessageDialog(rootPane, "Запрос отправлен");
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(rootPane, "Не удалось добавить запрос");
+                    Logger.getLogger(EngineerForm.class.getName()).log(Level.SEVERE, null, ex);
                 }
+            }
             //}
         }
-       
+
     }//GEN-LAST:event_jButtonSendActionPerformed
 
     private void jButtonAddDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddDetailActionPerformed
@@ -586,26 +689,26 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
 
             }
         }
-       
+
 
     }//GEN-LAST:event_jButtonAddDetailActionPerformed
 
     private void jButtonDeleteDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteDetailActionPerformed
         // TODO add your handling code here:
-         if (jTable3.getSelectedRow() == -1) {
+        if (jTable3.getSelectedRow() == -1) {
             JOptionPane.showMessageDialog(rootPane, "Выберите строку для удаления");
         } else {
             dtm.removeRow(jTable3.getSelectedRow());
         }
-       
+
     }//GEN-LAST:event_jButtonDeleteDetailActionPerformed
 
     private void jButtonAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddActionPerformed
         // TODO add your handling code here:
-         RepairAddUpdate repairAddUpdate = new RepairAddUpdate(0, -1, PK);
+        RepairAddUpdate repairAddUpdate = new RepairAddUpdate(0, -1, PK);
         repairAddUpdate.setListenerCloseForm(new ListenerCloseForm(this));
         repairAddUpdate.setVisible(true);
-       
+
     }//GEN-LAST:event_jButtonAddActionPerformed
 
     private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpdateActionPerformed
@@ -620,7 +723,7 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
             repairAddUpdate.setVisible(true);
             this.setEnabled(false);
         }
-       
+
     }//GEN-LAST:event_jButtonUpdateActionPerformed
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
@@ -644,7 +747,7 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
                 Logger.getLogger(DetailsStore.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-       
+
     }//GEN-LAST:event_jButtonDeleteActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -657,8 +760,23 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
         this.dispose();
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        if (jTableOrders.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(this, "Выделите заказ для изменения статуса!");
+        } else {
+            Object PK = jTableOrders.getValueAt(jTableOrders.getSelectedRow(), 0);
+            int primKey = Integer.parseInt(PK.toString());
+            EngineerUpdateStatus engineerUpdateStatus = new EngineerUpdateStatus(primKey);
+            engineerUpdateStatus.setListenerCloseForm(new ListenerCloseForm(this));
+            engineerUpdateStatus.setVisible(true);
+            this.setEnabled(false);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButtonAdd;
     private javax.swing.JButton jButtonAddDetail;
     private javax.swing.JButton jButtonDelete;
@@ -677,15 +795,18 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanelCreateZapros;
     private javax.swing.JPanel jPanelRemonts;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JTabbedPane jTabbedPane;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
+    private javax.swing.JTable jTableOrders;
     // End of variables declaration//GEN-END:variables
 }

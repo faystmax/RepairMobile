@@ -31,24 +31,23 @@ public class RepairAddUpdate extends javax.swing.JFrame {
     private int PK;
     private int engPk;
 
-    private ArrayList<String> pkDevice;
-    private ArrayList<String> valueDevice;
+    private ArrayList<String> pkOrder;
+    private ArrayList<String> valueOrder;
 
-    private ArrayList<String> pkStatus;
-    private ArrayList<String> valueStatus;
+    private ArrayList<String> pkCrash;
+    private ArrayList<String> valueCrash;
+    private boolean flag;
 
     public RepairAddUpdate(int addOrUpdate, int PK, int engPK) {
+        flag = false;
         initComponents();
+
         this.engPk = engPK;
         this.PK = PK;
-        pkDevice = new ArrayList<>();
-        valueDevice = new ArrayList<>();
-        pkStatus = new ArrayList<>();
-        valueStatus = new ArrayList<>();
-        jDateChooserEnd.setDateFormatString("dd.MM.yyyy");
-        jDateChooserEnd.setDate(new java.util.Date());
-        JTextFieldDateEditor editor2 = (JTextFieldDateEditor) jDateChooserEnd.getDateEditor();
-        editor2.setEditable(false);
+        pkOrder = new ArrayList<>();
+        valueOrder = new ArrayList<>();
+        pkCrash = new ArrayList<>();
+        valueCrash = new ArrayList<>();
 
         jDateChooserStart.setDateFormatString("dd.MM.yyyy");
         jDateChooserStart.setDate(new java.util.Date());
@@ -57,21 +56,135 @@ public class RepairAddUpdate extends javax.swing.JFrame {
 
         this.addOrUpdate = addOrUpdate;
         ResultSet resSet = null;
+        String pkOrd = null;
+        String pkCrsh = null;
+        String repStat = null;
         try {
             if (addOrUpdate == 0) {
-                resSet = RepairMobile.st.executeQuery("select pk_device,modelofdevice,typeofdevice.nameoftype,"
-                        + "manufacturer.nameofmanufacturer from device"
-                        + " inner join myorder on myorder.PK_order=device.PK_order"
-                        + " inner join typeofdevice on typeofdevice.PK_typeofdevice=device.PK_typeofdevice"
-                        + " inner join manufacturer on manufacturer.PK_manufacturer=device.PK_manufacturer"
-                        + " where myorder.PK_status=2");
+
+                resSet = RepairMobile.st.executeQuery("select myorder.pk_order,"
+                        + " '№' ||myorder.numoforder || ' ' || manufacturer.nameofmanufacturer || ' ' || modeldevice.nameofmodel"
+                        + " from myorder"
+                        + " inner join device on device.PK_device=myorder.PK_device"
+                        + " inner join modeldevice on device.PK_modeldevice=modeldevice.PK_modeldevice"
+                        + " inner join manufacturer on manufacturer.PK_manufacturer=modeldevice.PK_manufacturer"
+                        + " where myorder.PK_status=12");
 
                 while (resSet.next()) {
-                    jComboBoxDevice.addItem(resSet.getString(3) + " " + resSet.getString(4) + " " + resSet.getString(2));
-                    pkDevice.add(resSet.getString(1));
-                    valueDevice.add(resSet.getString(3) + " " + resSet.getString(4) + " " + resSet.getString(2));
+                    jComboBoxDevice.addItem(resSet.getString(2));
+                    pkOrder.add(resSet.getString(1));
+                    valueOrder.add(resSet.getString(2));
+
                 }
+                jComboBoxDevice.setSelectedIndex(-1);
+                jComboBoxCrash.setSelectedIndex(-1);
+                jComboBoxCrash.setEnabled(false);
+
+            } else {
+                resSet = RepairMobile.st.executeQuery("select pk_order,repairstatus from repair where pk_repair=" + PK);
+                if (resSet.next()) {
+                    pkOrd = resSet.getString(1);
+                    repStat = resSet.getString(2);
+                }
+
+                resSet = RepairMobile.st.executeQuery("select pk_crash from repair where pk_repair=" + PK);
+                if (resSet.next()) {
+                    pkCrsh = resSet.getString(1);
+                }
+
+                ArrayList<String> listAlreadyUseCrash = new ArrayList<>();
+                String usedCrashForReq = "";
+                resSet = RepairMobile.st.executeQuery("select pk_crash from ordercrash where pk_order=" + pkOrd);
+                if (resSet.next()) {
+                    listAlreadyUseCrash.add(resSet.getString(1));
+                }
+                for (int j = 0; j < listAlreadyUseCrash.size(); j++) {
+                    if (j == listAlreadyUseCrash.size() - 1) {
+                        usedCrashForReq += "typeofcrash.pk_crash<>" + listAlreadyUseCrash.get(j);
+                    } else {
+                        usedCrashForReq += "typeofcrash.pk_crash<>" + listAlreadyUseCrash.get(j) + " and ";
+                    }
+
+                }
+
+                resSet = RepairMobile.st.executeQuery("select myorder.pk_order,"
+                        + " '№' ||myorder.numoforder || ' ' || manufacturer.nameofmanufacturer || ' ' || modeldevice.nameofmodel"
+                        + " from myorder"
+                        + " inner join device on device.PK_device=myorder.PK_device"
+                        + " inner join modeldevice on device.PK_modeldevice=modeldevice.PK_modeldevice"
+                        + " inner join manufacturer on manufacturer.PK_manufacturer=modeldevice.PK_manufacturer"
+                        + " where myorder.PK_status=12");
+
+                int idxOrd = -1;
+                int i = 0;
+                while (resSet.next()) {
+                    jComboBoxDevice.addItem(resSet.getString(2));
+                    pkOrder.add(resSet.getString(1));
+                    valueOrder.add(resSet.getString(2));
+                    if (pkOrd != null) {
+                        if (pkOrd.equals(resSet.getString(1))) {
+                            idxOrd = i;
+                        }
+                    }
+                    i++;
+                }
+
+                jComboBoxDevice.setSelectedIndex(idxOrd);
+                if (addOrUpdate == 1) {
+                    resSet = RepairMobile.st.executeQuery("select typeofcrash.pk_crash,"
+                            + " typeofcrash.nameofcrash"
+                            + " from typeofcrash"
+                            + " inner join ordercrash on ordercrash.PK_crash=typeofcrash.pk_crash"
+                            + " where ordercrash.PK_order=" + pkOrder.get(jComboBoxDevice.getSelectedIndex()) + " and " + usedCrashForReq);
+                } else {
+                    if (usedCrashForReq.equals("")) {
+                        resSet = RepairMobile.st.executeQuery("select typeofcrash.pk_crash,"
+                                + " typeofcrash.nameofcrash"
+                                + " from typeofcrash"
+                                + " inner join ordercrash on ordercrash.PK_crash=typeofcrash.pk_crash"
+                                + " where " + usedCrashForReq
+                        );
+                    } else {
+                        resSet = RepairMobile.st.executeQuery("select typeofcrash.pk_crash,"
+                                + " typeofcrash.nameofcrash"
+                                + " from typeofcrash"
+                                + " inner join ordercrash on ordercrash.PK_crash=typeofcrash.pk_crash"
+                        );
+                    }
+                }
+                int idxCr = -1;
+                i = 0;
+                while (resSet.next()) {
+                    jComboBoxCrash.addItem(resSet.getString(2));
+                    pkCrash.add(resSet.getString(1));
+                    valueCrash.add(resSet.getString(2));
+                    if (pkCrsh != null) {
+                        if (pkCrsh.equals(resSet.getString(1))) {
+                            idxCr = i;
+                        }
+                    }
+                    i++;
+                }
+
+                if (repStat != null) {
+                    if (repStat.equals("0")) {
+                        jComboBoxStatus.setSelectedIndex(0);
+                    } else {
+                        jComboBoxStatus.setSelectedIndex(1);
+                        jDateChooserStart.setVisible(true);
+                        jLabel5.setVisible(true);
+                    }
+                }
+                if (jComboBoxStatus.getSelectedIndex() != 1) {
+                    jDateChooserStart.setVisible(false);
+                    jLabel5.setVisible(false);
+                }
+                jLabel5.setText("Дата завершения");
+
+                jComboBoxCrash.setSelectedIndex(idxCr);
             }
+
+            flag = true;
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(this, "Ошибка: Невозможно изменить");
@@ -82,69 +195,8 @@ public class RepairAddUpdate extends javax.swing.JFrame {
         if (addOrUpdate == 1) {
             jButtonAddUpdate.setText("Изменить");
             this.setTitle("Изменить ремонт");
-            try {
-                /*resSet = MainRemOtdel.st.executeQuery("select pk_device,modelofdevice,typeofdevice.nameoftype,"
-                    + "manufacturer.nameofmanufacturer from device"
-                    + " inner join myorder on myorder.PK_order=device.PK_order"
-                    + " inner join typeofdevice on typeofdevice.PK_typeofdevice=device.PK_typeofdevice"
-                    + " inner join manufacturer on manufacturer.PK_manufacturer=device.PK_manufacturer"
-                    + " where myorder.PK_status=2");
 
-            while (resSet.next()) {
-                jComboBoxDevice.addItem(resSet.getString(3) + " " + resSet.getString(4) + " " + resSet.getString(2));
-                pkDevice.add(resSet.getString(1));
-                valueDevice.add(resSet.getString(3) + " " + resSet.getString(4) + " " + resSet.getString(2));
-            }*/
-                resSet = RepairMobile.st.executeQuery("select device.pk_device,modelofdevice,typeofdevice.nameoftype,"
-                        + "manufacturer.nameofmanufacturer from device"
-                        + " inner join repair on repair.PK_device=device.PK_device"
-                        + " inner join typeofdevice on typeofdevice.PK_typeofdevice=device.PK_typeofdevice"
-                        + " inner join manufacturer on manufacturer.PK_manufacturer=device.PK_manufacturer"
-                        + " where repair.PK_repair=" + PK);
-
-                if (resSet.next()) {
-                    jComboBoxDevice.addItem(resSet.getString(3) + " " + resSet.getString(4) + " " + resSet.getString(2));
-                    pkDevice.add(resSet.getString(1));
-                    valueDevice.add(resSet.getString(3) + " " + resSet.getString(4) + " " + resSet.getString(2));
-                }
-
-                resSet = RepairMobile.st.executeQuery("select startdate, enddate,pk_device"
-                        + " from repair where pk_repair=" + PK);
-                if (resSet.next()) {
-                    jDateChooserStart.setDate(resSet.getDate(1));
-                    jDateChooserEnd.setDate(resSet.getDate(2));
-                    for (int i = 0; i < pkDevice.size(); i++) {
-                        if (pkDevice.get(i).equals(resSet.getString(3))) {
-                            jComboBoxDevice.setSelectedIndex(i);
-                        }
-                    }
-                }
-                resSet = RepairMobile.st.executeQuery("select pk_status,nameofstatus from status where not(pk_status=2) and not(pk_status=7)");
-                while (resSet.next()) {
-                    jComboBoxStatus.addItem(resSet.getString(2));
-                    valueStatus.add(resSet.getString(2));
-                    pkStatus.add(resSet.getString(1));
-                }
-
-                resSet = RepairMobile.st.executeQuery("select pk_status from myorder"
-                        + " inner join device on device.PK_order=myorder.PK_order"
-                        + " where device.Pk_device=" + pkDevice.get(jComboBoxDevice.getSelectedIndex()));
-                if (resSet.next()) {
-                    for (int i = 0; i < pkStatus.size(); i++) {
-                        if (pkStatus.get(i).equals(resSet.getString(1))) {
-                            jComboBoxStatus.setSelectedIndex(i);
-                        }
-                    }
-                }
-
-            } catch (SQLException ex) {
-                Logger.getLogger(RepairAddUpdate.class.getName()).log(Level.SEVERE, null, ex);
-            }
         } else {
-            jLabel2.setVisible(false);
-            jComboBoxStatus.setVisible(false);
-            jLabel6.setVisible(false);
-            jDateChooserEnd.setVisible(false);
             jDateChooserStart.setDate(new java.util.Date());
             jComboBoxDevice.setSelectedIndex(-1);
         }
@@ -168,13 +220,13 @@ public class RepairAddUpdate extends javax.swing.JFrame {
         jComboBoxDevice = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
         jDateChooserStart = new com.toedter.calendar.JDateChooser();
-        jDateChooserEnd = new com.toedter.calendar.JDateChooser();
         jButtonCancel = new javax.swing.JButton();
         jButtonAddUpdate = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        jComboBoxCrash = new javax.swing.JComboBox<>();
+        jLabel6 = new javax.swing.JLabel();
         jComboBoxStatus = new javax.swing.JComboBox<>();
-        jLabel2 = new javax.swing.JLabel();
 
         jLabel1.setText("jLabel1");
 
@@ -186,11 +238,15 @@ public class RepairAddUpdate extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setText("Устройство");
+        jComboBoxDevice.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxDeviceActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Заказ");
 
         jLabel5.setText("Дата начала");
-
-        jLabel6.setText("Дата окончания");
 
         jButtonCancel.setText("Отмена");
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
@@ -206,13 +262,17 @@ public class RepairAddUpdate extends javax.swing.JFrame {
             }
         });
 
-        jComboBoxStatus.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jComboBoxStatusItemStateChanged(evt);
+        jLabel4.setText("Поломка");
+
+        jLabel6.setText("Статус");
+
+        jComboBoxStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ремонтируется", "Выполнено" }));
+        jComboBoxStatus.setSelectedIndex(-1);
+        jComboBoxStatus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxStatusActionPerformed(evt);
             }
         });
-
-        jLabel2.setText("Статус");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -222,31 +282,28 @@ public class RepairAddUpdate extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButtonCancel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonAddUpdate)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jDateChooserStart, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
-                        .addComponent(jDateChooserEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel6)
-                        .addGap(44, 44, 44))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jComboBoxStatus, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jComboBoxDevice, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(jLabel3)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jComboBoxStatus, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButtonCancel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 107, Short.MAX_VALUE)
+                                .addComponent(jButtonAddUpdate))
+                            .addComponent(jComboBoxDevice, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jComboBoxCrash, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4))
                                 .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jDateChooserStart, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -255,18 +312,19 @@ public class RepairAddUpdate extends javax.swing.JFrame {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jComboBoxDevice, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBoxStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jDateChooserStart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jDateChooserEnd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jComboBoxCrash, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jComboBoxStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(55, 55, 55)
+                        .addComponent(jLabel5))
+                    .addComponent(jDateChooserStart, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCancel)
@@ -287,18 +345,26 @@ public class RepairAddUpdate extends javax.swing.JFrame {
         if (addOrUpdate == 0) {
 
             if (jComboBoxDevice.getSelectedIndex() == -1) {
-                JOptionPane.showMessageDialog(this, "Невозможно добавить пустое поле");
+                JOptionPane.showMessageDialog(this, "Заполните поля");
             } else {
                 try {
-                    RepairMobile.st.executeQuery("Insert into SERVERADM.repair (startdate,PK_device,pk_engineer)"
+                    int stat = 0;
+                    if (jComboBoxStatus.getSelectedIndex() == 0) {
+                        stat = 0;
+                    } else {
+                        stat = 1;
+                    }
+                    RepairMobile.st.executeQuery("Insert into repair (startdate,PK_order,pk_engineer,pk_crash,repairstatus)"
                             + " values ("
                             + " TO_DATE('" + dateStart + "', 'YYYY-MM-DD'),'"
-                            + pkDevice.get(jComboBoxDevice.getSelectedIndex()) + "'"
-                            + ",'" + engPk + "')");
-                    RepairMobile.st.executeQuery("update myorder  set myorder.pk_status='3'"
+                            + pkOrder.get(jComboBoxDevice.getSelectedIndex()) + "'"
+                            + ",'" + engPk + "'"
+                            + ",'" + pkCrash.get(jComboBoxCrash.getSelectedIndex()) + "','" + stat + "')");
+                    //сделать проверку на все выполненые работы
+                    /*RepairMobile.st.executeQuery("update myorder  set myorder.pk_status='3'"
                             + " where  EXISTS (select device.pk_device from device"
                             + " where device.pk_order = myorder.PK_ORDER and device.pk_device ="
-                            + pkDevice.get(jComboBoxDevice.getSelectedIndex()) + ")");
+                            + pkOrder.get(jComboBoxDevice.getSelectedIndex()) + ")");*/
                     JOptionPane.showMessageDialog(this, "Запись успешно добавлена");
                     listenerCloseForm.event();
                 } catch (SQLException ex) {
@@ -309,37 +375,37 @@ public class RepairAddUpdate extends javax.swing.JFrame {
             }
         } else {
             if (addOrUpdate == 1) {
-                java.sql.Date dateEnd = null;
-                java.util.Date dateChooserEnd = jDateChooserEnd.getDate();
-                if (dateChooserEnd != null) {
-                    dateEnd = new java.sql.Date(dateChooserEnd.getTime());
-                }
                 if (jComboBoxDevice.getSelectedIndex() == -1) {
                     JOptionPane.showMessageDialog(this, "Невозможно изменить на пустое поле");
                 } else {
                     try {
-                        if (dateEnd != null) {
-                            RepairMobile.st.executeQuery("UPDATE repair"
-                                    + " SET startdate = TO_DATE('" + dateStart + "', 'YYYY-MM-DD'),"
-                                    + " enddate = TO_DATE('" + dateEnd + "', 'YYYY-MM-DD'),"
-                                    + "pk_device='"
-                                    + pkDevice.get(jComboBoxDevice.getSelectedIndex())
-                                    + "' WHERE PK_repair=" + PK
-                            );
+                        String repStat = null;
+                        if (jComboBoxStatus.getSelectedIndex() == 0) {
+                            repStat = "0";
                         } else {
-                            RepairMobile.st.executeQuery("UPDATE repair"
-                                    + " SET startdate = TO_DATE('" + dateStart + "', 'YYYY-MM-DD'),"
-                                    + " enddate = null,"
-                                    + "pk_device='"
-                                    + pkDevice.get(jComboBoxDevice.getSelectedIndex())
-                                    + "' WHERE PK_repair=" + PK
-                            );
+                            repStat = "1";
                         }
-                        RepairMobile.st.executeQuery("update myorder  set myorder.pk_status=" + pkStatus.get(jComboBoxStatus.getSelectedIndex())
+
+                        String date = "null";
+                        if (repStat.equals("1")) {
+                            date = "TO_DATE('" + dateStart + "', 'YYYY-MM-DD')";
+                        }
+                        RepairMobile.st.executeQuery("UPDATE repair"
+                                + " SET "
+                                + " enddate =" + date + ","
+                                + " pk_order='"
+                                + pkOrder.get(jComboBoxDevice.getSelectedIndex())
+                                + "', pk_crash='" + pkCrash.get(jComboBoxCrash.getSelectedIndex())
+                                + "',repairstatus='" + repStat + "'"
+                                + " WHERE PK_repair=" + PK
+                        );
+
+
+                        /*RepairMobile.st.executeQuery("update myorder  set myorder.pk_status=" + pkCrash.get(jComboBoxStatus.getSelectedIndex())
                                 + " where  EXISTS (select device.pk_device from device"
                                 + " where device.pk_order = myorder.PK_ORDER and device.pk_device ="
-                                + pkDevice.get(jComboBoxDevice.getSelectedIndex()) + ")"
-                        );
+                                + pkOrder.get(jComboBoxDevice.getSelectedIndex()) + ")"
+                        );*/
                         JOptionPane.showMessageDialog(this, "Запись успешно изменена");
                         listenerCloseForm.event();
                     } catch (SQLException ex) {
@@ -363,31 +429,85 @@ public class RepairAddUpdate extends javax.swing.JFrame {
         listenerCloseForm.event();
     }//GEN-LAST:event_formWindowClosing
 
-    private void jComboBoxStatusItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBoxStatusItemStateChanged
+    private void jComboBoxDeviceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxDeviceActionPerformed
         // TODO add your handling code here:
-        if (pkStatus.size() != 0) {
-            if (pkStatus.get(jComboBoxStatus.getSelectedIndex()).equals("3")
-                    || pkStatus.get(jComboBoxStatus.getSelectedIndex()).equals("4")) {
-                jDateChooserEnd.setDate(null);
-                jDateChooserEnd.setEnabled(false);
-            } else {
-                jDateChooserEnd.setDate(new java.util.Date());
-                jDateChooserEnd.setEnabled(true);
+        if (jComboBoxDevice.getSelectedIndex() != -1 && flag) {
+            jComboBoxCrash.setEnabled(true);
+            ResultSet resSet = null;
+            pkCrash = new ArrayList<>();
+            valueCrash = new ArrayList<>();
+            jComboBoxCrash.removeAllItems();
+            String pkOrd = null;
+            try {
+                if (addOrUpdate == 0) {
+
+                    pkOrd = pkOrder.get(jComboBoxDevice.getSelectedIndex());
+
+                    ArrayList<String> listAlreadyUseCrash = new ArrayList<>();
+                    String usedCrashForReq = "";
+                    resSet = RepairMobile.st.executeQuery("select pk_crash from repair where pk_order=" + pkOrd);
+                    while (resSet.next()) {
+                        listAlreadyUseCrash.add(resSet.getString(1));
+                    }
+                    for (int j = 0; j < listAlreadyUseCrash.size(); j++) {
+                        if (j == listAlreadyUseCrash.size() - 1) {
+                            usedCrashForReq += "typeofcrash.pk_crash<>" + listAlreadyUseCrash.get(j);
+                        } else {
+                            usedCrashForReq += "typeofcrash.pk_crash<>" + listAlreadyUseCrash.get(j) + " and ";
+                        }
+
+                    }
+                    if (!usedCrashForReq.equals("")) {
+                        resSet = RepairMobile.st.executeQuery("select typeofcrash.pk_crash,"
+                                + " typeofcrash.nameofcrash"
+                                + " from typeofcrash"
+                                + " inner join ordercrash on ordercrash.PK_crash=typeofcrash.pk_crash"
+                                + " where ordercrash.PK_order=" + pkOrder.get(jComboBoxDevice.getSelectedIndex()) + " and " + usedCrashForReq);
+                    } else {
+                        resSet = RepairMobile.st.executeQuery("select typeofcrash.pk_crash,"
+                                + " typeofcrash.nameofcrash"
+                                + " from typeofcrash"
+                                + " inner join ordercrash on ordercrash.PK_crash=typeofcrash.pk_crash"
+                                + " where ordercrash.PK_order=" + pkOrder.get(jComboBoxDevice.getSelectedIndex()));
+                    }
+                    while (resSet.next()) {
+                        jComboBoxCrash.addItem(resSet.getString(2));
+                        pkCrash.add(resSet.getString(1));
+                        valueCrash.add(resSet.getString(2));
+                    }
+                    jComboBoxCrash.setSelectedIndex(-1);
+                }
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Ошибка: Невозможно изменить");
+                Logger.getLogger(DetailsStore.class.getName()).log(Level.SEVERE, null, ex);
+                this.dispose();
             }
         }
-    }//GEN-LAST:event_jComboBoxStatusItemStateChanged
+    }//GEN-LAST:event_jComboBoxDeviceActionPerformed
+
+    private void jComboBoxStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxStatusActionPerformed
+        // TODO add your handling code here:
+        if (jComboBoxStatus.getSelectedIndex() == 1 && addOrUpdate == 1) {
+            jDateChooserStart.setVisible(true);
+            jLabel5.setVisible(true);
+        } else {
+            jDateChooserStart.setVisible(false);
+            jLabel5.setVisible(false);
+        }
+    }//GEN-LAST:event_jComboBoxStatusActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAddUpdate;
     private javax.swing.JButton jButtonCancel;
+    private javax.swing.JComboBox<String> jComboBoxCrash;
     private javax.swing.JComboBox<String> jComboBoxDevice;
     private javax.swing.JComboBox<String> jComboBoxStatus;
-    private com.toedter.calendar.JDateChooser jDateChooserEnd;
     private com.toedter.calendar.JDateChooser jDateChooserStart;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     // End of variables declaration//GEN-END:variables

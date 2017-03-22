@@ -3,10 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/tigler/NetBeansProjects/repairMobile/src/main/rem/otdel/DetailsStore.java</file>
-            <file>file:/home/tigler/NetBeansProjects/repairMobile/src/main/rem/otdel/AddUpdateDetailFromStore.java</file>
-            <file>file:/home/tigler/NetBeansProjects/repairMobile/src/main/rem/otdel/Orders.java</file>
-            <file>file:/home/tigler/NetBeansProjects/repairMobile/src/main/rem/otdel/OrderDetail.java</file>
+            <file>file:/home/tigler/NetBeansProjects/repairMobile/src/main/rem/otdel/EngineerForm.java</file>
+            <file>file:/home/tigler/NetBeansProjects/repairMobile/src/main/rem/otdel/RepairAddUpdate.java</file>
+            <file>file:/home/tigler/NetBeansProjects/repairMobile/src/main/rem/otdel/EngineerUpdateStatus.java</file>
         </group>
     </open-files>
 </project-private>
