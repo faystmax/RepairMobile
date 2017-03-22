@@ -81,30 +81,11 @@ public class RepairAddUpdate extends javax.swing.JFrame {
                 jComboBoxCrash.setEnabled(false);
 
             } else {
-                resSet = RepairMobile.st.executeQuery("select pk_order,repairstatus from repair where pk_repair=" + PK);
+                resSet = RepairMobile.st.executeQuery("select pk_order,repairstatus,pk_crash from repair where pk_repair=" + PK);
                 if (resSet.next()) {
                     pkOrd = resSet.getString(1);
                     repStat = resSet.getString(2);
-                }
-
-                resSet = RepairMobile.st.executeQuery("select pk_crash from repair where pk_repair=" + PK);
-                if (resSet.next()) {
-                    pkCrsh = resSet.getString(1);
-                }
-
-                ArrayList<String> listAlreadyUseCrash = new ArrayList<>();
-                String usedCrashForReq = "";
-                resSet = RepairMobile.st.executeQuery("select pk_crash from ordercrash where pk_order=" + pkOrd);
-                if (resSet.next()) {
-                    listAlreadyUseCrash.add(resSet.getString(1));
-                }
-                for (int j = 0; j < listAlreadyUseCrash.size(); j++) {
-                    if (j == listAlreadyUseCrash.size() - 1) {
-                        usedCrashForReq += "typeofcrash.pk_crash<>" + listAlreadyUseCrash.get(j);
-                    } else {
-                        usedCrashForReq += "typeofcrash.pk_crash<>" + listAlreadyUseCrash.get(j) + " and ";
-                    }
-
+                    pkCrsh = resSet.getString(3);
                 }
 
                 resSet = RepairMobile.st.executeQuery("select myorder.pk_order,"
@@ -130,28 +111,45 @@ public class RepairAddUpdate extends javax.swing.JFrame {
                 }
 
                 jComboBoxDevice.setSelectedIndex(idxOrd);
-                if (addOrUpdate == 1) {
+
+                pkOrd = pkOrder.get(jComboBoxDevice.getSelectedIndex());
+                ArrayList<String> listAlreadyUseCrash = new ArrayList<>();
+                String usedCrashForReq = "";
+                String curCrash = "";
+                resSet = RepairMobile.st.executeQuery("select pk_crash from repair where pk_repair=" + PK);
+                if (resSet.next()) {
+                    curCrash = resSet.getString(1);
+                }
+
+                resSet = RepairMobile.st.executeQuery("select pk_crash from repair where pk_order=" + pkOrd);
+                while (resSet.next()) {
+                    if (!curCrash.equals(resSet.getString(1))) {
+                        listAlreadyUseCrash.add(resSet.getString(1));
+                    }
+                }
+                for (int j = 0; j < listAlreadyUseCrash.size(); j++) {
+                    if (j == listAlreadyUseCrash.size() - 1) {
+                        usedCrashForReq += "typeofcrash.pk_crash<>" + listAlreadyUseCrash.get(j);
+                    } else {
+                        usedCrashForReq += "typeofcrash.pk_crash<>" + listAlreadyUseCrash.get(j) + " and ";
+                    }
+
+                }
+
+                if (!usedCrashForReq.equals("")) {
                     resSet = RepairMobile.st.executeQuery("select typeofcrash.pk_crash,"
                             + " typeofcrash.nameofcrash"
                             + " from typeofcrash"
                             + " inner join ordercrash on ordercrash.PK_crash=typeofcrash.pk_crash"
                             + " where ordercrash.PK_order=" + pkOrder.get(jComboBoxDevice.getSelectedIndex()) + " and " + usedCrashForReq);
                 } else {
-                    if (usedCrashForReq.equals("")) {
-                        resSet = RepairMobile.st.executeQuery("select typeofcrash.pk_crash,"
-                                + " typeofcrash.nameofcrash"
-                                + " from typeofcrash"
-                                + " inner join ordercrash on ordercrash.PK_crash=typeofcrash.pk_crash"
-                                + " where " + usedCrashForReq
-                        );
-                    } else {
-                        resSet = RepairMobile.st.executeQuery("select typeofcrash.pk_crash,"
-                                + " typeofcrash.nameofcrash"
-                                + " from typeofcrash"
-                                + " inner join ordercrash on ordercrash.PK_crash=typeofcrash.pk_crash"
-                        );
-                    }
+                    resSet = RepairMobile.st.executeQuery("select typeofcrash.pk_crash,"
+                            + " typeofcrash.nameofcrash"
+                            + " from typeofcrash"
+                            + " inner join ordercrash on ordercrash.PK_crash=typeofcrash.pk_crash"
+                            + " where ordercrash.PK_order=" + pkOrder.get(jComboBoxDevice.getSelectedIndex()));
                 }
+
                 int idxCr = -1;
                 i = 0;
                 while (resSet.next()) {
@@ -350,21 +348,26 @@ public class RepairAddUpdate extends javax.swing.JFrame {
                 try {
                     int stat = 0;
                     if (jComboBoxStatus.getSelectedIndex() == 0) {
-                        stat = 0;
+                        RepairMobile.st.executeQuery("Insert into repair (startdate,PK_order,pk_engineer,pk_crash,repairstatus)"
+                                + " values ("
+                                + " TO_DATE('" + dateStart + "', 'YYYY-MM-DD'),'"
+                                + pkOrder.get(jComboBoxDevice.getSelectedIndex()) + "'"
+                                + ",'" + engPk + "'"
+                                + ",'" + pkCrash.get(jComboBoxCrash.getSelectedIndex()) + "','0')");
                     } else {
-                        stat = 1;
+                        RepairMobile.st.executeQuery("Insert into repair (startdate,enddate,PK_order,pk_engineer,pk_crash,repairstatus)"
+                                + " values ("
+                                + " TO_DATE('" + dateStart + "', 'YYYY-MM-DD'),"
+                                + " TO_DATE('" + dateStart + "', 'YYYY-MM-DD'),'"
+                                + pkOrder.get(jComboBoxDevice.getSelectedIndex()) + "'"
+                                + ",'" + engPk + "'"
+                                + ",'" + pkCrash.get(jComboBoxCrash.getSelectedIndex()) + "','1')");
                     }
-                    RepairMobile.st.executeQuery("Insert into repair (startdate,PK_order,pk_engineer,pk_crash,repairstatus)"
-                            + " values ("
-                            + " TO_DATE('" + dateStart + "', 'YYYY-MM-DD'),'"
-                            + pkOrder.get(jComboBoxDevice.getSelectedIndex()) + "'"
-                            + ",'" + engPk + "'"
-                            + ",'" + pkCrash.get(jComboBoxCrash.getSelectedIndex()) + "','" + stat + "')");
-                    //сделать проверку на все выполненые работы
-                    /*RepairMobile.st.executeQuery("update myorder  set myorder.pk_status='3'"
-                            + " where  EXISTS (select device.pk_device from device"
-                            + " where device.pk_order = myorder.PK_ORDER and device.pk_device ="
-                            + pkOrder.get(jComboBoxDevice.getSelectedIndex()) + ")");*/
+
+                    //
+                    /**
+                     * сделать проверку на все выполненые работы
+                     */
                     JOptionPane.showMessageDialog(this, "Запись успешно добавлена");
                     listenerCloseForm.event();
                 } catch (SQLException ex) {
@@ -478,6 +481,45 @@ public class RepairAddUpdate extends javax.swing.JFrame {
                     jComboBoxCrash.setSelectedIndex(-1);
                 }
 
+                if (addOrUpdate == 1) {
+
+                    pkOrd = pkOrder.get(jComboBoxDevice.getSelectedIndex());
+
+                    ArrayList<String> listAlreadyUseCrash = new ArrayList<>();
+                    String usedCrashForReq = "";
+                    resSet = RepairMobile.st.executeQuery("select pk_crash from repair where pk_order=" + pkOrd);
+                    while (resSet.next()) {
+                        listAlreadyUseCrash.add(resSet.getString(1));
+                    }
+                    for (int j = 0; j < listAlreadyUseCrash.size(); j++) {
+                        if (j == listAlreadyUseCrash.size() - 1) {
+                            usedCrashForReq += "typeofcrash.pk_crash<>" + listAlreadyUseCrash.get(j);
+                        } else {
+                            usedCrashForReq += "typeofcrash.pk_crash<>" + listAlreadyUseCrash.get(j) + " and ";
+                        }
+
+                    }
+                    if (!usedCrashForReq.equals("")) {
+                        resSet = RepairMobile.st.executeQuery("select typeofcrash.pk_crash,"
+                                + " typeofcrash.nameofcrash"
+                                + " from typeofcrash"
+                                + " inner join ordercrash on ordercrash.PK_crash=typeofcrash.pk_crash"
+                                + " where ordercrash.PK_order=" + pkOrder.get(jComboBoxDevice.getSelectedIndex()) + " and " + usedCrashForReq);
+                    } else {
+                        resSet = RepairMobile.st.executeQuery("select typeofcrash.pk_crash,"
+                                + " typeofcrash.nameofcrash"
+                                + " from typeofcrash"
+                                + " inner join ordercrash on ordercrash.PK_crash=typeofcrash.pk_crash"
+                                + " where ordercrash.PK_order=" + pkOrder.get(jComboBoxDevice.getSelectedIndex()));
+                    }
+                    while (resSet.next()) {
+                        jComboBoxCrash.addItem(resSet.getString(2));
+                        pkCrash.add(resSet.getString(1));
+                        valueCrash.add(resSet.getString(2));
+                    }
+                    jComboBoxCrash.setSelectedIndex(-1);
+                }
+
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(this, "Ошибка: Невозможно изменить");
                 Logger.getLogger(DetailsStore.class.getName()).log(Level.SEVERE, null, ex);
@@ -491,7 +533,7 @@ public class RepairAddUpdate extends javax.swing.JFrame {
         if (jComboBoxStatus.getSelectedIndex() == 1 && addOrUpdate == 1) {
             jDateChooserStart.setVisible(true);
             jLabel5.setVisible(true);
-        } else {
+        } else if (addOrUpdate == 1) {
             jDateChooserStart.setVisible(false);
             jLabel5.setVisible(false);
         }
