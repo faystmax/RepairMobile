@@ -316,9 +316,9 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonAdd)
                     .addComponent(jButtonUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonDelete))
+                    .addComponent(jButtonDelete)
+                    .addComponent(jButtonAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 451, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -845,7 +845,25 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
     }//GEN-LAST:event_jButtonExecActionPerformed
 
     private void jButtonOrderDetail1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOrderDetail1ActionPerformed
-        // TODO add your handling code here:
+        if (jTableOrderDetail.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(this, "Выделите деталь для удаления");
+        } else {
+            try {
+                Object PK = jTableOrderDetail.getValueAt(jTableOrderDetail.getSelectedRow(), 0);
+                int primKey = Integer.parseInt(PK.toString());
+
+                int option = JOptionPane.showConfirmDialog(this, "Вы уверены что хотите удалить запись",
+                        "Удаление записи", JOptionPane.YES_NO_OPTION);
+                if (option == 0) {
+                    RepairMobile.st.executeQuery("delete from ZAKAZDETAILS where PK_ZAKAZDETAIL=" + PK);
+                    addDataInTable();
+                }
+
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Удаление невозможно");
+                Logger.getLogger(DetailsStore.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_jButtonOrderDetail1ActionPerformed
 
     private void jMenuItemMenegersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemMenegersActionPerformed
