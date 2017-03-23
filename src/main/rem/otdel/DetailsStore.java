@@ -212,7 +212,7 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
         jTableOrderDetail = new javax.swing.JTable();
         jButtonOrderDetail = new javax.swing.JButton();
         jButtonExec = new javax.swing.JButton();
-        jButtonOrderDetail1 = new javax.swing.JButton();
+        jButtonOrderDetailDelete = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable( )
@@ -353,10 +353,10 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
             }
         });
 
-        jButtonOrderDetail1.setText("Удалить заказанную деталь");
-        jButtonOrderDetail1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonOrderDetailDelete.setText("Удалить заказанную деталь");
+        jButtonOrderDetailDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonOrderDetail1ActionPerformed(evt);
+                jButtonOrderDetailDeleteActionPerformed(evt);
             }
         });
 
@@ -373,7 +373,7 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 226, Short.MAX_VALUE)
                         .addComponent(jButtonOrderDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButtonOrderDetail1)))
+                        .addComponent(jButtonOrderDetailDelete)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -383,7 +383,7 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonOrderDetail)
                     .addComponent(jButtonExec)
-                    .addComponent(jButtonOrderDetail1))
+                    .addComponent(jButtonOrderDetailDelete))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 451, Short.MAX_VALUE)
                 .addContainerGap())
@@ -844,7 +844,7 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
 
     }//GEN-LAST:event_jButtonExecActionPerformed
 
-    private void jButtonOrderDetail1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOrderDetail1ActionPerformed
+    private void jButtonOrderDetailDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOrderDetailDeleteActionPerformed
         if (jTableOrderDetail.getSelectedRow() == -1) {
             JOptionPane.showMessageDialog(this, "Выделите деталь для удаления");
         } else {
@@ -864,7 +864,7 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
                 Logger.getLogger(DetailsStore.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-    }//GEN-LAST:event_jButtonOrderDetail1ActionPerformed
+    }//GEN-LAST:event_jButtonOrderDetailDeleteActionPerformed
 
     private void jMenuItemMenegersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemMenegersActionPerformed
         Managers managers = new Managers();
@@ -883,7 +883,7 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
     private javax.swing.JButton jButtonExec;
     private javax.swing.JButton jButtonExecute;
     private javax.swing.JButton jButtonOrderDetail;
-    private javax.swing.JButton jButtonOrderDetail1;
+    private javax.swing.JButton jButtonOrderDetailDelete;
     private javax.swing.JButton jButtonUpdate;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
