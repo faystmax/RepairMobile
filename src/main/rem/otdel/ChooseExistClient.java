@@ -123,6 +123,7 @@ public class ChooseExistClient extends javax.swing.JFrame implements UpdatesData
         });
 
         jButtonUpdateClient.setText("Изменить");
+        jButtonUpdateClient.setToolTipText("");
         jButtonUpdateClient.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonUpdateClientActionPerformed(evt);

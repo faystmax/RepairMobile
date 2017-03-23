@@ -18,6 +18,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import net.proteanit.sql.DbUtils;
 import spravochn.detail.Detail;
+import spravochn.engineer.Engenieers;
+import spravochn.manager.Managers;
 
 /**
  *
@@ -249,10 +251,10 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItemClose = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItemDetails = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItemMenegers = new javax.swing.JMenuItem();
+        jMenuItemEnginers = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -526,21 +528,31 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
 
         jMenu2.setText("Справочники");
 
-        jMenuItem1.setText("Детали");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItemDetails.setText("Детали");
+        jMenuItemDetails.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                jMenuItemDetailsActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem1);
+        jMenu2.add(jMenuItemDetails);
 
         jMenu4.setText("Пользователи");
 
-        jMenuItem3.setText("Менеджеры");
-        jMenu4.add(jMenuItem3);
+        jMenuItemMenegers.setText("Менеджеры");
+        jMenuItemMenegers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemMenegersActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItemMenegers);
 
-        jMenuItem4.setText("Инженеры");
-        jMenu4.add(jMenuItem4);
+        jMenuItemEnginers.setText("Инженеры");
+        jMenuItemEnginers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemEnginersActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItemEnginers);
 
         jMenu2.add(jMenu4);
 
@@ -571,11 +583,11 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void jMenuItemDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDetailsActionPerformed
         // TODO add your handling code here:
         Detail detail = new Detail();
         detail.setVisible(true);
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_jMenuItemDetailsActionPerformed
 
     private void jMenuItemCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCloseActionPerformed
         // TODO add your handling code here:
@@ -836,6 +848,16 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonOrderDetail1ActionPerformed
 
+    private void jMenuItemMenegersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemMenegersActionPerformed
+        Managers managers = new Managers();
+        managers.setVisible(true);
+    }//GEN-LAST:event_jMenuItemMenegersActionPerformed
+
+    private void jMenuItemEnginersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEnginersActionPerformed
+        Engenieers engenieers = new Engenieers();
+        engenieers.setVisible(true);
+    }//GEN-LAST:event_jMenuItemEnginersActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAdd;
@@ -852,11 +874,11 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItemClose;
+    private javax.swing.JMenuItem jMenuItemDetails;
+    private javax.swing.JMenuItem jMenuItemEnginers;
+    private javax.swing.JMenuItem jMenuItemMenegers;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
