@@ -240,7 +240,7 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
             @Override
             public boolean isCellEditable(int row, int column)
             {
-                if(column==5){
+                if(column==6){
                     return true;
                 }
                 return false;
@@ -419,14 +419,14 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
 
             },
             new String [] {
-                "Деталь", "Колличество"
+                "Деталь", "Устройство", "Колличество"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -456,9 +456,17 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
 
             },
             new String [] {
-                "Деталь", "Расположение", "Количество на складе"
+                "Деталь", "Устройство", "Расположение", "Количество на складе", "Взять деталей(шт)"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, true, false, true, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane4.setViewportView(jTable4);
 
         jLabel1.setText("Дата выполнения");
@@ -474,10 +482,10 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
                         .addComponent(jScrollPane2)
                         .addContainerGap())
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 470, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 599, Short.MAX_VALUE)
                             .addComponent(jScrollPane4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 154, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                                 .addComponent(jButtonExecute, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -677,20 +685,20 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
             ArrayList<ArrayList<Integer>> amountDetails = new ArrayList<>();
             ArrayList<ArrayList<Integer>> amountDetailsRaznic = new ArrayList<>();
             for (int i = 0; i < jTable3.getRowCount(); i++) {
-                int amountInReq = Integer.parseInt(jTable3.getValueAt(i, 3).toString());
+                int amountInReq = Integer.parseInt(jTable3.getValueAt(i, 4).toString());
                 ArrayList<String> pkDetStor = new ArrayList<>();
                 ArrayList<String> pkDet = new ArrayList<>();
                 ArrayList<Integer> amountDet = new ArrayList<>();
                 ArrayList<Integer> amountDetRaznic = new ArrayList<>();
                 for (int j = 0; j < sctructForTableses.size(); j++) {
                     for (int k = 0; k < sctructForTableses.get(j).getRowCount(); k++) {
-                        if (sctructForTableses.get(j).getValueAt(k, 1).toString().equals(jTable3.getValueAt(i, 1).toString())) {
-                            if (sctructForTableses.get(j).getValueAt(k, 5) != null) {
+                       // if (sctructForTableses.get(j).getValueAt(k, 1).toString().equals(jTable3.getValueAt(i, 1).toString())) {
+                            if (sctructForTableses.get(j).getValueAt(k, 6) != null) {
                                 int countInputUser = 0;
                                 int countInStore = 0;
                                 try {
-                                    countInputUser = Integer.parseInt(sctructForTableses.get(j).getValueAt(k, 5).toString());
-                                    countInStore = Integer.parseInt(sctructForTableses.get(j).getValueAt(k, 4).toString());
+                                    countInputUser = Integer.parseInt(sctructForTableses.get(j).getValueAt(k, 6).toString());
+                                    countInStore = Integer.parseInt(sctructForTableses.get(j).getValueAt(k, 5).toString());
                                 } catch (Exception ex) {
                                     flagCorrectData = false;
                                     JOptionPane.showMessageDialog(this, "Данные в столбце 'Взять деталей' не корректные. Введите целые числа");
@@ -700,7 +708,7 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
                                 if (countInStore < countInputUser) {
                                     flagCorrectData = false;
                                     JOptionPane.showMessageDialog(this, "Деталей на локации меньше, чем предполагается взять\n"
-                                            + sctructForTableses.get(j).getValueAt(k, 2).toString());
+                                            + sctructForTableses.get(j).getValueAt(k, 4).toString());
                                 } else {
                                     if (countInStore >= countInputUser) {
                                         int countTmp = countInStore - countInputUser;
@@ -712,7 +720,7 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
                                 }
                             }
 
-                        }
+                      //  }
 
                     }
                 }
@@ -729,7 +737,7 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
                     for (int j = 0; j < pkDetails.get(i).size(); j++) {
                         amCount += amountDetails.get(i).get(j);
                     }
-                    if (amCount != Integer.parseInt(jTable3.getValueAt(i, 3).toString())) {
+                    if (amCount != Integer.parseInt(jTable3.getValueAt(i, 4).toString())) {
                         flagAmCorrect = false;
                         JOptionPane.showMessageDialog(this, "Колличество взятых деталей не "
                                 + "\nсоответствует колличеству деталей в запросе\n"
@@ -791,9 +799,15 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
             jTable4.setModel(sctructForTableses.get(i));
         } else {
             try {
-                resSet = RepairMobile.st.executeQuery("select PK_detailfromwh, detailfromwarehouse.pk_detail, detail.nameofdetail,location, amount from detailfromwarehouse"
-                        + " inner join detail on detail.PK_detail=detailfromwarehouse.PK_detail"
-                        + " where detailfromwarehouse.PK_detail=" + jTable3.getValueAt(jTable3.getSelectedRow(), 1).toString() + " and  PK_storekeeper=" + PK);
+                resSet = RepairMobile.st.executeQuery("select PK_detailfromwh, detailfromwarehouse.pk_concretedetail, detail.nameofdetail,"
+                        + " typeofdevice.nameoftype || ' ' || manufacturer.nameofmanufacturer|| ' ' ||modeldevice.nameofmodel,"
+                        + "location, amount from detailfromwarehouse"
+                        + " inner join concretedetail on concretedetail.PK_concretedetail=detailfromwarehouse.PK_concretedetail"
+                        + " inner join typeofdevice on typeofdevice.PK_typeofdevice=concretedetail.PK_typeofdevice"
+                        + " inner join modeldevice on modeldevice.PK_modeldevice=concretedetail.PK_modeldevice"
+                        + " inner join manufacturer on manufacturer.PK_manufacturer=modeldevice.PK_manufacturer"
+                        + " inner join detail on detail.PK_detail=concretedetail.PK_detail"
+                        + " where detail.PK_detail=" + jTable3.getValueAt(jTable3.getSelectedRow(), 5).toString());
             } catch (SQLException ex) {
                 Logger.getLogger(DetailsStore.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -811,13 +825,67 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
         jTable4.getColumnModel().getColumn(1).setMinWidth(0);
         jTable4.getColumnModel().getColumn(1).setPreferredWidth(0);
         jTable4.getColumnModel().getColumn(2).setHeaderValue("Деталь");
-        jTable4.getColumnModel().getColumn(3).setHeaderValue("Расположение");
-        jTable4.getColumnModel().getColumn(4).setHeaderValue("Колличество на складе");
+        jTable4.getColumnModel().getColumn(3).setHeaderValue("Устройство");
+        jTable4.getColumnModel().getColumn(4).setHeaderValue("Расположение");
+        jTable4.getColumnModel().getColumn(5).setHeaderValue("Колличество на складе");
     }//GEN-LAST:event_jTable3MousePressed
 
     private void jTable2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MousePressed
         // TODO add your handling code here:
+        sctructForTableses = new ArrayList<>();
+        indsParTable = new ArrayList<>();
+        jTable4.setModel(dtm4);
+        jTable4.getColumnModel().getColumn(0).setMaxWidth(0);
+        jTable4.getColumnModel().getColumn(0).setMinWidth(0);
+        jTable4.getColumnModel().getColumn(0).setPreferredWidth(0);
+        jTable4.getColumnModel().getColumn(1).setHeaderValue("Деталь");
+        jTable4.getColumnModel().getColumn(2).setHeaderValue("Расположение");
+        jTable4.getColumnModel().getColumn(3).setHeaderValue("Колличество на складе");
 
+        int idx = jTable2.getSelectedRow();
+        String pkReq = jTable2.getValueAt(idx, 0).toString();
+        ResultSet resSet = null;
+        try {
+            resSet = RepairMobile.st.executeQuery("select PK_detailofrequest, detailofrequest.PK_concretedetail, detail.nameofdetail,"
+                    + " typeofdevice.nameoftype || ' ' || manufacturer.nameofmanufacturer|| ' ' ||modeldevice.nameofmodel,amount,"
+                    + " detail.pk_detail, typeofdevice.pk_typeofdevice,manufacturer.pk_manufacturer,modeldevice.pk_modeldevice"
+                    + " from detailofrequest"
+                    + " inner join concretedetail on concretedetail.PK_concretedetail=detailofrequest.PK_concretedetail"
+                    + " inner join typeofdevice on typeofdevice.PK_typeofdevice=concretedetail.PK_typeofdevice"
+                    + " inner join modeldevice on modeldevice.PK_modeldevice=concretedetail.PK_modeldevice"
+                    + " inner join manufacturer on manufacturer.PK_manufacturer=modeldevice.PK_manufacturer"
+                    + " inner join detail on detail.PK_detail=concretedetail.PK_detail"
+                    + " where PK_Zapros=" + pkReq);
+        } catch (SQLException ex) {
+            Logger.getLogger(DetailsStore.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        jTable3.setModel(DbUtils.resultSetToTableModel(resSet));
+        jTable3.getColumnModel().getColumn(0).setMaxWidth(0);
+        jTable3.getColumnModel().getColumn(0).setMinWidth(0);
+        jTable3.getColumnModel().getColumn(0).setPreferredWidth(0);
+        jTable3.getColumnModel().getColumn(1).setMaxWidth(0);
+        jTable3.getColumnModel().getColumn(1).setMinWidth(0);
+        jTable3.getColumnModel().getColumn(1).setPreferredWidth(0);
+        jTable3.getColumnModel().getColumn(2).setHeaderValue("Деталь");
+        jTable3.getColumnModel().getColumn(3).setHeaderValue("Устройство");
+        jTable3.getColumnModel().getColumn(4).setHeaderValue("Колличество");
+        jTable3.getColumnModel().getColumn(5).setMaxWidth(0);
+        jTable3.getColumnModel().getColumn(5).setMinWidth(0);
+        jTable3.getColumnModel().getColumn(5).setPreferredWidth(0);
+        jTable3.getColumnModel().getColumn(6).setMaxWidth(0);
+        jTable3.getColumnModel().getColumn(6).setMinWidth(0);
+        jTable3.getColumnModel().getColumn(6).setPreferredWidth(0);
+        jTable3.getColumnModel().getColumn(7).setMaxWidth(0);
+        jTable3.getColumnModel().getColumn(7).setMinWidth(0);
+        jTable3.getColumnModel().getColumn(7).setPreferredWidth(0);
+        jTable3.getColumnModel().getColumn(8).setMaxWidth(0);
+        jTable3.getColumnModel().getColumn(8).setMinWidth(0);
+        jTable3.getColumnModel().getColumn(8).setPreferredWidth(0);
+        if (jTable2.getValueAt(jTable2.getSelectedRow(), 4).toString().equals("Ожидает выполнения")) {
+            jButtonExecute.setEnabled(true);
+        } else {
+            jButtonExecute.setEnabled(false);
+        }
     }//GEN-LAST:event_jTable2MousePressed
 
     private void jButtonOrderDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOrderDetailActionPerformed

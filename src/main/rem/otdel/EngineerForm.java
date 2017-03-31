@@ -137,6 +137,60 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
             }
         }
 
+        //если все ремонты заказа проведены - изменить статус заказа
+        try {
+
+            resSet = RepairMobile.st.executeQuery("select myorder.PK_ORDER,"
+                    + " myorder.PK_STATUS"
+                    + " from myorder "
+                    + " inner join status on status.PK_status=myorder.PK_status"
+                    + " where status.PK_status=12");
+            ArrayList<String> orders = new ArrayList<>();
+            while (resSet.next()) {
+                orders.add(resSet.getString(1));
+            }
+
+            ArrayList<ArrayList<String>> listOrdCrash = new ArrayList<>();
+            for (int i = 0; i < orders.size(); i++) {
+                resSet = RepairMobile.st.executeQuery("select PK_ORDERcrash,pk_order,pk_crash"
+                        + " from ordercrash where pk_order=" + orders.get(i)
+                );
+                ArrayList<String> listCrash = new ArrayList<>();
+                while (resSet.next()) {
+                    listCrash.add(resSet.getString(3));
+                }
+                listOrdCrash.add(listCrash);
+            }
+
+            ArrayList<ArrayList<String>> lstRep = new ArrayList<>();
+            for (int i = 0; i < orders.size(); i++) {
+                resSet = RepairMobile.st.executeQuery("select repair.PK_repair,"
+                        + " myorder.pk_order,"
+                        + " typeofcrash.pk_crash "
+                        + " from repair"
+                        + " inner join myorder on myorder.PK_order=repair.PK_order"
+                        + " inner join typeofcrash on typeofcrash.PK_crash=repair.PK_crash"
+                        + " inner join engineer on engineer.PK_engineer=repair.PK_engineer"
+                        + " where engineer.PK_engineer=" + PK + " and repair.repairstatus=1 and myorder.pk_order=" + orders.get(i)
+                );
+                ArrayList<String> listCrash = new ArrayList<>();
+                while (resSet.next()) {
+                    listCrash.add(resSet.getString(1));
+                }
+                lstRep.add(listCrash);
+            }
+
+            for (int i = 0; i < orders.size(); i++) {
+                if (lstRep.get(i).size() == listOrdCrash.get(i).size()) {
+                    resSet = RepairMobile.st.executeQuery("update myorder set pk_status=15 where pk_order=" + orders.get(i)
+                    );
+                }
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(EngineerForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         try {
             resSet = RepairMobile.st.executeQuery("select repair.PK_repair,"
                     + " myorder.numoforder,"
@@ -312,7 +366,7 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
 
         jTable3.getColumnModel().getColumn(3).setMaxWidth(0);
         jTable3.getColumnModel().getColumn(3).setMinWidth(0);
-        jTable3.getColumnModel().getColumn(4).setPreferredWidth(0);
+        jTable3.getColumnModel().getColumn(3).setPreferredWidth(0);
         try {
             resSet = RepairMobile.st.executeQuery("select myorder.PK_ORDER,myorder.NUMOFORDER,"
                     + "TO_CHAR(myorder.TIMETOACCEPT, 'DD.MM.YYYY'),"
@@ -529,14 +583,14 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 422, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(89, 89, 89)
                 .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(364, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3)
+                .addContainerGap())
         );
 
         jTabbedPane.addTab("Заказы", jPanel3);
@@ -855,7 +909,6 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
                         pkZapros = resSet.getInt(1);
                     }
 
-
                     for (int i = 0; i < jTable3.getRowCount(); i++) {
                         String pkDet = (String) jTable3.getValueAt(i, 0);
                         String pkType = (String) jTable3.getValueAt(i, 2);
@@ -887,8 +940,9 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
     private void jButtonAddDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddDetailActionPerformed
         // TODO add your handling code here:
         if (jTable2.getSelectedRow() != -1) {
-            if (jComboBoxDetail.getSelectedIndex() == -1) {
-                JOptionPane.showMessageDialog(rootPane, "Выберите деталь");
+            if (jComboBoxDetail.getSelectedIndex() == -1 || jComboBoxType.getSelectedIndex() == -1
+                    || jComboBoxManufacturer.getSelectedIndex() == -1 || jComboBoxModel.getSelectedIndex() == -1) {
+                JOptionPane.showMessageDialog(rootPane, "Выберите конкретную деталь");
             } else {
                 if ((int) jSpinner1.getValue() <= 0) {
                     JOptionPane.showMessageDialog(rootPane, "Деталей не может быть меньше одной");
