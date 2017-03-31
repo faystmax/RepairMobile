@@ -1,55 +1,43 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package spravochn.manufacture;
+package main.rem.otdel;
+
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
-import main.rem.otdel.ListenerCloseForm;
-import main.rem.otdel.Orders;
-import main.rem.otdel.RepairMobile;
 
 /**
  *
- * @author tigler
+ * @author maximus
  */
-public class ManufacturerAddUpdate extends javax.swing.JFrame {
+public class PhoneNaZamenuAddUpdate extends javax.swing.JFrame {
 
-    /**
-     * Creates new form ManufacturerAddUpdate
-     */
-    private ListenerCloseForm listenerCloseForm;
     private int addOrUpdate;
     private int PK;
+    private ListenerCloseForm listenerCloseForm;
 
-    public ManufacturerAddUpdate(int addOrUpdate, int PK) {
+    public PhoneNaZamenuAddUpdate(int addOrUpdate, int PK) {
         initComponents();
         this.addOrUpdate = addOrUpdate;
+        this.PK = PK;
         if (addOrUpdate == 1) {
             jButtonAddUpdate.setText("Изменить");
-            this.setTitle("Изменить производителя");
-        }
-        this.PK = PK;
+            this.setTitle("Изменить информацию о телефоне");
 
-        ResultSet resSet = null;
-        try {
-            resSet = RepairMobile.st.executeQuery("select nameofmanufacturer from manufacturer where PK_manufacturer=" + PK);
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Ошибка: Невозможно изменить");
-
-            this.dispose();
-        }
-        try {
-            if (resSet.next()) {
-                jTextField1.setText(resSet.getString(1));
+            ResultSet resSet = null;
+            try {
+                resSet = RepairMobile.st.executeQuery("select "
+                        + "PK_KEYOFCHANGEMOBILE,"
+                        + "MODEL,"
+                        + "IMEINUMBER from replacemobile"
+                        + " where replacemobile.PK_KEYOFCHANGEMOBILE=" + PK);
+                if (resSet.next()) {
+                    jTextFieldModel.setText(resSet.getString(2));
+                    jTextFieldImei.setText(resSet.getString(3));
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Ошибка: Невозможно изменить");
+                this.dispose();
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Ошибка: Невозможно изменить");
-            this.dispose();
         }
     }
 
@@ -67,19 +55,16 @@ public class ManufacturerAddUpdate extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        jTextFieldModel = new javax.swing.JTextField();
         jButtonCancel = new javax.swing.JButton();
         jButtonAddUpdate = new javax.swing.JButton();
+        jTextFieldImei = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Добавить производителя");
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                formWindowClosing(evt);
-            }
-        });
+        setTitle("Добавить телефон");
 
-        jLabel1.setText("Производитель");
+        jLabel1.setText("Модель");
 
         jButtonCancel.setText("Отмена");
         jButtonCancel.addActionListener(new java.awt.event.ActionListener() {
@@ -95,6 +80,8 @@ public class ManufacturerAddUpdate extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setText("Imei");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -102,15 +89,17 @@ public class ManufacturerAddUpdate extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jTextFieldModel)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButtonCancel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonAddUpdate)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 102, Short.MAX_VALUE)
+                        .addComponent(jButtonAddUpdate))
+                    .addComponent(jTextFieldImei, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -118,9 +107,13 @@ public class ManufacturerAddUpdate extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldModel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(16, 16, 16)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextFieldImei, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonCancel)
                     .addComponent(jButtonAddUpdate))
@@ -133,23 +126,22 @@ public class ManufacturerAddUpdate extends javax.swing.JFrame {
 
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
         // TODO add your handling code here:
-        //listenerCloseForm.event();
-        updateParent();
+        listenerCloseForm.event();
         this.dispose();
     }//GEN-LAST:event_jButtonCancelActionPerformed
 
     private void jButtonAddUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddUpdateActionPerformed
         // TODO add your handling code here:
+        String model = jTextFieldModel.getText();
+        String imei = jTextFieldImei.getText();
         if (addOrUpdate == 0) {
-            String text = jTextField1.getText();
-            if (text.equals("")) {
+            if (model.equals("") || imei.equals("")) {
                 JOptionPane.showMessageDialog(this, "Невозможно добавить пустое поле");
             } else {
                 try {
-                    RepairMobile.st.executeQuery("Insert into manufacturer (NAMEOFmanufacturer) values ('" + text + "')");
+                    RepairMobile.st.executeQuery("Insert into replacemobile (MODEL,IMEINUMBER) values ('" + model + "','" + imei + "')");
                     JOptionPane.showMessageDialog(this, "Запись успешно добавлена");
-                    //listenerCloseForm.event();
-                    updateParent();
+                    listenerCloseForm.event();
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(this, "Ошибка: Невозможно добавить");
 
@@ -158,42 +150,34 @@ public class ManufacturerAddUpdate extends javax.swing.JFrame {
             }
         } else {
             if (addOrUpdate == 1) {
-
-                String text = jTextField1.getText();
-
-                if (text.equals("")) {
+                if (model.equals("") || imei.equals("")) {
                     JOptionPane.showMessageDialog(this, "Невозможно изменить на пустое поле");
                 } else {
                     try {
-                        RepairMobile.st.executeQuery("UPDATE manufacturer SET NAMEOFmanufacturer = '" + text + "' WHERE PK_manufacturer=" + PK);
+                        RepairMobile.st.executeQuery("UPDATE replacemobile "
+                                + "SET MODEL = '" + model + "',"
+                                + "IMEINUMBER = '" + imei + "'"
+                                + ""
+                                + " WHERE replacemobile.PK_KEYOFCHANGEMOBILE=" + PK);
                         JOptionPane.showMessageDialog(this, "Запись успешно изменена");
-                        //listenerCloseForm.event();
-                        updateParent();
+                        listenerCloseForm.event();
                     } catch (SQLException ex) {
                         JOptionPane.showMessageDialog(this, "Ошибка: Невозможно изменить");
                     }
                     this.dispose();
                 }
             }
+
         }
     }//GEN-LAST:event_jButtonAddUpdateActionPerformed
 
-    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        //listenerCloseForm.event();
-        updateParent();
-    }//GEN-LAST:event_formWindowClosing
-    public void updateParent() {
-        if (listenerCloseForm.updatesDataInForms instanceof Orders) {
-            ((Orders) listenerCloseForm.updatesDataInForms).addDeviceData();
-        } else {
-            listenerCloseForm.event();
-        }
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAddUpdate;
     private javax.swing.JButton jButtonCancel;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JTextField jTextFieldImei;
+    private javax.swing.JTextField jTextFieldModel;
     // End of variables declaration//GEN-END:variables
 }

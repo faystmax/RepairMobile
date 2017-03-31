@@ -14,6 +14,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.TableModel;
 import main.rem.otdel.ListenerCloseForm;
+import main.rem.otdel.Orders;
 import main.rem.otdel.RepairMobile;
 import net.proteanit.sql.DbUtils;
 
@@ -31,7 +32,7 @@ public class ModelAddUpdate extends javax.swing.JFrame {
     private ListenerCloseForm listenerCloseForm;
     ArrayList<String> pkMan;
     ArrayList<String> valueMan;
-    
+
     public ModelAddUpdate(int addOrUpdate, int PK) {
         initComponents();
         this.addOrUpdate = addOrUpdate;
@@ -41,24 +42,24 @@ public class ModelAddUpdate extends javax.swing.JFrame {
         if (addOrUpdate == 1) {
             jButtonAddUpdate.setText("Изменить");
             this.setTitle("Изменить модель");
-            
+
             ResultSet resSet = null;
             ResultSet resSet1 = null;
             ResultSet resSet2 = null;
-            
+
             try {
                 resSet = RepairMobile.st.executeQuery("select nameofmodel,pk_manufacturer  from modeldevice  where  modeldevice.PK_modeldevice=" + PK);
-                
+
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(this, "Ошибка: Невозможно изменить");
-                
+
                 this.dispose();
             }
             try {
                 if (resSet.next()) {
                     jTextField1.setText(resSet.getString(1));
                 }
-                String tmp =resSet.getString(2);
+                String tmp = resSet.getString(2);
                 resSet2 = RepairMobile.st.executeQuery("select pk_manufacturer,nameofmanufacturer  from manufacturer");
                 TableModel tableModel = DbUtils.resultSetToTableModel(resSet2);
                 for (int i = 0; i < tableModel.getRowCount(); i++) {
@@ -71,7 +72,7 @@ public class ModelAddUpdate extends javax.swing.JFrame {
                         jComboBox1.setSelectedIndex(i);
                     }
                 }
-                
+
                 resSet1 = RepairMobile.st.executeQuery("select pk_manufacturer,nameofmanufacturer  from manufacturer  where PK_manufacturer=" + tmp);
             } catch (SQLException ex) {
                 ex.printStackTrace();
@@ -90,12 +91,12 @@ public class ModelAddUpdate extends javax.swing.JFrame {
                 jComboBox1.setSelectedIndex(-1);
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(this, "Ошибка: Невозможно изменить");
-                
+
                 this.dispose();
             }
         }
     }
-    
+
     public void setListenerCloseForm(ListenerCloseForm listenerCloseForm) {
         this.listenerCloseForm = listenerCloseForm;
     }
@@ -187,7 +188,8 @@ public class ModelAddUpdate extends javax.swing.JFrame {
 
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
         // TODO add your handling code here:
-        listenerCloseForm.event();
+        //listenerCloseForm.event();
+        updateParent();
         this.dispose();
     }//GEN-LAST:event_jButtonCancelActionPerformed
 
@@ -199,41 +201,52 @@ public class ModelAddUpdate extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Невозможно добавить пустое поле");
             } else {
                 try {
-                    RepairMobile.st.executeQuery("Insert into modeldevice (NAMEOFmodel,pk_manufacturer) values ('" + text + "','"+ pkMan.get(jComboBox1.getSelectedIndex())+"')");
+                    RepairMobile.st.executeQuery("Insert into modeldevice (NAMEOFmodel,pk_manufacturer) values ('" + text + "','" + pkMan.get(jComboBox1.getSelectedIndex()) + "')");
                     JOptionPane.showMessageDialog(this, "Запись успешно добавлена");
-                    listenerCloseForm.event();
+                    //listenerCloseForm.event();
+                    updateParent();
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(this, "Ошибка: Невозможно добавить");
-                    
+
                 }
                 this.dispose();
             }
         } else {
             if (addOrUpdate == 1) {
-                
+
                 String text = jTextField1.getText();
-                
+
                 if (text.equals("")) {
                     JOptionPane.showMessageDialog(this, "Невозможно изменить на пустое поле");
                 } else {
                     try {
                         RepairMobile.st.executeQuery("UPDATE modeldevice SET NAMEOFmodel= '" + text + "', pk_manufacturer= '" + pkMan.get(jComboBox1.getSelectedIndex()) + "' WHERE PK_modelDevice=" + PK);
                         JOptionPane.showMessageDialog(this, "Запись успешно изменена");
-                        listenerCloseForm.event();
+                        //listenerCloseForm.event();
+                        updateParent();
                     } catch (SQLException ex) {
                         JOptionPane.showMessageDialog(this, "Ошибка: Невозможно изменить");
                     }
                     this.dispose();
                 }
             }
-            
+
         }
     }//GEN-LAST:event_jButtonAddUpdateActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        listenerCloseForm.event();
+        //listenerCloseForm.event();
+        updateParent();
     }//GEN-LAST:event_formWindowClosing
 
+    public void updateParent() {
+
+        if (listenerCloseForm.updatesDataInForms instanceof Orders) {
+            ((Orders) listenerCloseForm.updatesDataInForms).addDeviceData();
+        } else {
+            listenerCloseForm.event();
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAddUpdate;

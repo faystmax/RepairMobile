@@ -11,7 +11,7 @@ package main.rem.otdel;
  */
 public class ListenerCloseForm {
 
-    UpdatesDataInForms updatesDataInForms;
+    public UpdatesDataInForms updatesDataInForms;
 
     public ListenerCloseForm(UpdatesDataInForms updatesDataInForms) {
         this.updatesDataInForms = updatesDataInForms;

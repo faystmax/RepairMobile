@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import main.rem.otdel.ListenerCloseForm;
+import main.rem.otdel.Orders;
 import main.rem.otdel.RepairMobile;
 
 /**
@@ -51,7 +52,7 @@ public class TypeCrashAddUpdate extends javax.swing.JFrame {
             this.dispose();
         }
     }
-    
+
     public void setListenerCloseForm(ListenerCloseForm listenerCloseForm) {
         this.listenerCloseForm = listenerCloseForm;
     }
@@ -137,13 +138,14 @@ public class TypeCrashAddUpdate extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelActionPerformed
-        listenerCloseForm.event();
+        //listenerCloseForm.event();
+        updateParent();
         this.dispose();
     }//GEN-LAST:event_jButtonCancelActionPerformed
 
     private void jButtonAddUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddUpdateActionPerformed
         // TODO add your handling code here:
-         if (addOrUpdate == 0) {
+        if (addOrUpdate == 0) {
             String text = jTextArea1.getText();
             if (text.equals("")) {
                 JOptionPane.showMessageDialog(this, "Невозможно добавить пустое поле");
@@ -151,7 +153,8 @@ public class TypeCrashAddUpdate extends javax.swing.JFrame {
                 try {
                     RepairMobile.st.executeQuery("Insert into typeofcrash (NAMEOFcrash) values ('" + text + "')");
                     JOptionPane.showMessageDialog(this, "Запись успешно добавлена");
-                    listenerCloseForm.event();
+                    //listenerCloseForm.event();
+                    updateParent();
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(this, "Ошибка: Невозможно добавить");
 
@@ -169,7 +172,8 @@ public class TypeCrashAddUpdate extends javax.swing.JFrame {
                     try {
                         RepairMobile.st.executeQuery("UPDATE typeofcrash SET NAMEOFcrash = '" + text + "' WHERE PK_crash=" + PK);
                         JOptionPane.showMessageDialog(this, "Запись успешно изменена");
-                        listenerCloseForm.event();
+                        //listenerCloseForm.event();
+                        updateParent();
                     } catch (SQLException ex) {
                         JOptionPane.showMessageDialog(this, "Ошибка: Невозможно изменить");
                     }
@@ -180,9 +184,18 @@ public class TypeCrashAddUpdate extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonAddUpdateActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        listenerCloseForm.event();
+        //listenerCloseForm.event();
+        updateParent();
     }//GEN-LAST:event_formWindowClosing
 
+    public void updateParent() {
+
+        if (listenerCloseForm.updatesDataInForms instanceof Orders) {
+            ((Orders) listenerCloseForm.updatesDataInForms).addCrashs();
+        } else {
+            listenerCloseForm.event();
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAddUpdate;

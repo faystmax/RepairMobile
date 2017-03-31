@@ -17,6 +17,9 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import net.proteanit.sql.DbUtils;
+import otchet.alldetail.AllDetail;
+import otchet.managerorder.ManagerOrder;
+import otchet.timezakaz.TimeZakaz;
 import spravochn.detail.Detail;
 
 /**
@@ -34,6 +37,7 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
     private ArrayList<Integer> indsParTable;
 
     public DetailsStore() {
+
         initComponents();
         this.PK = PK;
         addDataInTable();
@@ -66,7 +70,7 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
     @Override
     public void addDataInTable() {
         ResultSet resSet = null;
-
+        this.setEnabled(true);
         try {
             resSet = RepairMobile.st.executeQuery("select detailfromwarehouse.PK_detailfromwh,"
                     + " detail.nameofdetail,"
@@ -254,6 +258,9 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
+        jMenuItemDetailsWarehouse = new javax.swing.JMenuItem();
+        jMenuItemMenegersZakaz = new javax.swing.JMenuItem();
+        jMenuItemPeriodZakaz = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Работа на складе");
@@ -547,6 +554,31 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Отчеты");
+
+        jMenuItemDetailsWarehouse.setText("Все детали на складе");
+        jMenuItemDetailsWarehouse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemDetailsWarehouseActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItemDetailsWarehouse);
+
+        jMenuItemMenegersZakaz.setText("Заказы менеджера");
+        jMenuItemMenegersZakaz.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemMenegersZakazActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItemMenegersZakaz);
+
+        jMenuItemPeriodZakaz.setText("Все заказы за период");
+        jMenuItemPeriodZakaz.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemPeriodZakazActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItemPeriodZakaz);
+
         jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
@@ -836,6 +868,27 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonOrderDetail1ActionPerformed
 
+    private void jMenuItemDetailsWarehouseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDetailsWarehouseActionPerformed
+        AllDetail allDetail = new AllDetail();
+        allDetail.setListenerCloseForm(new ListenerCloseForm(this));
+        allDetail.setVisible(true);
+        this.setEnabled(false);
+    }//GEN-LAST:event_jMenuItemDetailsWarehouseActionPerformed
+
+    private void jMenuItemMenegersZakazActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemMenegersZakazActionPerformed
+        ManagerOrder managerOrder = new ManagerOrder();
+        managerOrder.setListenerCloseForm(new ListenerCloseForm(this));
+        managerOrder.setVisible(true);
+        this.setEnabled(false);
+    }//GEN-LAST:event_jMenuItemMenegersZakazActionPerformed
+
+    private void jMenuItemPeriodZakazActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemPeriodZakazActionPerformed
+        TimeZakaz timeZakaz = new TimeZakaz();
+        timeZakaz.setListenerCloseForm(new ListenerCloseForm(this));
+        timeZakaz.setVisible(true);
+        this.setEnabled(false);
+    }//GEN-LAST:event_jMenuItemPeriodZakazActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAdd;
@@ -857,6 +910,9 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItemClose;
+    private javax.swing.JMenuItem jMenuItemDetailsWarehouse;
+    private javax.swing.JMenuItem jMenuItemMenegersZakaz;
+    private javax.swing.JMenuItem jMenuItemPeriodZakaz;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
