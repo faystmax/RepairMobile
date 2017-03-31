@@ -18,8 +18,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import net.proteanit.sql.DbUtils;
 import spravochn.detail.Detail;
-import spravochn.engineer.Engenieers;
-import spravochn.manager.Managers;
 
 /**
  *
@@ -212,7 +210,7 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
         jTableOrderDetail = new javax.swing.JTable();
         jButtonOrderDetail = new javax.swing.JButton();
         jButtonExec = new javax.swing.JButton();
-        jButtonOrderDetailDelete = new javax.swing.JButton();
+        jButtonOrderDetail1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable( )
@@ -251,10 +249,10 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItemClose = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItemDetails = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
-        jMenuItemMenegers = new javax.swing.JMenuItem();
-        jMenuItemEnginers = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -316,9 +314,9 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonAdd)
                     .addComponent(jButtonUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonDelete)
-                    .addComponent(jButtonAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButtonDelete))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 451, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -353,10 +351,10 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
             }
         });
 
-        jButtonOrderDetailDelete.setText("Удалить заказанную деталь");
-        jButtonOrderDetailDelete.addActionListener(new java.awt.event.ActionListener() {
+        jButtonOrderDetail1.setText("Удалить заказанную деталь");
+        jButtonOrderDetail1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonOrderDetailDeleteActionPerformed(evt);
+                jButtonOrderDetail1ActionPerformed(evt);
             }
         });
 
@@ -373,7 +371,7 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 226, Short.MAX_VALUE)
                         .addComponent(jButtonOrderDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButtonOrderDetailDelete)))
+                        .addComponent(jButtonOrderDetail1)))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -383,7 +381,7 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonOrderDetail)
                     .addComponent(jButtonExec)
-                    .addComponent(jButtonOrderDetailDelete))
+                    .addComponent(jButtonOrderDetail1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 451, Short.MAX_VALUE)
                 .addContainerGap())
@@ -528,31 +526,21 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
 
         jMenu2.setText("Справочники");
 
-        jMenuItemDetails.setText("Детали");
-        jMenuItemDetails.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem1.setText("Детали");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemDetailsActionPerformed(evt);
+                jMenuItem1ActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItemDetails);
+        jMenu2.add(jMenuItem1);
 
         jMenu4.setText("Пользователи");
 
-        jMenuItemMenegers.setText("Менеджеры");
-        jMenuItemMenegers.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemMenegersActionPerformed(evt);
-            }
-        });
-        jMenu4.add(jMenuItemMenegers);
+        jMenuItem3.setText("Менеджеры");
+        jMenu4.add(jMenuItem3);
 
-        jMenuItemEnginers.setText("Инженеры");
-        jMenuItemEnginers.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemEnginersActionPerformed(evt);
-            }
-        });
-        jMenu4.add(jMenuItemEnginers);
+        jMenuItem4.setText("Инженеры");
+        jMenu4.add(jMenuItem4);
 
         jMenu2.add(jMenu4);
 
@@ -583,11 +571,11 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItemDetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemDetailsActionPerformed
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
         Detail detail = new Detail();
         detail.setVisible(true);
-    }//GEN-LAST:event_jMenuItemDetailsActionPerformed
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItemCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCloseActionPerformed
         // TODO add your handling code here:
@@ -844,37 +832,9 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
 
     }//GEN-LAST:event_jButtonExecActionPerformed
 
-    private void jButtonOrderDetailDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOrderDetailDeleteActionPerformed
-        if (jTableOrderDetail.getSelectedRow() == -1) {
-            JOptionPane.showMessageDialog(this, "Выделите деталь для удаления");
-        } else {
-            try {
-                Object PK = jTableOrderDetail.getValueAt(jTableOrderDetail.getSelectedRow(), 0);
-                int primKey = Integer.parseInt(PK.toString());
-
-                int option = JOptionPane.showConfirmDialog(this, "Вы уверены что хотите удалить запись",
-                        "Удаление записи", JOptionPane.YES_NO_OPTION);
-                if (option == 0) {
-                    RepairMobile.st.executeQuery("delete from ZAKAZDETAILS where PK_ZAKAZDETAIL=" + PK);
-                    addDataInTable();
-                }
-
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, "Удаление невозможно");
-                Logger.getLogger(DetailsStore.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }//GEN-LAST:event_jButtonOrderDetailDeleteActionPerformed
-
-    private void jMenuItemMenegersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemMenegersActionPerformed
-        Managers managers = new Managers();
-        managers.setVisible(true);
-    }//GEN-LAST:event_jMenuItemMenegersActionPerformed
-
-    private void jMenuItemEnginersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEnginersActionPerformed
-        Engenieers engenieers = new Engenieers();
-        engenieers.setVisible(true);
-    }//GEN-LAST:event_jMenuItemEnginersActionPerformed
+    private void jButtonOrderDetail1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOrderDetail1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonOrderDetail1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -883,7 +843,7 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
     private javax.swing.JButton jButtonExec;
     private javax.swing.JButton jButtonExecute;
     private javax.swing.JButton jButtonOrderDetail;
-    private javax.swing.JButton jButtonOrderDetailDelete;
+    private javax.swing.JButton jButtonOrderDetail1;
     private javax.swing.JButton jButtonUpdate;
     private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
@@ -892,11 +852,11 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItemClose;
-    private javax.swing.JMenuItem jMenuItemDetails;
-    private javax.swing.JMenuItem jMenuItemEnginers;
-    private javax.swing.JMenuItem jMenuItemMenegers;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

@@ -32,10 +32,18 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
     private ArrayList<String> valueDetail;
     private DefaultTableModel dtm;
 
+    ArrayList<String> pkDetails;
+    ArrayList<String> valueDetails;
+    ArrayList<String> pkModel;
+    ArrayList<String> valueModel;
+    ArrayList<String> pkProizv;
+    ArrayList<String> valueProizv;
+    ArrayList<String> pkTypeDevice;
+    ArrayList<String> valueTypeDevice;
+
     /**
      * Creates new form EngineerForm
      */
-
     public EngineerForm(int PK) {
         initComponents();
         this.PK = PK;
@@ -43,6 +51,7 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
         pkStorekeeper = new ArrayList<String>();
         valueStorekeeper = new ArrayList<String>();
 
+        //jButtonAddDetail.setEnabled(false);
         ResultSet resSet = null;
         try {
             resSet = RepairMobile.st.executeQuery("select famofengineer,nameofengineer,otchofengineer from engineer"
@@ -61,7 +70,7 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
         JTextFieldDateEditor editor2 = (JTextFieldDateEditor) jDateChooser1.getDateEditor();
         editor2.setEditable(false);
 
-        pkDetail = new ArrayList<String>();
+        /*pkDetail = new ArrayList<String>();
         valueDetail = new ArrayList<String>();
 
         try {
@@ -77,7 +86,7 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
             valueDetail.add(tableModel.getValueAt(i, 1).toString());
         }
         jComboBoxDetail.setModel(new DefaultComboBoxModel(valueDetail.toArray()));
-        jComboBoxDetail.setSelectedIndex(-1);
+        jComboBoxDetail.setSelectedIndex(-1);*/
     }
 
     @Override
@@ -90,17 +99,16 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
                     + " manufacturer.nameofmanufacturer|| ' ' ||modeldevice.nameofmodel,"
                     + " TO_CHAR(repair.startdate, 'DD.MM.YYYY'),"
                     + " TO_CHAR(repair.enddate, 'DD.MM.YYYY'),"
-                     + " typeofcrash.nameofcrash ,"
+                    + " typeofcrash.nameofcrash ,"
                     + " repair.repairstatus "
-                   
                     + " from repair"
                     + " inner join engineer on repair.PK_engineer=engineer.PK_engineer"
                     + " inner join myorder on myorder.PK_order=repair.PK_order"
                     + " inner join device on myorder.PK_device=device.PK_device"
                     + " inner join modeldevice on modeldevice.PK_modeldevice=device.PK_modeldevice"
                     + " inner join manufacturer on modeldevice.PK_manufacturer=manufacturer.PK_manufacturer"
-                    + " inner join typeofcrash on typeofcrash.PK_crash=repair.PK_crash"                 
-                    + " where engineer.PK_engineer="+ PK
+                    + " inner join typeofcrash on typeofcrash.PK_crash=repair.PK_crash"
+                    + " where engineer.PK_engineer=" + PK
             );
         } catch (SQLException ex) {
             Logger.getLogger(DetailsStore.class.getName()).log(Level.SEVERE, null, ex);
@@ -116,7 +124,7 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
         jTable1.getColumnModel().getColumn(4).setHeaderValue("Конец ремонта");
         jTable1.getColumnModel().getColumn(5).setHeaderValue("Поломка");
         jTable1.getColumnModel().getColumn(6).setHeaderValue("Статус");
-        
+
         for (int i = 0; i < jTable1.getRowCount(); i++) {
             if (jTable1.getValueAt(i, 6).toString().equals("0")) {
                 jTable1.setValueAt("Ремонтируется", i, 6);
@@ -129,7 +137,127 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
             }
         }
 
-        /* try {
+        try {
+            resSet = RepairMobile.st.executeQuery("select repair.PK_repair,"
+                    + " myorder.numoforder,"
+                    + " manufacturer.nameofmanufacturer|| ' ' ||modeldevice.nameofmodel,"
+                    + " TO_CHAR(repair.startdate, 'DD.MM.YYYY'),"
+                    + " TO_CHAR(repair.enddate, 'DD.MM.YYYY'),"
+                    + " typeofcrash.nameofcrash "
+                    //+ " repair.repairstatus "
+
+                    + " from repair"
+                    + " inner join engineer on repair.PK_engineer=engineer.PK_engineer"
+                    + " inner join myorder on myorder.PK_order=repair.PK_order"
+                    + " inner join device on myorder.PK_device=device.PK_device"
+                    + " inner join modeldevice on modeldevice.PK_modeldevice=device.PK_modeldevice"
+                    + " inner join manufacturer on modeldevice.PK_manufacturer=manufacturer.PK_manufacturer"
+                    + " inner join typeofcrash on typeofcrash.PK_crash=repair.PK_crash"
+                    + " where engineer.PK_engineer=" + PK + " and repair.repairstatus=0"
+            );
+        } catch (SQLException ex) {
+            Logger.getLogger(DetailsStore.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        jTable2.setModel(DbUtils.resultSetToTableModel(resSet));
+        jTable2.getColumnModel().getColumn(0).setMaxWidth(0);
+        jTable2.getColumnModel().getColumn(0).setMinWidth(0);
+        jTable2.getColumnModel().getColumn(0).setPreferredWidth(0);
+        jTable2.getColumnModel().getColumn(1).setHeaderValue("№ заказа");
+        jTable2.getColumnModel().getColumn(2).setHeaderValue("Устройство");
+        jTable2.getColumnModel().getColumn(3).setHeaderValue("Начало ремонта");
+        jTable2.getColumnModel().getColumn(4).setHeaderValue("Конец ремонта");
+        jTable2.getColumnModel().getColumn(5).setHeaderValue("Поломка");
+
+        ResultSet resSetProizv = null;
+        pkProizv = new ArrayList<String>();
+        valueProizv = new ArrayList<String>();
+
+        ResultSet resTypeDevice = null;
+        pkTypeDevice = new ArrayList<String>();
+        valueTypeDevice = new ArrayList<String>();
+
+        pkDetail = new ArrayList<String>();
+        valueDetail = new ArrayList<String>();
+
+        pkModel = new ArrayList<String>();
+        valueModel = new ArrayList<String>();
+
+        try {
+
+            //был replace
+            jComboBoxModel.setEnabled(false);
+
+            //производитель
+            int indSel = -1;
+            resSetProizv = RepairMobile.st.executeQuery("select * from manufacturer");
+            TableModel tableModel = DbUtils.resultSetToTableModel(resSetProizv);
+            for (int i = 0; i < tableModel.getRowCount(); i++) {
+                pkProizv.add(tableModel.getValueAt(i, 0).toString());
+                valueProizv.add(tableModel.getValueAt(i, 1).toString());
+            }
+            jComboBoxManufacturer.setModel(new DefaultComboBoxModel(valueProizv.toArray()));
+            jComboBoxManufacturer.setSelectedIndex(indSel);
+
+            indSel = -1;
+            //тип устройства
+            resSetProizv = RepairMobile.st.executeQuery("select * from typeofdevice");
+            tableModel = DbUtils.resultSetToTableModel(resSetProizv);
+            for (int i = 0; i < tableModel.getRowCount(); i++) {
+                pkTypeDevice.add(tableModel.getValueAt(i, 0).toString());
+                valueTypeDevice.add(tableModel.getValueAt(i, 1).toString());
+            }
+            jComboBoxType.setModel(new DefaultComboBoxModel(valueTypeDevice.toArray()));
+            jComboBoxType.setSelectedIndex(indSel);
+
+            indSel = -1;
+            resSetProizv = RepairMobile.st.executeQuery("select * from detail");
+            tableModel = DbUtils.resultSetToTableModel(resSetProizv);
+            for (int i = 0; i < tableModel.getRowCount(); i++) {
+                pkDetail.add(tableModel.getValueAt(i, 0).toString());
+                valueDetail.add(tableModel.getValueAt(i, 1).toString());
+            }
+            jComboBoxDetail.setModel(new DefaultComboBoxModel(valueDetail.toArray()));
+            jComboBoxDetail.setSelectedIndex(indSel);
+
+            indSel = -1;
+            if (jComboBoxManufacturer.getSelectedIndex() != -1) {
+                jComboBoxModel.setEnabled(true);
+                ResultSet resSetModel = null;
+                pkModel = new ArrayList<String>();
+                valueModel = new ArrayList<String>();
+                try {
+                    // TODO add your handling code here:
+                    resSetModel = RepairMobile.st.executeQuery("select pk_modeldevice,nameofmodel"
+                            + " from modeldevice where pk_manufacturer =" + pkProizv.get(jComboBoxManufacturer.getSelectedIndex()));
+                    tableModel = DbUtils.resultSetToTableModel(resSetModel);
+                    for (int i = 0; i < tableModel.getRowCount(); i++) {
+                        pkModel.add(tableModel.getValueAt(i, 0).toString());
+                        valueModel.add(tableModel.getValueAt(i, 1).toString());
+                    }
+                    jComboBoxModel.setModel(new DefaultComboBoxModel(valueModel.toArray()));
+                    jComboBoxModel.setSelectedIndex(indSel);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Orders.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Orders.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //jTable2.getColumnModel().getColumn(6).setHeaderValue("Статус");
+
+        /*for (int i = 0; i < jTable2.getRowCount(); i++) {
+            if (jTable2.getValueAt(i, 6).toString().equals("0")) {
+                jTable2.setValueAt("Ремонтируется", i, 6);
+            } else {
+                if (jTable2.getValueAt(i, 6).toString().equals("1")) {
+                    jTable2.setValueAt("Выполнено", i, 6);
+                } else {
+                    jTable2.setValueAt("Неизвестно", i, 6);
+                }
+            }
+        }*/
+
+ /* try {
             resSet = RepairMobile.st.executeQuery("select repair.PK_repair,"
                     + " typeofdevice.nameoftype,"
                     + " manufacturer.nameofmanufacturer,"
@@ -165,15 +293,26 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
         jTable2.getColumnModel().getColumn(7).setMaxWidth(0);
         jTable2.getColumnModel().getColumn(7).setMinWidth(0);
         jTable2.getColumnModel().getColumn(7).setPreferredWidth(0);
-
+         */
         dtm = new DefaultTableModel();
         jTable3.setModel(dtm);
         dtm.addColumn("pk");
         dtm.addColumn("Деталь");
+        dtm.addColumn("pk_type");
+        dtm.addColumn("pk_model");
+        dtm.addColumn("Устройство");
         dtm.addColumn("Колличество");
         jTable3.getColumnModel().getColumn(0).setMaxWidth(0);
         jTable3.getColumnModel().getColumn(0).setMinWidth(0);
-        jTable3.getColumnModel().getColumn(0).setPreferredWidth(0);*/
+        jTable3.getColumnModel().getColumn(0).setPreferredWidth(0);
+
+        jTable3.getColumnModel().getColumn(2).setMaxWidth(0);
+        jTable3.getColumnModel().getColumn(2).setMinWidth(0);
+        jTable3.getColumnModel().getColumn(2).setPreferredWidth(0);
+
+        jTable3.getColumnModel().getColumn(3).setMaxWidth(0);
+        jTable3.getColumnModel().getColumn(3).setMinWidth(0);
+        jTable3.getColumnModel().getColumn(4).setPreferredWidth(0);
         try {
             resSet = RepairMobile.st.executeQuery("select myorder.PK_ORDER,myorder.NUMOFORDER,"
                     + "TO_CHAR(myorder.TIMETOACCEPT, 'DD.MM.YYYY'),"
@@ -235,6 +374,7 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
                 }
             }
         }
+
     }
 
     /**
@@ -258,21 +398,29 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
         jTableOrders = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jPanelCreateZapros = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jDateChooser1 = new com.toedter.calendar.JDateChooser();
         jButtonSend = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        jButtonAddDetail = new javax.swing.JButton();
         jButtonDeleteDetail = new javax.swing.JButton();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTable3 = new javax.swing.JTable( )         {             @Override             public boolean isCellEditable(int row, int column)             {                 return false;             }         };
-        jComboBoxDetail = new javax.swing.JComboBox<String>();
-        jSpinner1 = new javax.swing.JSpinner();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable( )         {             @Override             public boolean isCellEditable(int row, int column)             {                 return false;             }         };
         jLabel4 = new javax.swing.JLabel();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        jButtonAddDetail = new javax.swing.JButton();
+        jComboBoxDetail = new javax.swing.JComboBox<>();
+        jLabel3 = new javax.swing.JLabel();
+        jSpinner1 = new javax.swing.JSpinner();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jComboBoxType = new javax.swing.JComboBox<>();
+        jComboBoxManufacturer = new javax.swing.JComboBox<>();
+        jComboBoxModel = new javax.swing.JComboBox<>();
         jLabelFIO = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -322,7 +470,7 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
             jPanelRemontsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelRemontsLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 789, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 907, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanelRemontsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButtonAdd, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -374,7 +522,7 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 735, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 853, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -393,8 +541,6 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
 
         jTabbedPane.addTab("Заказы", jPanel3);
 
-        jLabel2.setText("Дата создания запроса");
-
         jButtonSend.setText("Отправить");
         jButtonSend.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -403,15 +549,6 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
         });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-
-        jLabel3.setText("Детали в запросе");
-
-        jButtonAddDetail.setText("Добавить");
-        jButtonAddDetail.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAddDetailActionPerformed(evt);
-            }
-        });
 
         jButtonDeleteDetail.setText("Удалить");
         jButtonDeleteDetail.addActionListener(new java.awt.event.ActionListener() {
@@ -453,39 +590,18 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 355, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jComboBoxDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jSpinner1)
-                                .addGap(27, 27, 27)))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButtonAddDetail, javax.swing.GroupLayout.DEFAULT_SIZE, 110, Short.MAX_VALUE)
-                            .addComponent(jButtonDeleteDetail, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButtonDeleteDetail, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButtonDeleteDetail))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jComboBoxDetail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButtonAddDetail))
-                        .addGap(19, 19, 19)
-                        .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)))
+                .addContainerGap()
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jButtonDeleteDetail)
                 .addContainerGap())
         );
 
@@ -502,6 +618,11 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
                 "Тип", "Производитель", "Модель", "Начало ремонта", "Конец ремонта", "", "Статус"
             }
         ));
+        jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable2MouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTable2);
 
         jLabel4.setText("Ремонты");
@@ -529,6 +650,92 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
                 .addContainerGap())
         );
 
+        jLabel2.setText("Дата запроса");
+
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Деталь в запросе"));
+
+        jButtonAddDetail.setText("Добавить");
+        jButtonAddDetail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAddDetailActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Деталь");
+
+        jLabel1.setText("Тип устройства");
+
+        jLabel5.setText("Производитель");
+
+        jLabel6.setText("Модель");
+
+        jLabel7.setText("Количество");
+
+        jComboBoxManufacturer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBoxManufacturerActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButtonAddDetail, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jComboBoxDetail, 0, 217, Short.MAX_VALUE)
+                                        .addComponent(jComboBoxManufacturer, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jComboBoxModel, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1)
+                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel5)
+                                .addComponent(jLabel7)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jComboBoxType, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBoxDetail, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBoxType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jComboBoxManufacturer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBoxModel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addComponent(jButtonAddDetail)
+                .addGap(57, 57, 57))
+        );
+
         javax.swing.GroupLayout jPanelCreateZaprosLayout = new javax.swing.GroupLayout(jPanelCreateZapros);
         jPanelCreateZapros.setLayout(jPanelCreateZaprosLayout);
         jPanelCreateZaprosLayout.setHorizontalGroup(
@@ -536,37 +743,35 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
             .addGroup(jPanelCreateZaprosLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanelCreateZaprosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanelCreateZaprosLayout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(jPanelCreateZaprosLayout.createSequentialGroup()
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 161, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addGroup(jPanelCreateZaprosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButtonSend, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jDateChooser1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelCreateZaprosLayout.createSequentialGroup()
-                                .addGroup(jPanelCreateZaprosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(31, 31, 31))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelCreateZaprosLayout.createSequentialGroup()
-                                .addComponent(jButtonSend, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(55, 55, 55))))))
+                                .addComponent(jLabel2)
+                                .addGap(20, 20, 20)))))
+                .addContainerGap())
         );
         jPanelCreateZaprosLayout.setVerticalGroup(
             jPanelCreateZaprosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelCreateZaprosLayout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPanelCreateZaprosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanelCreateZaprosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanelCreateZaprosLayout.createSequentialGroup()
-                        .addGap(22, 22, 22)
                         .addComponent(jLabel2)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonSend)))
-                .addContainerGap())
+                        .addGap(54, 54, 54)
+                        .addComponent(jButtonSend))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane.addTab("Создание запроса", jPanelCreateZapros);
@@ -615,8 +820,8 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
                 .addContainerGap()
                 .addComponent(jLabelFIO)
                 .addGap(1, 1, 1)
-                .addComponent(jTabbedPane)
-                .addGap(16, 16, 16))
+                .addComponent(jTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 505, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -637,23 +842,36 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
             } else {
                 try {
                     int pkRepair = Integer.parseInt(jTable2.getValueAt(jTable2.getSelectedRow(), 0).toString());
-                    int pkDevice = Integer.parseInt(jTable2.getValueAt(jTable2.getSelectedRow(), 7).toString());
+                    //int pkDevice = Integer.parseInt(jTable2.getValueAt(jTable2.getSelectedRow(), 7).toString());
                     //int idxComboBox = jComboBoxStorekeeper.getSelectedIndex();
                     // String pkStrokeeper = pkStorekeeper.get(idxComboBox);
                     java.sql.Date date = new java.sql.Date(jDateChooser1.getDateEditor().getDate().getTime());
-                    // RepairMobile.st.executeQuery("Insert into zapros (PK_Repair, PK_storekeeper,timetoget,"
-                    //       + "flagofcomplete,pk_device) values ('" + pkRepair + "','" + pkStrokeeper + "', TO_DATE('" + date + "', 'YYYY-MM-DD') ,'0',"
-                    //        + "'" + pkDevice + "')");
+                    RepairMobile.st.executeQuery("Insert into zapros (PK_Repair,timetoget,"
+                            + "flagofcomplete) values ('" + pkRepair + "', TO_DATE('" + date + "', 'YYYY-MM-DD') ,'0')"
+                    );
                     resSet = RepairMobile.st.executeQuery("select seqzapros.currval from dual");
                     int pkZapros = 0;
                     if (resSet.next()) {
                         pkZapros = resSet.getInt(1);
                     }
+
+
                     for (int i = 0; i < jTable3.getRowCount(); i++) {
                         String pkDet = (String) jTable3.getValueAt(i, 0);
-                        String countDetail = (String) jTable3.getValueAt(i, 2);
+                        String pkType = (String) jTable3.getValueAt(i, 2);
+                        String pkModel = (String) jTable3.getValueAt(i, 3);
+                        String countDetail = (String) jTable3.getValueAt(i, 5);
+                        RepairMobile.st.executeQuery("Insert into concretedetail (pk_detail,pk_modeldevice,pk_typeofdevice)"
+                                + " values ('" + pkDet + "','" + pkModel + "','" + pkType + "')");
+
+                        resSet = RepairMobile.st.executeQuery("select seqconcretedetail.currval from dual");
+                        int pkConcDet = 0;
+                        if (resSet.next()) {
+                            pkConcDet = resSet.getInt(1);
+                        }
+
                         RepairMobile.st.executeQuery("Insert into detailofrequest"
-                                + " (PK_zapros,PK_detail,amount) values ('" + pkZapros + "','" + pkDet + "','" + countDetail + "')");
+                                + " (PK_zapros,PK_concretedetail,amount,pk_detailstatus) values ('" + pkZapros + "','" + pkConcDet + "','" + countDetail + "','1')");
                     }
                     JOptionPane.showMessageDialog(rootPane, "Запрос отправлен");
                 } catch (SQLException ex) {
@@ -668,28 +886,35 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
 
     private void jButtonAddDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddDetailActionPerformed
         // TODO add your handling code here:
-        if (jComboBoxDetail.getSelectedIndex() == -1) {
-            JOptionPane.showMessageDialog(rootPane, "Выберите деталь");
-        } else {
-            if ((int) jSpinner1.getValue() <= 0) {
-                JOptionPane.showMessageDialog(rootPane, "Деталей не может быть меньше одной");
+        if (jTable2.getSelectedRow() != -1) {
+            if (jComboBoxDetail.getSelectedIndex() == -1) {
+                JOptionPane.showMessageDialog(rootPane, "Выберите деталь");
             } else {
-                for (int i = 0; i < jTable3.getRowCount(); i++) {
-                    if (pkDetail.get(jComboBoxDetail.getSelectedIndex()) == jTable3.getValueAt(i, 0)) {
-                        JOptionPane.showMessageDialog(rootPane, "Такая деталь уже добавлена в список");
-                        return;
+                if ((int) jSpinner1.getValue() <= 0) {
+                    JOptionPane.showMessageDialog(rootPane, "Деталей не может быть меньше одной");
+                } else {
+                    for (int i = 0; i < jTable3.getRowCount(); i++) {
+                        if (pkDetail.get(jComboBoxDetail.getSelectedIndex()) == jTable3.getValueAt(i, 0)) {
+                            JOptionPane.showMessageDialog(rootPane, "Такая деталь уже добавлена в список");
+                            return;
+                        }
                     }
+                    Object[] objects = {
+                        pkDetail.get(jComboBoxDetail.getSelectedIndex()),
+                        valueDetail.get(jComboBoxDetail.getSelectedIndex()),
+                        pkTypeDevice.get(jComboBoxDetail.getSelectedIndex()),
+                        pkModel.get(jComboBoxDetail.getSelectedIndex()),
+                        valueProizv.get(jComboBoxManufacturer.getSelectedIndex()) + " " + valueModel.get(jComboBoxModel.getSelectedIndex()),
+                        jSpinner1.getValue().toString()
+                    };
+                    dtm.addRow(objects);
+
                 }
-                Object[] objects = {
-                    pkDetail.get(jComboBoxDetail.getSelectedIndex()),
-                    valueDetail.get(jComboBoxDetail.getSelectedIndex()),
-                    jSpinner1.getValue().toString()
-                };
-                dtm.addRow(objects);
-
             }
-        }
 
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Выберите ремонт");
+        }
 
     }//GEN-LAST:event_jButtonAddDetailActionPerformed
 
@@ -774,6 +999,35 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_jTable2MouseClicked
+
+    private void jComboBoxManufacturerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxManufacturerActionPerformed
+        // TODO add your handling code here:
+        if (jComboBoxManufacturer.getSelectedIndex() != -1) {
+            jComboBoxModel.setEnabled(true);
+            ResultSet resSetModel = null;
+            pkModel = new ArrayList<String>();
+            valueModel = new ArrayList<String>();
+            try {
+                // TODO add your handling code here:
+                resSetModel = RepairMobile.st.executeQuery("select pk_modeldevice,nameofmodel"
+                        + " from modeldevice where pk_manufacturer =" + pkProizv.get(jComboBoxManufacturer.getSelectedIndex()));
+                TableModel tableModel = DbUtils.resultSetToTableModel(resSetModel);
+                for (int i = 0; i < tableModel.getRowCount(); i++) {
+                    pkModel.add(tableModel.getValueAt(i, 0).toString());
+                    valueModel.add(tableModel.getValueAt(i, 1).toString());
+                }
+                jComboBoxModel.setModel(new DefaultComboBoxModel(valueModel.toArray()));
+                jComboBoxModel.setSelectedIndex(-1);
+            } catch (SQLException ex) {
+                Logger.getLogger(Orders.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jComboBoxManufacturerActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -784,10 +1038,17 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
     private javax.swing.JButton jButtonSend;
     private javax.swing.JButton jButtonUpdate;
     private javax.swing.JComboBox<String> jComboBoxDetail;
+    private javax.swing.JComboBox<String> jComboBoxManufacturer;
+    private javax.swing.JComboBox<String> jComboBoxModel;
+    private javax.swing.JComboBox<String> jComboBoxType;
     private com.toedter.calendar.JDateChooser jDateChooser1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabelFIO;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
@@ -796,6 +1057,7 @@ public class EngineerForm extends javax.swing.JFrame implements UpdatesDataInFor
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanelCreateZapros;
     private javax.swing.JPanel jPanelRemonts;
     private javax.swing.JScrollPane jScrollPane1;

@@ -630,7 +630,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         jMenuItemTypeCrash = new javax.swing.JMenuItem();
         jMenuItemTypeDevice = new javax.swing.JMenuItem();
         jMenuItemModel = new javax.swing.JMenuItem();
-        jMenuItemClient = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         jMenu1.setText("jMenu1");
 
@@ -1227,13 +1227,13 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         });
         jMenu3.add(jMenuItemModel);
 
-        jMenuItemClient.setText("Клиенты");
-        jMenuItemClient.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem2.setText("Клиенты");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItemClientActionPerformed(evt);
+                jMenuItem2ActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItemClient);
+        jMenu3.add(jMenuItem2);
 
         jMenuBar1.add(jMenu3);
 
@@ -1885,12 +1885,12 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         model.setVisible(true);
     }//GEN-LAST:event_jMenuItemModelActionPerformed
 
-    private void jMenuItemClientActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemClientActionPerformed
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         ChooseExistClient chooseExistClient = new ChooseExistClient();
         chooseExistClient.setListenerCloseForm(new ListenerCloseForm(this));
         chooseExistClient.setVisible(true);
         this.setEnabled(false);
-    }//GEN-LAST:event_jMenuItemClientActionPerformed
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1927,7 +1927,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuClose;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItemClient;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItemManufacturer;
     private javax.swing.JMenuItem jMenuItemModel;
     private javax.swing.JMenuItem jMenuItemStatus;

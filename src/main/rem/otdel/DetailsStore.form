@@ -32,12 +32,12 @@
             <Property name="text" type="java.lang.String" value="&#x421;&#x43f;&#x440;&#x430;&#x432;&#x43e;&#x447;&#x43d;&#x438;&#x43a;&#x438;"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItemDetails">
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
               <Properties>
                 <Property name="text" type="java.lang.String" value="&#x414;&#x435;&#x442;&#x430;&#x43b;&#x438;"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemDetailsActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem1ActionPerformed"/>
               </Events>
             </MenuItem>
             <Menu class="javax.swing.JMenu" name="jMenu4">
@@ -45,21 +45,15 @@
                 <Property name="text" type="java.lang.String" value="&#x41f;&#x43e;&#x43b;&#x44c;&#x437;&#x43e;&#x432;&#x430;&#x442;&#x435;&#x43b;&#x438;"/>
               </Properties>
               <SubComponents>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItemMenegers">
+                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem3">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="&#x41c;&#x435;&#x43d;&#x435;&#x434;&#x436;&#x435;&#x440;&#x44b;"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemMenegersActionPerformed"/>
-                  </Events>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMenuItemEnginers">
+                <MenuItem class="javax.swing.JMenuItem" name="jMenuItem4">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="&#x418;&#x43d;&#x436;&#x435;&#x43d;&#x435;&#x440;&#x44b;"/>
                   </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItemEnginersActionPerformed"/>
-                  </Events>
                 </MenuItem>
               </SubComponents>
             </Menu>
@@ -151,9 +145,9 @@
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="jButtonAdd" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jButtonUpdate" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jButtonDelete" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButtonAdd" alignment="1" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jScrollPane1" min="-2" pref="451" max="-2" attributes="0"/>
@@ -258,7 +252,7 @@
                               <EmptySpace pref="226" max="32767" attributes="0"/>
                               <Component id="jButtonOrderDetail" min="-2" pref="181" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jButtonOrderDetailDelete" min="-2" max="-2" attributes="0"/>
+                              <Component id="jButtonOrderDetail1" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -272,7 +266,7 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jButtonOrderDetail" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jButtonExec" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jButtonOrderDetailDelete" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jButtonOrderDetail1" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jScrollPane7" pref="451" max="32767" attributes="0"/>
@@ -346,12 +340,12 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonExecActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="jButtonOrderDetailDelete">
+            <Component class="javax.swing.JButton" name="jButtonOrderDetail1">
               <Properties>
                 <Property name="text" type="java.lang.String" value="&#x423;&#x434;&#x430;&#x43b;&#x438;&#x442;&#x44c; &#x437;&#x430;&#x43a;&#x430;&#x437;&#x430;&#x43d;&#x43d;&#x443;&#x44e; &#x434;&#x435;&#x442;&#x430;&#x43b;&#x44c;"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonOrderDetailDeleteActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonOrderDetail1ActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>

@@ -90,7 +90,7 @@ public class OrderDetail extends javax.swing.JFrame {
                 pkDetails.add(tableModel.getValueAt(i, 0).toString());
                 valueDetails.add(tableModel.getValueAt(i, 1).toString());
             }
-            jComboBoxDetail.setModel(new DefaultComboBoxModel(valueDetails.toArray()));
+            jComboBoxDetails.setModel(new DefaultComboBoxModel(valueDetails.toArray()));
 
             resSetProizv = RepairMobile.st.executeQuery("select pk_postavshik,nazv from postavshik");
             tableModel = DbUtils.resultSetToTableModel(resSetProizv);
@@ -100,7 +100,7 @@ public class OrderDetail extends javax.swing.JFrame {
             }
             jComboBoxPostav.setModel(new DefaultComboBoxModel(valuePostav.toArray()));
 
-            jComboBoxDetail.setSelectedIndex(-1);
+            jComboBoxDetails.setSelectedIndex(-1);
             jComboBoxPostav.setSelectedIndex(-1);
             jComboBoxTypeDevice.setSelectedIndex(-1);
             jComboBoxManufacturer.setSelectedIndex(-1);
@@ -132,7 +132,7 @@ public class OrderDetail extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jComboBoxDetail = new javax.swing.JComboBox<String>();
+        jComboBoxDetails = new javax.swing.JComboBox<String>();
         jComboBoxTypeDevice = new javax.swing.JComboBox<String>();
         jComboBoxManufacturer = new javax.swing.JComboBox<String>();
         jComboBoxModel = new javax.swing.JComboBox<String>();
@@ -185,7 +185,7 @@ public class OrderDetail extends javax.swing.JFrame {
                             .addComponent(jLabel3))
                         .addGap(35, 35, 35)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jComboBoxDetail, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jComboBoxDetails, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jComboBoxTypeDevice, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jComboBoxManufacturer, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jComboBoxModel, 0, 216, Short.MAX_VALUE)
@@ -211,7 +211,7 @@ public class OrderDetail extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
-                    .addComponent(jComboBoxDetail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBoxDetails, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
@@ -277,7 +277,7 @@ public class OrderDetail extends javax.swing.JFrame {
                     + " inner join modeldevice on modeldevice.PK_modeldevice=concretedetail.PK_modeldevice"
                     + " inner join manufacturer on manufacturer.PK_manufacturer=modeldevice.PK_manufacturer"
                     +" where "
-                    + " concretedetail.pk_detail=" + pkDetails.get(jComboBoxDetail.getSelectedIndex())
+                    + " concretedetail.pk_detail=" + pkDetails.get(jComboBoxDetails.getSelectedIndex())
                     + "and concretedetail.pk_modelDevice=" + pkModel.get(jComboBoxModel.getSelectedIndex())
                     + "and concretedetail.pk_typeofdevice=" + pkTypeDevice.get(jComboBoxTypeDevice.getSelectedIndex())
                     + "and manufacturer.pk_manufacturer=" + pkProizv.get(jComboBoxManufacturer.getSelectedIndex())
@@ -288,7 +288,7 @@ public class OrderDetail extends javax.swing.JFrame {
             } else {
                 int costOneDetail = Integer.parseInt(jSpinner1.getValue().toString()) / Integer.parseInt(jSpinnerAmount.getValue().toString());
                 RepairMobile.st.executeQuery("insert into concretedetail (pk_detail,pk_modeldevice,pk_typeofdevice,costofdetail)"
-                        + "values('" + pkDetails.get(jComboBoxDetail.getSelectedIndex())
+                        + "values('" + pkDetails.get(jComboBoxDetails.getSelectedIndex())
                         + "','" + pkModel.get(jComboBoxModel.getSelectedIndex())
                         + "','" + pkTypeDevice.get(jComboBoxTypeDevice.getSelectedIndex()) + "','" + costOneDetail + "')"
                 );
@@ -347,7 +347,7 @@ public class OrderDetail extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonOrder;
-    private javax.swing.JComboBox<String> jComboBoxDetail;
+    private javax.swing.JComboBox<String> jComboBoxDetails;
     private javax.swing.JComboBox<String> jComboBoxManufacturer;
     private javax.swing.JComboBox<String> jComboBoxModel;
     private javax.swing.JComboBox<String> jComboBoxPostav;
