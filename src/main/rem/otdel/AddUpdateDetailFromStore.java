@@ -73,7 +73,9 @@ public class AddUpdateDetailFromStore extends javax.swing.JFrame {
                     pkType = resSet.getString(4);
                     pkDet = resSet.getString(2);
                     cost = resSet.getString(5);
-                    jSpinnerCostOne.setValue(Integer.parseInt(cost));
+                    if (cost != null) {
+                        jSpinnerCostOne.setValue(Integer.parseInt(cost));
+                    }
                 }
                 if (pkMod != null) {
                     resSet = RepairMobile.st.executeQuery("select pk_modeldevice,pk_manufacturer from modeldevice"

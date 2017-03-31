@@ -370,11 +370,11 @@
                               <EmptySpace max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="jScrollPane3" pref="470" max="32767" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jScrollPane3" pref="599" max="32767" attributes="0"/>
                                   <Component id="jScrollPane4" max="32767" attributes="0"/>
                               </Group>
-                              <EmptySpace pref="154" max="32767" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="1" attributes="0">
                                       <Component id="jButtonExecute" min="-2" pref="155" max="-2" attributes="0"/>
@@ -484,13 +484,19 @@
                 <Component class="javax.swing.JTable" name="jTable3">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="2" rowCount="0">
+                      <Table columnCount="3" rowCount="0">
                         <Column editable="false" title="&#x414;&#x435;&#x442;&#x430;&#x43b;&#x44c;" type="java.lang.String"/>
+                        <Column editable="false" title="&#x423;&#x441;&#x442;&#x440;&#x43e;&#x439;&#x441;&#x442;&#x432;&#x43e;" type="java.lang.String"/>
                         <Column editable="false" title="&#x41a;&#x43e;&#x43b;&#x43b;&#x438;&#x447;&#x435;&#x441;&#x442;&#x432;&#x43e;" type="java.lang.String"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                       <TableColumnModel selectionModel="0">
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
                         <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                           <Title/>
                           <Editor/>
@@ -534,14 +540,26 @@
                 <Component class="javax.swing.JTable" name="jTable4">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="3" rowCount="0">
-                        <Column editable="true" title="&#x414;&#x435;&#x442;&#x430;&#x43b;&#x44c;" type="java.lang.Object"/>
-                        <Column editable="true" title="&#x420;&#x430;&#x441;&#x43f;&#x43e;&#x43b;&#x43e;&#x436;&#x435;&#x43d;&#x438;&#x435;" type="java.lang.Object"/>
+                      <Table columnCount="5" rowCount="0">
+                        <Column editable="false" title="&#x414;&#x435;&#x442;&#x430;&#x43b;&#x44c;" type="java.lang.Object"/>
+                        <Column editable="true" title="&#x423;&#x441;&#x442;&#x440;&#x43e;&#x439;&#x441;&#x442;&#x432;&#x43e;" type="java.lang.Object"/>
+                        <Column editable="false" title="&#x420;&#x430;&#x441;&#x43f;&#x43e;&#x43b;&#x43e;&#x436;&#x435;&#x43d;&#x438;&#x435;" type="java.lang.Object"/>
                         <Column editable="true" title="&#x41a;&#x43e;&#x43b;&#x438;&#x447;&#x435;&#x441;&#x442;&#x432;&#x43e; &#x43d;&#x430; &#x441;&#x43a;&#x43b;&#x430;&#x434;&#x435;" type="java.lang.Object"/>
+                        <Column editable="true" title="&#x412;&#x437;&#x44f;&#x442;&#x44c; &#x434;&#x435;&#x442;&#x430;&#x43b;&#x435;&#x439;(&#x448;&#x442;)" type="java.lang.Object"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                       <TableColumnModel selectionModel="0">
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
                         <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                           <Title/>
                           <Editor/>
@@ -564,7 +582,7 @@
                     </Property>
                   </Properties>
                   <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTable( )         { &#xa;@Override &#xa;public boolean isCellEditable(int row, int column) &#xa;{      &#xa;if(column==5){&#xa;return true;&#xa;}&#xa;return false;    &#xa;}       &#xa;};"/>
+                    <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new javax.swing.JTable( )         { &#xa;@Override &#xa;public boolean isCellEditable(int row, int column) &#xa;{      &#xa;if(column==6){&#xa;return true;&#xa;}&#xa;return false;    &#xa;}       &#xa;};"/>
                   </AuxValues>
                 </Component>
               </SubComponents>
