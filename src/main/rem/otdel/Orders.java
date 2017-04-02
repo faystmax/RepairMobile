@@ -592,14 +592,14 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         jButtonChooseExist = new javax.swing.JButton();
         jTextFieldAddress = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
-        jComboBoxManufacturers = new javax.swing.JComboBox<String>();
+        jComboBoxManufacturers = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jComboBoxTypeDevice = new javax.swing.JComboBox<String>();
+        jComboBoxTypeDevice = new javax.swing.JComboBox<>();
         jButtonAddModel = new javax.swing.JButton();
         jButtonAddManufacturer = new javax.swing.JButton();
-        jComboBoxModel = new javax.swing.JComboBox<String>();
+        jComboBoxModel = new javax.swing.JComboBox<>();
         jTextFieldIMEI = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
@@ -609,15 +609,15 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         jLabel11 = new javax.swing.JLabel();
         jTextFieldCost = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jComboBoxReplace = new javax.swing.JComboBox<String>();
+        jComboBoxReplace = new javax.swing.JComboBox<>();
         jButtonAccept = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jListAllCrash = new javax.swing.JList<MyMap>();
+        jListAllCrash = new javax.swing.JList<>();
         jButtonAddCrash = new javax.swing.JButton();
         jButtonRetCrash = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
-        jListSelCrash = new javax.swing.JList<MyMap>();
+        jListSelCrash = new javax.swing.JList<>();
         jButtonAddTypeOfCrash = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -1188,11 +1188,11 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 993, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 989, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -1200,7 +1200,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 439, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)

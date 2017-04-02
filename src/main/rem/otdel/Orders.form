@@ -1021,11 +1021,11 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPane1" pref="993" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" pref="989" max="32767" attributes="0"/>
                           <Group type="102" attributes="0">
                               <Component id="jButton1" min="-2" pref="172" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jButton2" min="-2" pref="179" max="-2" attributes="0"/>
+                              <Component id="jButton2" min="-2" pref="204" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -1037,7 +1037,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" pref="439" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" pref="441" max="32767" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="jButton2" pref="33" max="32767" attributes="0"/>
