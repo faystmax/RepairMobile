@@ -21,6 +21,8 @@ import otchet.alldetail.AllDetail;
 import otchet.managerorder.ManagerOrder;
 import otchet.timezakaz.TimeZakaz;
 import spravochn.detail.Detail;
+import spravochn.engineer.Engenieers;
+import spravochn.manager.Managers;
 
 /**
  *
@@ -552,9 +554,19 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
         jMenu4.setText("Пользователи");
 
         jMenuItem3.setText("Менеджеры");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
         jMenu4.add(jMenuItem3);
 
         jMenuItem4.setText("Инженеры");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
         jMenu4.add(jMenuItem4);
 
         jMenu2.add(jMenu4);
@@ -957,6 +969,18 @@ public class DetailsStore extends javax.swing.JFrame implements UpdatesDataInFor
         timeZakaz.setVisible(true);
         this.setEnabled(false);
     }//GEN-LAST:event_jMenuItemPeriodZakazActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+        Managers managers = new Managers();
+        managers.setVisible(true);  
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+        // TODO add your handling code here:
+        Engenieers engenieers = new Engenieers();
+        engenieers.setVisible(true);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
