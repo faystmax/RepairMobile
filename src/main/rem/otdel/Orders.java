@@ -592,14 +592,14 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         jButtonChooseExist = new javax.swing.JButton();
         jTextFieldAddress = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
-        jComboBoxManufacturers = new javax.swing.JComboBox<>();
+        jComboBoxManufacturers = new javax.swing.JComboBox<String>();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jComboBoxTypeDevice = new javax.swing.JComboBox<>();
+        jComboBoxTypeDevice = new javax.swing.JComboBox<String>();
         jButtonAddModel = new javax.swing.JButton();
         jButtonAddManufacturer = new javax.swing.JButton();
-        jComboBoxModel = new javax.swing.JComboBox<>();
+        jComboBoxModel = new javax.swing.JComboBox<String>();
         jTextFieldIMEI = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
@@ -609,15 +609,15 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         jLabel11 = new javax.swing.JLabel();
         jTextFieldCost = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jComboBoxReplace = new javax.swing.JComboBox<>();
+        jComboBoxReplace = new javax.swing.JComboBox<String>();
         jButtonAccept = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jListAllCrash = new javax.swing.JList<>();
+        jListAllCrash = new javax.swing.JList<MyMap>();
         jButtonAddCrash = new javax.swing.JButton();
         jButtonRetCrash = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
-        jListSelCrash = new javax.swing.JList<>();
+        jListSelCrash = new javax.swing.JList<MyMap>();
         jButtonAddTypeOfCrash = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -1063,7 +1063,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 989, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 1013, Short.MAX_VALUE)
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addComponent(jButton7)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -1075,7 +1075,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                 .addContainerGap()
                 .addComponent(jButton7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 461, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 490, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1123,7 +1123,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 993, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1013, Short.MAX_VALUE)
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(29, 29, 29)
@@ -1188,7 +1188,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 989, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1013, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1200,7 +1200,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
@@ -1238,7 +1238,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE))
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE))
         );
 
         jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder("Заказ по номеру"));
@@ -1278,7 +1278,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
             .addGroup(jPanel12Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 961, Short.MAX_VALUE)
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 981, Short.MAX_VALUE)
                     .addGroup(jPanel12Layout.createSequentialGroup()
                         .addComponent(jTextFieldNomerZakaza, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1415,10 +1415,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabelFIO, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1018, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jTabbedPane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1426,8 +1423,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                 .addContainerGap()
                 .addComponent(jLabelFIO, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1)
-                .addGap(29, 29, 29))
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 569, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();

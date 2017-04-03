@@ -265,7 +265,7 @@ public class OrderUpdate extends javax.swing.JFrame {
         String textNumber = jTextFieldNumber.getText();
         Date dateChooserCreate = jDateChooserCreate.getDate();
         java.sql.Date date = new java.sql.Date(dateChooserCreate.getTime());
-        java.sql.Date date2= null;
+        java.sql.Date date2 = null;
         if (jDateChooserEnd.getDate() != null) {
             Date dateChooserEnd = jDateChooserEnd.getDate();
             date2 = new java.sql.Date(dateChooserEnd.getTime());
@@ -283,8 +283,8 @@ public class OrderUpdate extends javax.swing.JFrame {
                 RepairMobile.st.executeQuery("UPDATE myorder SET "
                         + "myorder.NUMOFORDER = '" + textNumber + "', "
                         + "myorder.TIMETOACCEPT = TO_DATE('" + date + "', 'YYYY-MM-DD'),"
-                        + "myorder.TIMETODELIVERY = " + (date2==null ? "null," : "TO_DATE('" + date2 + "', 'YYYY-MM-DD'),")
-                       // + "myorder.TIMETODELIVERY = TO_DATE('" + date2 + "', 'YYYY-MM-DD'),"
+                        + "myorder.TIMETODELIVERY = " + (date2 == null ? "null," : "TO_DATE('" + date2 + "', 'YYYY-MM-DD'),")
+                        // + "myorder.TIMETODELIVERY = TO_DATE('" + date2 + "', 'YYYY-MM-DD'),"
                         + "myorder.COSTOFORDER='" + textCost + "',"
                         + "myorder.TYPEOFORDER='" + typeOfDevice + "',"
                         + "myorder.PK_STATUS='" + pkStatus + "'"
