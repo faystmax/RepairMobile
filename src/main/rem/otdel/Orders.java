@@ -524,6 +524,24 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         correctSizeTable(jTable2);
         correctSizeTable(jTable1);
 
+        try {
+            resSet = RepairMobile.st.executeQuery("select PK_CLIENT,FAMOFCLIENT,"
+                    + "NAMEOFCLIENT,OTCOFCLIENT,NUMBEROFPHONE,address from client");
+
+        } catch (SQLException ex) {
+            Logger.getLogger(ChooseExistClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        jTableClients.setModel(DbUtils.resultSetToTableModel(resSet));
+        jTableClients.getColumnModel().getColumn(0).setMaxWidth(0);
+        jTableClients.getColumnModel().getColumn(0).setMinWidth(0);
+        jTableClients.getColumnModel().getColumn(0).setPreferredWidth(0);
+
+        jTableClients.getColumnModel().getColumn(1).setHeaderValue("Фамилия");
+        jTableClients.getColumnModel().getColumn(2).setHeaderValue("Имя");
+        jTableClients.getColumnModel().getColumn(3).setHeaderValue("Отчество");
+        jTableClients.getColumnModel().getColumn(4).setHeaderValue("Телефон");
+        jTableClients.getColumnModel().getColumn(5).setHeaderValue("Адрес");
+
     }
 
     ArrayList<String> pkReplace;
@@ -592,14 +610,14 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         jButtonChooseExist = new javax.swing.JButton();
         jTextFieldAddress = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
-        jComboBoxManufacturers = new javax.swing.JComboBox<String>();
+        jComboBoxManufacturers = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jComboBoxTypeDevice = new javax.swing.JComboBox<String>();
+        jComboBoxTypeDevice = new javax.swing.JComboBox<>();
         jButtonAddModel = new javax.swing.JButton();
         jButtonAddManufacturer = new javax.swing.JButton();
-        jComboBoxModel = new javax.swing.JComboBox<String>();
+        jComboBoxModel = new javax.swing.JComboBox<>();
         jTextFieldIMEI = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
@@ -609,15 +627,15 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         jLabel11 = new javax.swing.JLabel();
         jTextFieldCost = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jComboBoxReplace = new javax.swing.JComboBox<String>();
+        jComboBoxReplace = new javax.swing.JComboBox<>();
         jButtonAccept = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jListAllCrash = new javax.swing.JList<MyMap>();
+        jListAllCrash = new javax.swing.JList<>();
         jButtonAddCrash = new javax.swing.JButton();
         jButtonRetCrash = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
-        jListSelCrash = new javax.swing.JList<MyMap>();
+        jListSelCrash = new javax.swing.JList<>();
         jButtonAddTypeOfCrash = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -666,6 +684,12 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         };
         jButtonNomerShow = new javax.swing.JButton();
         jTextFieldNomerZakaza = new javax.swing.JTextField();
+        jPanel13 = new javax.swing.JPanel();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        jTableClients = new javax.swing.JTable();
+        jScrollPane10 = new javax.swing.JScrollPane();
+        jTableClientsOrder = new javax.swing.JTable();
+        jButtonViewClientOrders = new javax.swing.JButton();
         jLabelFIO = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
@@ -1321,6 +1345,69 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         );
 
         jTabbedPane1.addTab("Статус ремонта устройства", jPanel10);
+
+        jTableClients.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane9.setViewportView(jTableClients);
+
+        jTableClientsOrder.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Номер заказа", "Дата создания", "Дата завершения", "Стоимость", "Тип", "Статус", "Клиент", "Устройство"
+            }
+        ));
+        jScrollPane10.setViewportView(jTableClientsOrder);
+
+        jButtonViewClientOrders.setText("Просмотр");
+        jButtonViewClientOrders.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonViewClientOrdersActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
+        jPanel13.setLayout(jPanel13Layout);
+        jPanel13Layout.setHorizontalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel13Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane10)
+                    .addGroup(jPanel13Layout.createSequentialGroup()
+                        .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 869, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)
+                        .addComponent(jButtonViewClientOrders)
+                        .addGap(0, 10, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel13Layout.setVerticalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel13Layout.createSequentialGroup()
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel13Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addGap(18, 18, 18))
+                    .addGroup(jPanel13Layout.createSequentialGroup()
+                        .addGap(70, 70, 70)
+                        .addComponent(jButtonViewClientOrders)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 140, Short.MAX_VALUE)))
+                .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("История клиентов", jPanel13);
 
         jLabelFIO.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabelFIO.setText("Менеджер: Петрова Екатерина Сергеевна");
@@ -2195,11 +2282,11 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                 //jTable1.setModel(DbUtils.resultSetToTableModel(resSet));
 
                 int numOrder = 0;
-                String textFam="";
-                String textName="";
-                String textOtch="";
-                String textTelefon="";
-                String textAddress="";
+                String textFam = "";
+                String textName = "";
+                String textOtch = "";
+                String textTelefon = "";
+                String textAddress = "";
                 if (resSet.next()) {
                     numOrder = resSet.getInt(2);
                     textFam = resSet.getString(11);
@@ -2207,8 +2294,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                     textOtch = resSet.getString(13);
                     textAddress = resSet.getString(14);
                     textTelefon = resSet.getString(15);
-                }
-                else{
+                } else {
                     JOptionPane.showMessageDialog(this, "Ошибка: Невозможно извлечь заказ!");
                 }
 
@@ -2243,8 +2329,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                         return;
                     }
                 }
-                
-                
+
                 //excell
                 HSSFWorkbook wb = null;
                 try {
@@ -2261,13 +2346,13 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
 
                     for (int i = 0; i < tableModel.getRowCount(); i++) {
                         cost += Integer.valueOf(tableModel.getValueAt(i, 7).toString());
-                        sheet.getRow((short) 17+i*2).getCell((short) 1).setCellValue(String.valueOf(i+1));          //Номер
-                        sheet.getRow((short) 17+i*2).getCell((short) 3).setCellValue(tableModel.getValueAt(i, 5).toString());          //Название
-                        sheet.getRow((short) 17+i*2).getCell((short) 26).setCellValue(Integer.valueOf(tableModel.getValueAt(i, 7).toString()));         //Цена                  
+                        sheet.getRow((short) 17 + i * 2).getCell((short) 1).setCellValue(String.valueOf(i + 1));          //Номер
+                        sheet.getRow((short) 17 + i * 2).getCell((short) 3).setCellValue(tableModel.getValueAt(i, 5).toString());          //Название
+                        sheet.getRow((short) 17 + i * 2).getCell((short) 26).setCellValue(Integer.valueOf(tableModel.getValueAt(i, 7).toString()));         //Цена                  
                     }
-                    
+
                     //обновим цену заказа
-                    RepairMobile.st.executeQuery("UPDATE myorder SET myorder.COSTOFORDER="+ cost +" WHERE PK_ORDER=" + primKey);
+                    RepairMobile.st.executeQuery("UPDATE myorder SET myorder.COSTOFORDER=" + cost + " WHERE PK_ORDER=" + primKey);
                     this.addDataInTable();
                 } catch (Exception e) {
                     System.out.println("Ошибка при чтении шаблона:" + e.getMessage());
@@ -2277,7 +2362,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                 //выбор файла и сохранение
                 JFileChooser fileChooser = new JFileChooser();
                 FileNameExtensionFilter filter = new FileNameExtensionFilter("Excell", "xls");
-                fileChooser.setSelectedFile(new File("AktRabot №"+numOrder + ".xls"));
+                fileChooser.setSelectedFile(new File("AktRabot №" + numOrder + ".xls"));
                 fileChooser.setFileFilter(filter);
                 if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
                     File file = fileChooser.getSelectedFile();
@@ -2293,7 +2378,6 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                     }
                 }
 
-                
                 //
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(this, "Ошибка: Невозможно составить акт работ");
@@ -2307,6 +2391,89 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         phoneNaZamenu.setVisible(true);
         this.setEnabled(false);
     }//GEN-LAST:event_jMenuItemPhonesActionPerformed
+
+    private void jButtonViewClientOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonViewClientOrdersActionPerformed
+        // TODO add your handling code here:
+        if (jTableClients.getSelectedRow() != -1) {
+            ResultSet resSet = null;
+            try {
+                ResultSet resSet2 = RepairMobile.st.executeQuery("select myorder.PK_ORDER,myorder.NUMOFORDER,"
+                        + "TO_CHAR(myorder.TIMETOACCEPT, 'DD.MM.YYYY'),"
+                        + "TO_CHAR(myorder.TIMETODELIVERY, 'DD.MM.YYYY'),"
+                        + "myorder.COSTOFORDER,myorder.TYPEOFORDER,myorder.PK_MANAGER"
+                        + ",myorder.PK_STATUS,"
+                        + " status.NAMEOFSTATUS,"
+                        + " myorder.PK_CLIENT,"
+                        + " client.FAMOFCLIENT || ' ' || client.NAMEOFCLIENT  || ' ' || client.OTCOFCLIENT,"
+                        + " modeldevice.nameofmodel "
+                        + " from myorder "
+                        + " inner join status on status.PK_status=myorder.PK_status"
+                        + " inner join manager on manager.PK_manager=myorder.PK_manager"
+                        + " inner join client on client.PK_client=myorder.PK_client"
+                        + " inner join device on device.PK_device=myorder.PK_device"
+                        + " inner join modeldevice on modeldevice.PK_modeldevice=device.PK_modeldevice"
+                        + " where client.pk_client=" + jTableClients.getValueAt(jTableClients.getSelectedRow(), 0));
+                jTableClientsOrder.setModel(DbUtils.resultSetToTableModel(resSet2));
+
+                DefaultTableModel dtm2 = (DefaultTableModel) jTableClientsOrder.getModel();
+                //dtm2.addColumn("На замене");
+                /*for (int i = 0; i < jTableClientsOrder.getRowCount(); i++) {
+                    resSet = RepairMobile.st.executeQuery("select clientmobile.PK_clientmobile,clientmobile.pk_client,"
+                            + " clientmobile.pk_keyofchangemobile,"
+                            + " replacemobile.model, replacemobile.imeinumber from clientmobile"
+                            + " inner join replacemobile on  clientmobile.pk_keyofchangemobile=replacemobile.pk_keyofchangemobile"
+                            + " where pk_client=" + jTableClientsOrder.getValueAt(i, 9).toString()
+                    );
+
+                    
+                }*/
+                jTableClientsOrder.getColumnModel().getColumn(1).setHeaderValue("Номер");
+                jTableClientsOrder.getColumnModel().getColumn(2).setHeaderValue("Дата создания");
+                jTableClientsOrder.getColumnModel().getColumn(3).setHeaderValue("Дата завершения");
+                jTableClientsOrder.getColumnModel().getColumn(4).setHeaderValue("Стоимость");
+                jTableClientsOrder.getColumnModel().getColumn(5).setHeaderValue("Тип");
+                jTableClientsOrder.getColumnModel().getColumn(8).setHeaderValue("Статус");
+                jTableClientsOrder.getColumnModel().getColumn(10).setHeaderValue("Клиент");
+                jTableClientsOrder.getColumnModel().getColumn(11).setHeaderValue("Устройство");
+
+                //пк заказа
+                jTableClientsOrder.getColumnModel().getColumn(0).setMaxWidth(0);
+                jTableClientsOrder.getColumnModel().getColumn(0).setMinWidth(0);
+                jTableClientsOrder.getColumnModel().getColumn(0).setPreferredWidth(0);
+                //пк менеджера
+                jTableClientsOrder.getColumnModel().getColumn(6).setMaxWidth(0);
+                jTableClientsOrder.getColumnModel().getColumn(6).setMinWidth(0);
+                jTableClientsOrder.getColumnModel().getColumn(6).setPreferredWidth(0);
+                //пк статуса
+                jTableClientsOrder.getColumnModel().getColumn(7).setMaxWidth(0);
+                jTableClientsOrder.getColumnModel().getColumn(7).setMinWidth(0);
+                jTableClientsOrder.getColumnModel().getColumn(7).setPreferredWidth(0);
+                //пк клиета
+                jTableClientsOrder.getColumnModel().getColumn(9).setMaxWidth(0);
+                jTableClientsOrder.getColumnModel().getColumn(9).setMinWidth(0);
+                jTableClientsOrder.getColumnModel().getColumn(9).setPreferredWidth(0);
+
+                for (int i = 0; i < jTableClientsOrder.getRowCount(); i++) {
+                    if (jTableClientsOrder.getValueAt(i, 5).toString().equals("0")) {
+                        jTableClientsOrder.setValueAt("Гарантийный", i, 5);
+                    } else {
+                        if (jTableClientsOrder.getValueAt(i, 5).toString().equals("1")) {
+                            jTableClientsOrder.setValueAt("Не гарантийный", i, 5);
+                        } else {
+                            jTableClientsOrder.setValueAt("Неизвестно", i, 5);
+                        }
+                    }
+                }
+                /*if (resSet.next()) {
+                    jTableClientsOrder.setValueAt(resSet.getString(4) + " " + resSet.getString(5), i, 12);
+                } else {
+                    jTableClientsOrder.setValueAt("", i, 12);
+                }*/
+            } catch (SQLException ex) {
+                Logger.getLogger(Orders.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jButtonViewClientOrdersActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -2323,6 +2490,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
     private javax.swing.JButton jButtonDeleteOrder;
     private javax.swing.JButton jButtonNomerShow;
     private javax.swing.JButton jButtonRetCrash;
+    private javax.swing.JButton jButtonViewClientOrders;
     private javax.swing.JComboBox<String> jComboBoxManufacturers;
     private javax.swing.JComboBox<String> jComboBoxModel;
     private javax.swing.JComboBox<String> jComboBoxReplace;
@@ -2356,6 +2524,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -2365,6 +2534,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane10;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -2372,11 +2542,14 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
     private javax.swing.JTable jTable4;
+    private javax.swing.JTable jTableClients;
+    private javax.swing.JTable jTableClientsOrder;
     private javax.swing.JTable jTableNomerRem;
     private javax.swing.JTable jTableNomerZakaz;
     private javax.swing.JTextField jTextFieldAddFam;
