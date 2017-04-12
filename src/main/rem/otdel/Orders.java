@@ -610,14 +610,14 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         jButtonChooseExist = new javax.swing.JButton();
         jTextFieldAddress = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
-        jComboBoxManufacturers = new javax.swing.JComboBox<>();
+        jComboBoxManufacturers = new javax.swing.JComboBox<String>();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jComboBoxTypeDevice = new javax.swing.JComboBox<>();
+        jComboBoxTypeDevice = new javax.swing.JComboBox<String>();
         jButtonAddModel = new javax.swing.JButton();
         jButtonAddManufacturer = new javax.swing.JButton();
-        jComboBoxModel = new javax.swing.JComboBox<>();
+        jComboBoxModel = new javax.swing.JComboBox<String>();
         jTextFieldIMEI = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
@@ -627,15 +627,15 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
         jLabel11 = new javax.swing.JLabel();
         jTextFieldCost = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jComboBoxReplace = new javax.swing.JComboBox<>();
+        jComboBoxReplace = new javax.swing.JComboBox<String>();
         jButtonAccept = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
-        jListAllCrash = new javax.swing.JList<>();
+        jListAllCrash = new javax.swing.JList<MyMap>();
         jButtonAddCrash = new javax.swing.JButton();
         jButtonRetCrash = new javax.swing.JButton();
         jScrollPane6 = new javax.swing.JScrollPane();
-        jListSelCrash = new javax.swing.JList<>();
+        jListSelCrash = new javax.swing.JList<MyMap>();
         jButtonAddTypeOfCrash = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -667,7 +667,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
             }
         };
         jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jButtonAktRabot = new javax.swing.JButton();
         jPanel10 = new javax.swing.JPanel();
         jPanel11 = new javax.swing.JPanel();
         jScrollPane8 = new javax.swing.JScrollPane();
@@ -1198,10 +1198,10 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
             }
         });
 
-        jButton2.setText("Оформить акт работ");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jButtonAktRabot.setText("Оформить акт работ");
+        jButtonAktRabot.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jButtonAktRabotActionPerformed(evt);
             }
         });
 
@@ -1216,7 +1216,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonAktRabot, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -1227,7 +1227,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
+                    .addComponent(jButtonAktRabot, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -2254,7 +2254,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
 
     }//GEN-LAST:event_jButtonNomerShowActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void jButtonAktRabotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAktRabotActionPerformed
         if (jTable1.getSelectedRow() == -1) {
             JOptionPane.showMessageDialog(this, "Выделите запись для оформления акта работ.");
         } else {
@@ -2383,7 +2383,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
                 JOptionPane.showMessageDialog(this, "Ошибка: Невозможно составить акт работ");
             }
         }
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_jButtonAktRabotActionPerformed
 
     private void jMenuItemPhonesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemPhonesActionPerformed
         PhoneNaZamenu phoneNaZamenu = new PhoneNaZamenu();
@@ -2478,7 +2478,6 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButtonAccept;
@@ -2486,6 +2485,7 @@ public class Orders extends javax.swing.JFrame implements UpdatesDataInForms {
     private javax.swing.JButton jButtonAddManufacturer;
     private javax.swing.JButton jButtonAddModel;
     private javax.swing.JButton jButtonAddTypeOfCrash;
+    private javax.swing.JButton jButtonAktRabot;
     private javax.swing.JButton jButtonChooseExist;
     private javax.swing.JButton jButtonDeleteOrder;
     private javax.swing.JButton jButtonNomerShow;
